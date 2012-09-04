@@ -28,15 +28,12 @@
 
 class FastTimer {
   public:
-    // call it in the main setup()
-    void begin();
     // call it in the main loop()
-    boolean update();
+    static boolean update();
     // call it in the main loop() if update() is true
-    boolean isNewCycle();
+    static boolean isNewCycle();
   private:
-    uint8_t _embedTime;
-    uint8_t _lastEmbedTime;
+    static uint8_t _embedTime, _lastEmbedTime;
 };
 
 

@@ -1,11 +1,9 @@
 #include "FastTimer.h"
 
 
-void FastTimer::begin()
-{
-  _lastEmbedTime  = 0;
-  _embedTime      = EMBEDTIME;
-}
+uint8_t FastTimer::_lastEmbedTime  = 0;
+uint8_t FastTimer::_embedTime      = 0;
+
 
 boolean FastTimer::update()
 {
