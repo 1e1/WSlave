@@ -1,6 +1,9 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
+// VELOCITY (choose inside macros)
+#define EMBEDTIME EMBEDTIME_65s_4h
+
 // ETH conf
 #define IP          10,240,170, 12
 #define SUBNET      255,255,255,0
