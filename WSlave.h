@@ -18,7 +18,7 @@ struct intfDigital
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
   byte vPin;
-  char *label;
+  const char *label;
 };
 // { 13+0b10000000 , 0, "Light" }
 // { 13+128 , 0, "Light" }
@@ -36,7 +36,7 @@ struct intfPulse
   // digitalPinHasPWM(p)
   byte wPin;
   uint8_t value;
-  char *label;
+  const char *label;
 };
 // { 13, 0, "Light" }
 
@@ -48,8 +48,8 @@ struct intfMessage
   // char [-128..127]
   char (*observe) (byte *pins);
   char value;
-  byte *pins;
-  char *label;
+  const byte *pins;
+  const char *label;
 };
 // test[i].value = test[i].observe(test[i].pins)
 // { obsTemperature, "##", { 13 }, "Outdoor" }
@@ -58,7 +58,12 @@ struct intfMessage
 
 class WSlave {
   public:
+    //enum MethodType { INVALID, GET, POST, PUT, HEAD, DELETE };
+    //WSlave();
+    //void begin();
   private:
+    //EthernetServer server;
+    //EthernetClient client;
 };
 
 
