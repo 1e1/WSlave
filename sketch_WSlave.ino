@@ -75,8 +75,8 @@ void software_Reset()
 
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
-LiquidCrystal lcd = LiquidCrystal(LCD_PINS);
-char lcdLines[LCD_HEIGHT][LCD_WIDTH];
+static LiquidCrystal lcd = LiquidCrystal(LCD_PINS);
+static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #define USE_LCD 1
 #else
 #define USE_LCD 0
@@ -84,13 +84,13 @@ char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 
 #if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) 
 #include <Ethernet.h>
-byte mac[] = { MAC };
-IPAddress ip(IP);
+static byte mac[] = { MAC };
+static IPAddress ip(IP);
 /*
-IPAddress gateway(GATEWAY);
-IPAddress subnet(SUBNET);
+static IPAddress gateway(GATEWAY);
+static IPAddress subnet(SUBNET);
 */
-EthernetServer server(PORT);
+static EthernetServer server(PORT);
 // last address
 #include "webApp.h"
 #define USE_ETH 1
@@ -141,7 +141,7 @@ void loop()
   if (FastTimer::update()) {
 #if USE_ETH
     if (FastTimer::isNewCycle()) {
-      Ethernet.maintain();
+      Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
     }
     // DO SOMETHING NEW
