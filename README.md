@@ -3,7 +3,8 @@ WSlave
 
 ### Basic REST webserver for the Internet of things
 
-Made with official Arduino IDE
+Made with official [Arduino IDE 1.0.1](http://arduino.cc/en/Main/Software)
+
 Tested on *SainSmart Mega 1280* + *LCD 1602 Shield* + *Ethernet Shield W5100*
 
 
