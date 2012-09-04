@@ -20,6 +20,7 @@
 #include "config.h"
 #include "macros.h"
 #include "WSlave.h"
+#include "FastTimer.h"
 #include <SPI.h>
 
 
@@ -132,6 +133,15 @@ void setup()
 
 void loop()
 {
+  if (FastTimer::update()) {
+#if USE_ETH
+    if (FastTimer::isNewCycle()) {
+      Ethernet.maintain();
+      LOGLN("renew DHCP");
+    }
+    // DO SOMETHING NEW
+#endif
+  }
   // listen for incoming clients
   EthernetClient client = server.available();
   if (client) {
