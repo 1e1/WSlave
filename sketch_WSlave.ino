@@ -1,17 +1,16 @@
 /*
-  Web Server
+ Rest Server
  
- A simple web server that shows the value of the analog input pins.
- using an Arduino Wiznet Ethernet shield. 
+ https://github.com/1e1/WSlave
  
- Circuit:
- * Ethernet shield attached to pins 10, 11, 12, 13
- * Analog inputs attached to pins A0 through A5 (optional)
+ Circuit at least one:
+ * Ethernet shield
+ * LCD shield
  
- created 18 Dec 2009
- by David A. Mellis
- modified 9 Apr 2012
- by Tom Igoe
+ created 29 Aug 2012
+ by Aymeric GERLIER
+ modified 4 Sep 2012
+ by Aymeric GERLIER
  
  */
 
@@ -24,50 +23,28 @@
 #include <SPI.h>
 
 
-/** configure that **/
+
+/** ===================== **/
+/**      connections      **/
+/** ===================== **/
+
 static intfDigital digitals[] = {
-  { 22, "relay1.1" },
-  { 24, "relay1.2" },
-  { 26, "relay1.3" },
-  { 28, "relay1.4" },
-  { 30, "relay1.5" },
-  { 32, "relay1.6" },
-  { 34, "relay1.7" },
-  { 36, "relay1.8" }
+  WSDIGITAL("relay1.1", 22),
+  WSDIGITAL("relay1.2", 24),
+  WSDIGITAL("relay1.3", 26),
+  WSDIGITAL("relay1.4", 28),
+  WSDIGITAL("relay1.5", 30),
+  WSDIGITAL("relay1.6", 32),
+  WSDIGITAL("relay1.7", 34),
+  WSDIGITAL("relay1.8", 36)
 };
 static intfPulse pulses[] = {
-  { 44, 0, "Pulse" }
+  WSPULSE("Pulse", 24)
 };
-static byte temperaturePins[] = { 13 };
+byte temperaturePins[] = { 13 };
 static intfMessage messages[] = {
   { obsTemperature, 'x', temperaturePins, "Indoor" }
 };
-
-
-#if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
-#include <LiquidCrystal.h>
-static LiquidCrystal lcd = LiquidCrystal(LCD_PINS);
-static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
-#define USE_LCD 1
-#else
-#define USE_LCD 0
-#endif
-
-#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) 
-#include <Ethernet.h>
-static byte mac[] = { MAC };
-static IPAddress ip(IP);
-static IPAddress gateway(GATEWAY);
-static IPAddress subnet(SUBNET);
-static EthernetServer server(PORT);
-// last address
-#include "webApp.h"
-#define USE_ETH 1
-#else
-#define USE_ETH 0
-#endif
-
-
 
 /** ===================== **/
 /**       observers       **/
@@ -79,6 +56,50 @@ char obsTemperature (byte *pins)
 }
 
 /** ===================== **/
+
+//inline unsigned int embedTime() __attribute__((always_inline));
+//inline unsigned int embedTime()
+//{
+//  return (unsigned int) (millis() >> 12);
+//}
+
+// Restarts program from beginning but does not reset the peripherals and registers
+void software_Reset()
+{
+  asm volatile ("jmp 0");  
+}
+
+
+
+
+#if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
+#include <LiquidCrystal.h>
+LiquidCrystal lcd = LiquidCrystal(LCD_PINS);
+char lcdLines[LCD_HEIGHT][LCD_WIDTH];
+#define USE_LCD 1
+#else
+#define USE_LCD 0
+#endif
+
+#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) 
+#include <Ethernet.h>
+byte mac[] = { MAC };
+IPAddress ip(IP);
+IPAddress gateway(GATEWAY);
+IPAddress subnet(SUBNET);
+EthernetServer server(PORT);
+// last address
+#include "webApp.h"
+#define USE_ETH 1
+#else
+#define USE_ETH 0
+#endif
+
+
+
+
+/** ===================== **/
+
 
 
 
