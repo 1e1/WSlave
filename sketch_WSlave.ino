@@ -86,8 +86,10 @@ char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #include <Ethernet.h>
 byte mac[] = { MAC };
 IPAddress ip(IP);
+/*
 IPAddress gateway(GATEWAY);
 IPAddress subnet(SUBNET);
+*/
 EthernetServer server(PORT);
 // last address
 #include "webApp.h"
@@ -116,9 +118,12 @@ void setup()
 #endif
 #if USE_ETH
   LOGLN("Trying to get an IP address using DHCP");
+  // reduce DHCP timeout, default is 60000ms
+  // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
+  // by:     Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address, 10000);...}
   if (0==Ethernet.begin(mac)) {
     LOGLN("Failed to configure Ethernet using DHCP");
-    Ethernet.begin(mac, ip/*, {DNS},*/, gateway, subnet);
+    Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
   }
   // then don't forget Ethernet.maintain()
   LOG("IP:   ");  LOGLN(Ethernet.localIP());
@@ -190,6 +195,7 @@ void loop()
     // give the web browser time to receive the data
     delay(1);
     // close the connection:
+    client.flush();
     client.stop();
     LOGLN("client disonnected");
   }

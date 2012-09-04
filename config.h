@@ -1,7 +1,7 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-// VELOCITY (choose inside macros)
+// VELOCITY (choose inside macros.h)
 #define EMBEDTIME EMBEDTIME_65s_4h
 
 // ETH conf
