@@ -24,7 +24,22 @@ void WSlave::check()
     // switch strcmp("*", path)
     
     LOGLN("new client");
+    
+    // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     _scan(' ');
+    if (_bufferEquals("GET")) {
+      LOGLN("GET");
+    } else if (_bufferEquals("PUT")) {
+      LOGLN("PUT");
+    }
+    _scan(' ');
+    if (_bufferEquals("/ws")) {
+      LOGLN("webservice");
+    } else {
+      // TODO catch /ws?param!!!
+      LOGLN("*");
+    }
+    
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     while (_client.connected()) {
@@ -83,7 +98,7 @@ void WSlave::check()
   * @param end   searched char
   * @param flags <allow multilines> <fail at end>
   */
-uint8_t WSlave::_scan(const char end)
+void WSlave::_scan(const char end)
 {
   _unbuffer();
   int c;
@@ -93,13 +108,22 @@ uint8_t WSlave::_scan(const char end)
       _reverseBuffer[--_bufferSize] = c;
     } else break;
   }
-  return BUFFERSIZE - _bufferSize;
 }
 
 
-boolean bufferEquals(char *str)
+boolean WSlave::_bufferEquals(const char *str)
 {
-  // TODO
+  if ('\0' != str[_bufferSize]) {
+    return false;
+  }
+  uint8_t i=0, j=_bufferSize;
+  while (i<j--) {
+    if (str[i]!=_reverseBuffer[j] || str[j]!=_reverseBuffer[i]) {
+      return false;
+    }
+    i++;
+  }
+  return true;
 }
 
 
