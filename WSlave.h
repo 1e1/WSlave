@@ -61,9 +61,11 @@ class WSlave {
     //enum MethodType { INVALID, GET, POST, PUT, HEAD, DELETE };
     //WSlave();
     //void begin();
+    //void check();
   private:
-    //EthernetServer server;
-    //EthernetClient client;
+    //EthernetServer _server;
+    //EthernetClient _client;
+    //void _sendHeaders(contentType
 };
 
 
