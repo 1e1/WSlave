@@ -7,7 +7,7 @@
 WSlave::WSlave() :
   _server(PORT)
 {
-  
+  _unbuffer();
 }
 
 void WSlave::begin()
@@ -50,12 +50,12 @@ void WSlave::check()
             _client.print(analogChannel);
             _client.print(" is ");
             _client.print(sensorReading);
-            _client.println("<br />");       
+            _client.println("<br />");
           }
           _client.println("</html>");
           break;
         }
-        if (c == '\n') {
+        if ('\n' == c) {
           // you're starting a new line
           currentLineIsBlank = true;
         } 
@@ -72,4 +72,34 @@ void WSlave::check()
     _client.stop();
     LOGLN("client disonnected");
   }
+}
+
+
+/** 
+  * copy the string starting here until the end character
+  * into buffer (reduce the bufferSiez)
+  * 
+  * @param end   searched char
+  * @param flags <allow multilines> <fail at end>
+  */
+void WSlave::_scan(const char end, char *buffer, uint8_t &bufferSize)
+{
+  int c;
+  while (bufferSize && _client.connected() && _client.available()) {
+    c = _client.read();
+    if (end!=c && 0<c) {
+      *(buffer++) = c;
+      bufferSize--;
+    } else {
+      *(buffer) = 0;
+      return;
+    }
+  }
+  LOGLN();
+}
+
+
+void WSlave::_unbuffer()
+{
+  _bufferSize = BUFFERSIZE;
 }

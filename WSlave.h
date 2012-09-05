@@ -5,6 +5,9 @@
 #include <Ethernet.h>
 
 
+#define BUFFERSIZE 8
+
+
 
 // 3 bytes = byte + @char
 // readOnly
@@ -66,11 +69,17 @@ class WSlave {
     void check();
   
   private:
-    enum MethodType { INVALID, GET, POST, PUT, HEAD, DELETE };
+    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
+    enum MethodType { INVALID, OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT };
     
     EthernetServer _server;
     EthernetClient _client;
+    void _scan(const char end, char *buffer, uint8_t &bufferSize);
     //void _sendHeaders(contentType
+    inline void _unbuffer() __attribute__((always_inline));
+    
+    char _buffer[BUFFERSIZE];
+    uint8_t _bufferSize;
   
 };
 
