@@ -1,5 +1,4 @@
 #include "WSlave.h"
-#include <Ethernet.h>
 
 #include "config.h"
 #include "macros.h"
