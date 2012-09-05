@@ -58,16 +58,11 @@ char obsTemperature (byte *pins)
 
 /** ===================== **/
 
-//inline unsigned int embedTime() __attribute__((always_inline));
-//inline unsigned int embedTime()
-//{
-//  return (unsigned int) (millis() >> 12);
-//}
-
 // Restarts program from beginning but does not reset the peripherals and registers
+inline void software_Reset() __attribute__((always_inline));
 void software_Reset()
 {
-  asm volatile ("jmp 0");  
+  asm volatile ("jmp 0");
 }
 
 
@@ -75,22 +70,23 @@ void software_Reset()
 
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
-static LiquidCrystal lcd = LiquidCrystal(LCD_PINS);
+static LiquidCrystal lcd(LCD_PINS);
 static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #define USE_LCD 1
 #else
 #define USE_LCD 0
 #endif
 
-#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) 
+#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
+#include <WSlave.h>
 static byte mac[] = { MAC };
 static IPAddress ip(IP);
 /*
 static IPAddress gateway(GATEWAY);
 static IPAddress subnet(SUBNET);
 */
-static EthernetServer server(PORT);
+static WSlave server;
 // last address
 #include "webApp.h"
 #define USE_ETH 1
@@ -143,61 +139,11 @@ void loop()
     if (FastTimer::isNewCycle()) {
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
+      // OR: software_Reset();
     }
     // DO SOMETHING NEW
 #endif
   }
-  // listen for incoming clients
-  EthernetClient client = server.available();
-  if (client) {
-    LOGLN("new client");
-    // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
-    while (client.connected()) {
-      if (client.available()) {
-        char c = client.read();
-        LOG(c);
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
-        if (currentLineIsBlank && '\n' == c) {
-          // send a standard http response header
-          client.println("HTTP/1.1 200 OK");
-          client.println("Content-Type: text/html");
-          client.println("Connnection: close");
-          client.println();
-          client.println("<!DOCTYPE HTML>");
-          client.println("<html>");
-                    // add a meta refresh tag, so the browser pulls again every 5 seconds:
-          client.println("<meta http-equiv=\"refresh\" content=\"5\">");
-          // output the value of each analog input pin
-          for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-            int sensorReading = analogRead(analogChannel);
-            client.print("analog input ");
-            client.print(analogChannel);
-            client.print(" is ");
-            client.print(sensorReading);
-            client.println("<br />");       
-          }
-          client.println("</html>");
-          break;
-        }
-        if (c == '\n') {
-          // you're starting a new line
-          currentLineIsBlank = true;
-        } 
-        else if ('\r' != c) {
-          // you've gotten a character on the current line
-          currentLineIsBlank = false;
-        }
-      }
-    }
-    // give the web browser time to receive the data
-    delay(1);
-    // close the connection:
-    client.flush();
-    client.stop();
-    LOGLN("client disonnected");
-  }
+  server.check();
 }
 
