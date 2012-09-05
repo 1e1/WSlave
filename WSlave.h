@@ -74,11 +74,12 @@ class WSlave {
     
     EthernetServer _server;
     EthernetClient _client;
-    void _scan(const char end, char *buffer, uint8_t &bufferSize);
+    uint8_t _scan(const char end);
     //void _sendHeaders(contentType
     inline void _unbuffer() __attribute__((always_inline));
     
-    char _buffer[BUFFERSIZE];
+    char _reverseBuffer[BUFFERSIZE];
+    boolean bufferEquals(char *str);
     uint8_t _bufferSize;
   
 };

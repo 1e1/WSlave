@@ -24,6 +24,7 @@ void WSlave::check()
     // switch strcmp("*", path)
     
     LOGLN("new client");
+    _scan(' ');
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
     while (_client.connected()) {
@@ -82,20 +83,23 @@ void WSlave::check()
   * @param end   searched char
   * @param flags <allow multilines> <fail at end>
   */
-void WSlave::_scan(const char end, char *buffer, uint8_t &bufferSize)
+uint8_t WSlave::_scan(const char end)
 {
+  _unbuffer();
   int c;
-  while (bufferSize && _client.connected() && _client.available()) {
+  while (_bufferSize && _client.connected() && _client.available()) {
     c = _client.read();
     if (end!=c && 0<c) {
-      *(buffer++) = c;
-      bufferSize--;
-    } else {
-      *(buffer) = 0;
-      return;
-    }
+      _reverseBuffer[--_bufferSize] = c;
+    } else break;
   }
-  LOGLN();
+  return BUFFERSIZE - _bufferSize;
+}
+
+
+boolean bufferEquals(char *str)
+{
+  // TODO
 }
 
 
