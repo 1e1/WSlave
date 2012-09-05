@@ -2,6 +2,7 @@
 #define WSLAVE_H_
 
 #include <Arduino.h>
+#include <Ethernet.h>
 
 
 
@@ -57,15 +58,20 @@ struct intfMessage
 
 
 class WSlave {
+  
   public:
-    //enum MethodType { INVALID, GET, POST, PUT, HEAD, DELETE };
-    //WSlave();
-    //void begin();
-    //void check();
+    WSlave();
+    
+    void begin();
+    void check();
+  
   private:
-    //EthernetServer _server;
-    //EthernetClient _client;
+    enum MethodType { INVALID, GET, POST, PUT, HEAD, DELETE };
+    
+    EthernetServer _server;
+    EthernetClient _client;
     //void _sendHeaders(contentType
+  
 };
 
 
