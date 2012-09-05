@@ -59,8 +59,8 @@ char obsTemperature (byte *pins)
 /** ===================== **/
 
 // Restarts program from beginning but does not reset the peripherals and registers
-inline void software_Reset() __attribute__((always_inline));
-void software_Reset()
+inline void software_reset() __attribute__((always_inline));
+void software_reset()
 {
   asm volatile ("jmp 0");
 }
@@ -139,7 +139,7 @@ void loop()
     if (FastTimer::isNewCycle()) {
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
-      // OR: software_Reset();
+      // OR: software_reset();
     }
     // DO SOMETHING NEW
 #endif
