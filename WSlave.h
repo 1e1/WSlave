@@ -106,16 +106,16 @@ class WSlave {
     EthernetServer _server;
     EthernetClient _client;
     void sendHeaders(const MethodType method, const ActionType action);
-    boolean _nextHttpLine();
+    const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
-    const uint8_t _bufferEqualsLength(const char *str);
+    const size_t _bufferEqualsLength(const char *str);
     const boolean _bufferIsEqualTo(const char *str) __attribute__((always_inline));
     const boolean _bufferIsPrefixOf(const char *str) __attribute__((always_inline));
     //void _sendHeaders(contentType
     inline void _unbuffer() __attribute__((always_inline));
     
     char _reverseBuffer[BUFFERSIZE];
-    uint8_t _bufferSize;
+    size_t _bufferSize;
   
 };
 

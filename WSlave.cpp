@@ -5,8 +5,10 @@
 
 
 WSlave::WSlave() :
-  _server(PORT)
+  _server(PORT),
+  _client()
 {
+  LOGLN("new server");
   _unbuffer();
 }
 
@@ -43,62 +45,42 @@ void WSlave::check()
     } else if (_bufferIsPrefixOf("/dict")) {
       action = DICTIONARY;
       LOGLN("dictionary");
+    } else {
+      LOGLN("*");
     }
     _nextHttpLine();
     
     // sweep headers until CRLF CRLF
+    LOGLN("sweeping headers");
     _crlfcrlf:
     while (_nextHttpLine() && --watchdog);
     if (_nextHttpLine() && watchdog) goto _crlfcrlf;
     if (!watchdog) {
       method = INVALID;
     }
+    LOGLN("ready to read body");
     
     // on body:
     if (method == POST) {
-      LOGLN("ready to read body");
+      LOGLN("reading body");
     }
     
-    // an http request ends with a blank line
-    while (_client.connected()) {
-      if (_client.available()) {
-        char c = _client.read();
-        LOG(c);
-        // if you've gotten to the end of the line (received a newline
-        // character) and the line is blank, the http request has ended,
-        // so you can send a reply
-        if (currentLineIsBlank && '\n' == c) {
-          // send a standard http response header
-          _client.println("HTTP/1.1 200 OK");
-          _client.println("Content-Type: text/html");
-          _client.println("Connnection: close");
-          _client.println();
-          _client.println("<!DOCTYPE HTML>");
-          _client.println("<html>");
-                    // add a meta refresh tag, so the browser pulls again every 5 seconds:
-          _client.println("<meta http-equiv=\"refresh\" content=\"5\">");
-          // output the value of each analog input pin
-          for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
-            int sensorReading = analogRead(analogChannel);
-            _client.print("analog input ");
-            _client.print(analogChannel);
-            _client.print(" is ");
-            _client.print(sensorReading);
-            _client.println("<br />");
-          }
-          _client.println("</html>");
-          break;
-        }
-        if ('\n' == c) {
-          // you're starting a new line
-          currentLineIsBlank = true;
-        } 
-        else if ('\r' != c) {
-          // you've gotten a character on the current line
-          currentLineIsBlank = false;
-        }
-      }
+    sendHeaders(method, action);
+    
+    _client.println("<!DOCTYPE HTML>");
+    _client.println("<html>");
+    // output the value of each analog input pin
+    for (int analogChannel = 0; analogChannel < 6; analogChannel++) {
+      int sensorReading = analogRead(analogChannel);
+      _client.print("analog input ");
+      _client.print(analogChannel);
+      _client.print(" is ");
+      _client.print(sensorReading);
+      _client.println("<br />");
     }
+    _client.println("</html>");
+    
+    LOGLN("response sent");
     // give the web browser time to receive the data
     delay(1);
     _close:
@@ -141,7 +123,7 @@ void WSlave::sendHeaders(const MethodType method, const ActionType action)
       break;
       default:
       _client.println("Content-Type: text/html");
-      _client.println("Content-Encoding: gzip");
+      //_client.println("Content-Encoding: gzip");
       LOGLN(" | Content-Type: text/html");
       LOGLN(" | Content-Encoding: gzip");
     }
@@ -159,7 +141,7 @@ void WSlave::sendHeaders(const MethodType method, const ActionType action)
   *
   * @return false if end by a new line
   */
-boolean WSlave::_nextHttpLine()
+const boolean WSlave::_nextHttpLine()
 {
   int c;
   uint8_t watchdog = MAXLINESIZE;
@@ -204,7 +186,7 @@ const boolean WSlave::_scanHttpLine(const char end)
 }
 
 
-const uint8_t WSlave::_bufferEqualsLength(const char *str)
+const size_t WSlave::_bufferEqualsLength(const char *str)
 {
   uint8_t i=0, j = BUFFERSIZE;
   while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
