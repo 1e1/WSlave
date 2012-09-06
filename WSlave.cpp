@@ -27,21 +27,24 @@ void WSlave::check()
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     MethodType method = INVALID;
-    _scan(SP);
-    if (_bufferEquals("GET")) {
+    _scanHttpLine(SP);
+    if (_bufferIsEqualTo("GET")) {
       LOGLN("GET");
       method = GET;
-    } else if (_bufferEquals("POST")) {
+    } else if (_bufferIsEqualTo("POST")) {
       LOGLN("POST");
       method = POST;
     }
-    _scan(SP);
-    if (_bufferEquals("/ws")) {
+    _scanHttpLine(SP);
+    if (_bufferEqualsLength("/ws")==3) {
       LOGLN("webservice");
-    } else {
       // TODO catch /ws?param!!!
+    } else if (_bufferEqualsLength("/dict")==5) {
+      LOGLN("dictionary");
+    } else {
       LOGLN("*");
     }
+    _nextHttpLine();
     
     // an http request ends with a blank line
     boolean currentLineIsBlank = true;
@@ -101,32 +104,67 @@ void WSlave::check()
   * @param end   searched char
   * @param flags <allow multilines> <fail at end>
   */
-void WSlave::_scan(const char end)
+void WSlave::_nextHttpLine()
 {
-  _unbuffer();
   int c;
-  while (_bufferSize && _client.connected() && _client.available()) {
-    c = _client.read();
-    if (end!=c && 0<c) {
-      _reverseBuffer[--_bufferSize] = c;
-    } else break;
+  uint8_t watchdog = BUFFERSIZE;
+  carriageReturn:
+  while (watchdog-- && _client.connected() && _client.available() && _client.read() != CR);
+  lineFeed:
+  if (watchdog-- && _client.connected() && _client.available() && _client.read() != LF) {
+    goto carriageReturn;
   }
 }
 
 
-boolean WSlave::_bufferEquals(const char *str)
+/** 
+  * copy the string starting here until the end character
+  * into buffer (reduce the bufferSiez)
+  * 
+  * @param end   searched char
+  * @param flags <allow multilines> <fail at end>
+  */
+void WSlave::_scanHttpLine(const char end)
 {
-  if ('\0' != str[_bufferSize]) {
-    return false;
+  _unbuffer();
+  int c;
+  char previous = '\0';
+  while (_bufferSize && _client.connected() && _client.available()) {
+    c = _client.read();
+    // unprintable chars are 0x0 .. 0x1F
+    // 0xE0 = 0xFF - 0x1F
+    if (end!=c && (c & 0xE0)) {
+      _reverseBuffer[--_bufferSize] = c;
+    } else if (c & 0x1F) {
+      if (previous==CR && c==LF) {
+        return;
+      } else {
+        previous = c;
+      }
+    } else return;
   }
-  uint8_t i=0, j=_bufferSize;
-  while (i<j--) {
-    if (str[i]!=_reverseBuffer[j] || str[j]!=_reverseBuffer[i]) {
-      return false;
-    }
+}
+
+
+const uint8_t WSlave::_bufferEqualsLength(const char *str)
+{
+  uint8_t i=0, j = BUFFERSIZE;
+  while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
     i++;
   }
-  return true;
+  return i;
+}
+
+
+const boolean WSlave::_bufferIsEqualTo(const char *str)
+{
+  return _bufferEqualsLength(str)==strlen(str);
+}
+
+
+const boolean WSlave::_bufferIsPrefixOf(const char *str)
+{
+  return _bufferSize == strlen(str) && _bufferEqualsLength(str)==strlen(str);
 }
 
 

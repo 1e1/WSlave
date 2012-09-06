@@ -29,6 +29,8 @@
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
+#define CR '\r'
+#define LF '\n'
 #define CRLF "\r\n"
 
 
@@ -98,12 +100,15 @@ class WSlave {
     
     EthernetServer _server;
     EthernetClient _client;
-    void _scan(const char end);
+    void _nextHttpLine();
+    void _scanHttpLine(const char end);
+    const uint8_t _bufferEqualsLength(const char *str);
+    const boolean _bufferIsEqualTo(const char *str) __attribute__((always_inline));
+    const boolean _bufferIsPrefixOf(const char *str) __attribute__((always_inline));
     //void _sendHeaders(contentType
     inline void _unbuffer() __attribute__((always_inline));
     
     char _reverseBuffer[BUFFERSIZE];
-    boolean _bufferEquals(const char *str);
     uint8_t _bufferSize;
   
 };
