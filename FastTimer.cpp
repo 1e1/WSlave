@@ -9,8 +9,8 @@ boolean FastTimer::update()
 {
   _lastEmbedTime  = _embedTime;
   _embedTime      = EMBEDTIME;
-  //return (0x01 & _lastEmbedTime) != (0x01 & _embedTime);
-  return 0x01 & (_lastEmbedTime ^ _embedTime);
+  //return 0x01 & (_lastEmbedTime ^ _embedTime);
+  return _lastEmbedTime != _embedTime;
 }
 
 boolean FastTimer::isNewCycle()
