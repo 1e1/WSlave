@@ -18,15 +18,14 @@ void WSlave::begin()
 void WSlave::check()
 {
   if (_client = _server.available()) {
-    // _readMethod()
-    // _readPath()
-    // _readHeaders()
-    // switch strcmp("*", path)
-    
     LOGLN("new client");
     
-    // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     MethodType method = INVALID;
+    ActionType action = ROOT;
+    uint8_t watchdog  = MAXHEADERS;
+    boolean currentLineIsBlank = true;
+    
+    // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     _scanHttpLine(SP);
     if (_bufferIsEqualTo("GET")) {
       LOGLN("GET");
@@ -34,20 +33,33 @@ void WSlave::check()
     } else if (_bufferIsEqualTo("POST")) {
       LOGLN("POST");
       method = POST;
-    }
+    } else goto _close;
+    
     _scanHttpLine(SP);
-    if (_bufferEqualsLength("/ws")==3) {
+    if (_bufferIsPrefixOf("/ws")) {
+      action = SERVICE;
       LOGLN("webservice");
       // TODO catch /ws?param!!!
-    } else if (_bufferEqualsLength("/dict")==5) {
+    } else if (_bufferIsPrefixOf("/dict")) {
+      action = DICTIONARY;
       LOGLN("dictionary");
-    } else {
-      LOGLN("*");
     }
     _nextHttpLine();
     
+    // sweep headers until CRLF CRLF
+    _crlfcrlf:
+    while (_nextHttpLine() && --watchdog);
+    if (_nextHttpLine() && watchdog) goto _crlfcrlf;
+    if (!watchdog) {
+      method = INVALID;
+    }
+    
+    // on body:
+    if (method == POST) {
+      LOGLN("ready to read body");
+    }
+    
     // an http request ends with a blank line
-    boolean currentLineIsBlank = true;
     while (_client.connected()) {
       if (_client.available()) {
         char c = _client.read();
@@ -89,6 +101,7 @@ void WSlave::check()
     }
     // give the web browser time to receive the data
     delay(1);
+    _close:
     // close the connection:
     _client.flush();
     _client.stop();
@@ -98,22 +111,65 @@ void WSlave::check()
 
 
 /** 
+  * Status:
+  *   1: 200
+  *   2: 200
+  *   3: 200
+  *   *: 400 "Bad Request"
+  *   *: 417 "The behavior expected fot the server is not supported."
+  * Content-Type:
+  *   1: application/json
+  *   2: text/html
+  *   3: text/cache-manifest
+  * Content-Encoding:
+  *   2: gzip
+  * Connection: close
+  */
+void WSlave::sendHeaders(const MethodType method, const ActionType action)
+{
+  LOGLN("HTTP response: ");
+  if (method == INVALID) {
+    _client.print("HTTP/1.1 417 Expectation failed");
+    LOGLN(" | HTTP/1.1 417 Expectation failed");
+  } else {
+    _client.print("HTTP/1.1 200 OK");
+    switch (action) {
+      case SERVICE:
+      case DICTIONARY:
+      _client.println("Content-Type: application/json");
+      LOGLN(" | Content-Type: application/json");
+      break;
+      default:
+      _client.println("Content-Type: text/html");
+      _client.println("Content-Encoding: gzip");
+      LOGLN(" | Content-Type: text/html");
+      LOGLN(" | Content-Encoding: gzip");
+    }
+  }
+  _client.println("Connnection: close");
+  _client.println();
+  LOGLN(" | Connnection: close");
+  LOGLN(" |--");
+}
+
+
+/** 
   * copy the string starting here until the end character
   * into buffer (reduce the bufferSiez)
-  * 
-  * @param end   searched char
-  * @param flags <allow multilines> <fail at end>
+  *
+  * @return false if end by a new line
   */
-void WSlave::_nextHttpLine()
+boolean WSlave::_nextHttpLine()
 {
   int c;
-  uint8_t watchdog = BUFFERSIZE;
-  carriageReturn:
-  while (watchdog-- && _client.connected() && _client.available() && _client.read() != CR);
-  lineFeed:
-  if (watchdog-- && _client.connected() && _client.available() && _client.read() != LF) {
-    goto carriageReturn;
+  uint8_t watchdog = MAXLINESIZE;
+  _carriageReturn:
+  while (_client.connected() && _client.available() && _client.read() != CR && --watchdog);
+  _lineFeed:
+  if (_client.connected() && _client.available() && _client.read() != LF && watchdog) {
+    goto _carriageReturn;
   }
+  return watchdog != MAXLINESIZE;
 }
 
 
@@ -123,8 +179,9 @@ void WSlave::_nextHttpLine()
   * 
   * @param end   searched char
   * @param flags <allow multilines> <fail at end>
+  * @return false if end by a new line
   */
-void WSlave::_scanHttpLine(const char end)
+const boolean WSlave::_scanHttpLine(const char end)
 {
   _unbuffer();
   int c;
@@ -137,12 +194,13 @@ void WSlave::_scanHttpLine(const char end)
       _reverseBuffer[--_bufferSize] = c;
     } else if (c & 0x1F) {
       if (previous==CR && c==LF) {
-        return;
+        return false;
       } else {
         previous = c;
       }
-    } else return;
+    } else break;
   }
+  return true;
 }
 
 

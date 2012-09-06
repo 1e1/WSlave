@@ -9,8 +9,10 @@
  loop         : server.check();
  
  URL
- GET          : /(ws)? (no param)
- POST         : /(D|P)<id>* (value in body param)
+ GET  /       : home
+ GET  /ws     : read status (no param)
+ POST /D<id>  : set bool value from body to digital pin
+ POST /P<id>  : set char value from body to PWM pin
  
  created 3 Sep 2012
  by Aymeric GERLIER
@@ -26,6 +28,8 @@
 
 
 #define BUFFERSIZE 8
+#define MAXLINESIZE 255
+#define MAXHEADERS 255
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
@@ -97,11 +101,13 @@ class WSlave {
   private:
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
     enum MethodType { INVALID/*, OPTIONS*/, GET/*, HEAD*/, POST/*, PUT, DELETE, TRACE, CONNECT*/ };
+    enum ActionType { ROOT, SERVICE, CACHE, DICTIONARY };
     
     EthernetServer _server;
     EthernetClient _client;
-    void _nextHttpLine();
-    void _scanHttpLine(const char end);
+    void sendHeaders(const MethodType method, const ActionType action);
+    boolean _nextHttpLine();
+    const boolean _scanHttpLine(const char end);
     const uint8_t _bufferEqualsLength(const char *str);
     const boolean _bufferIsEqualTo(const char *str) __attribute__((always_inline));
     const boolean _bufferIsPrefixOf(const char *str) __attribute__((always_inline));
