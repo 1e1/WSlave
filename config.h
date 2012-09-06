@@ -1,8 +1,8 @@
 #ifndef CONFIG_H_
 #define CONFIG_H_
 
-// VELOCITY (choose inside macros.h)
-#define EMBEDTIME EMBEDTIME_65s_4h
+
+#define DEBUG 1
 
 // ETH conf
 #define IP          10,240,170, 12
@@ -19,6 +19,9 @@
 #define LCD_WIDTH   16
 #define LCD_HEIGHT  2
 */
+
+// VELOCITY (choose inside macros.h)
+#define EMBEDTIME EMBEDTIME_65s_4h
 /*
 // design conf
 //#define PIN_D00 "RX"

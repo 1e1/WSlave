@@ -15,7 +15,6 @@
  */
 
 
-#define DEBUG 1
 
 #include "config.h"
 #include "macros.h"
@@ -86,7 +85,7 @@ static IPAddress ip(IP);
 static IPAddress gateway(GATEWAY);
 static IPAddress subnet(SUBNET);
 */
-static WSlave server;
+static WSlave wsengine;
 // last address
 #include "webApp.h"
 #define USE_ETH 1
@@ -107,6 +106,7 @@ void setup()
 #if DEBUG
   Serial.begin(9600);
 #endif
+  LOGLN("=== BEGIN SETUP ===");
 #if USE_LCD
   lcd.begin(LCD_WIDTH, LCD_HEIGHT);
   pinMode(LCD_BLPIN, OUTPUT);
@@ -117,26 +117,28 @@ void setup()
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
   // by:     Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address, 10000);...}
-  if (0==Ethernet.begin(mac)) {
+  //if (0==Ethernet.begin(mac)) {
     LOGLN("Failed to configure Ethernet using DHCP");
     Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
-  }
+  //}
   // then don't forget Ethernet.maintain()
   LOG("IP:   ");  LOGLN(Ethernet.localIP());
   LOG("MASK: ");  LOGLN(Ethernet.subnetMask());
   LOG("GATE: ");  LOGLN(Ethernet.gatewayIP());
   LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
-  server.begin();
-  LOGLN("server started");
+  wsengine.begin();
 #endif
+  LOGLN("=== END SETUP ===");
 }
 
 
 void loop()
 {
   if (FastTimer::update()) {
+    LOGLN("new time section");
 #if USE_ETH
     if (FastTimer::isNewCycle()) {
+      LOGLN("new time cycle");
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
       // OR: software_reset();
@@ -144,6 +146,6 @@ void loop()
     // DO SOMETHING NEW
 #endif
   }
-  server.check();
+  wsengine.check();
 }
 
