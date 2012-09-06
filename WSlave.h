@@ -10,7 +10,7 @@
  
  URL
  GET          : /(ws)? (no param)
- POST         : /<id>* (value in body param)
+ POST         : /(D|P)<id>* (value in body param)
  
  created 3 Sep 2012
  by Aymeric GERLIER
