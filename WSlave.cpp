@@ -26,13 +26,16 @@ void WSlave::check()
     LOGLN("new client");
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
-    _scan(' ');
+    MethodType method = INVALID;
+    _scan(SP);
     if (_bufferEquals("GET")) {
       LOGLN("GET");
-    } else if (_bufferEquals("PUT")) {
-      LOGLN("PUT");
+      method = GET;
+    } else if (_bufferEquals("POST")) {
+      LOGLN("POST");
+      method = POST;
     }
-    _scan(' ');
+    _scan(SP);
     if (_bufferEquals("/ws")) {
       LOGLN("webservice");
     } else {

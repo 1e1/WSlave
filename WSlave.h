@@ -1,3 +1,23 @@
+/*
+ Rest Server
+ 
+ https://github.com/1e1/WSlave
+ 
+ USAGE
+ declaration  : static WSlave server;
+ setup        : server.begin();
+ loop         : server.check();
+ 
+ URL
+ GET          : /(ws)? (no param)
+ POST         : /<id>* (value in body param)
+ 
+ created 3 Sep 2012
+ by Aymeric GERLIER
+ 
+ */
+
+
 #ifndef WSLAVE_H_
 #define WSLAVE_H_
 
@@ -6,6 +26,10 @@
 
 
 #define BUFFERSIZE 8
+
+// Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
+#define SP ' '
+#define CRLF "\r\n"
 
 
 
@@ -70,7 +94,7 @@ class WSlave {
   
   private:
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
-    enum MethodType { INVALID, OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE, CONNECT };
+    enum MethodType { INVALID/*, OPTIONS*/, GET/*, HEAD*/, POST/*, PUT, DELETE, TRACE, CONNECT*/ };
     
     EthernetServer _server;
     EthernetClient _client;
