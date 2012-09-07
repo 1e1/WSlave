@@ -31,7 +31,7 @@ namespace FastTimer {
   // call it once in the main loop()
   const uint8_t update();
   
-  static uint8_t _embedTime = -1; // -1;
+  static uint8_t _embedTime = 0; // -1;
   
 }
 
