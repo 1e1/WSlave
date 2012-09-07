@@ -58,7 +58,7 @@ char obsTemperature (byte *pins)
 /** ===================== **/
 
 // Restarts program from beginning but does not reset the peripherals and registers
-inline void software_reset() __attribute__((always_inline));
+__attribute__((always_inline)) inline void software_reset();
 void software_reset()
 {
   asm volatile ("jmp 0");
