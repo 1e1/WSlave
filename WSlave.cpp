@@ -21,10 +21,9 @@ void WSlave::check()
   if (_client = _server.available()) {
     LOGLN("new client");
     
-    MethodType method = INVALID;
-    ActionType action = ROOT;
-    uint8_t watchdog  = MAXHEADERS;
-    boolean currentLineIsBlank = true;
+    static MethodType method = INVALID;
+    static ActionType action = ROOT;
+    static uint8_t watchdog  = MAXHEADERS;
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     _scanHttpLine(SP);
@@ -162,8 +161,8 @@ void WSlave::_sendHeaders(const MethodType method, const ActionType action)
 
 void WSlave::_sendBody(const prog_uchar bytes[])
 {
-  uint8_t buffer[WRITEBUFFERSIZE];
-  size_t i = 0;
+  static uint8_t buffer[WRITEBUFFERSIZE];
+  static size_t i = 0;
   while ((buffer[i++] = pgm_read_byte(bytes++)))
   {
     if (i == WRITEBUFFERSIZE) {
@@ -187,8 +186,8 @@ void WSlave::_sendBody(const prog_uchar bytes[])
   */
 const boolean WSlave::_nextHttpLine()
 {
-  int c;
-  uint8_t watchdog = MAXLINESIZE;
+  static int c;
+  static uint8_t watchdog = MAXLINESIZE;
   _carriageReturn:
   while (_client.connected() && _client.available() && _client.read() != CR && --watchdog);
   _lineFeed:
@@ -210,8 +209,8 @@ const boolean WSlave::_nextHttpLine()
 const boolean WSlave::_scanHttpLine(const char end)
 {
   _unbuffer();
-  int c;
-  char previous = '\0';
+  static int c;
+  static char previous = '\0';
   while (_bufferSize && _client.connected() && _client.available()) {
     c = _client.read();
     // unprintable chars are 0x0 .. 0x1F
@@ -232,7 +231,7 @@ const boolean WSlave::_scanHttpLine(const char end)
 
 const size_t WSlave::_bufferEqualsLength(const char *str)
 {
-  uint8_t i=0, j = READBUFFERSIZE;
+  static uint8_t i=0, j = READBUFFERSIZE;
   while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
     i++;
   }
