@@ -86,8 +86,6 @@ static IPAddress gateway(GATEWAY);
 static IPAddress subnet(SUBNET);
 */
 static WSlave wsengine;
-// last address
-#include "webApp.h"
 #define USE_ETH 1
 #else
 #define USE_ETH 0
