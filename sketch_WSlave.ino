@@ -64,6 +64,13 @@ void software_reset()
   asm volatile ("jmp 0");
 }
 
+__attribute__((always_inline)) inline const size_t digitals_len();
+__attribute__((always_inline)) inline const size_t pulses_len();
+__attribute__((always_inline)) inline const size_t messages_len();
+const size_t digitals_len() { return ARRAYLEN(digitals); }
+const size_t pulses_len()   { return ARRAYLEN(pulses);   }
+const size_t messages_len() { return ARRAYLEN(messages); }
+
 
 
 
