@@ -57,7 +57,7 @@
 /** LOOP **/
 // wikipedia "foreach_loop"
 #define FOREACH(idxtype, idxpvar, col, colsiz ) idxtype* idxpvar; for( idxpvar=col ; idxpvar < (col + (colsiz)) ; idxpvar++)
-#define ARRAYLEN( ary ) ( sizeof(ary)/sizeof(ary[0]) )
+#define ARRAYLEN( ary ) ( sizeof(ary)/sizeof(*ary) )
 /*
 FOREACH (char, p1, c1, strlen(c1) ) {
   printf("loop 1 : %c\n",*p1);
