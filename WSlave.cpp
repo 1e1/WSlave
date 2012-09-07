@@ -62,13 +62,13 @@ void WSlave::check()
       LOGLN("reading body");
     }
     
-    sendHeaders(method, action);
+    _sendHeaders(method, action);
     
     //if (method!=HEAD) {
       switch (action) {
         
         default:
-        sendBody(webpage);
+        _sendBody(webpage);
       }
     //} // if (method!=HEAD)
     
@@ -114,7 +114,7 @@ void WSlave::check()
   *   2: max-age=604800 // 7* 24* 60* 60
   * Connection: close
   */
-void WSlave::sendHeaders(const MethodType method, const ActionType action)
+void WSlave::_sendHeaders(const MethodType method, const ActionType action)
 {
   LOGLN("HTTP response: ");
   if (method == INVALID) {
@@ -142,7 +142,7 @@ void WSlave::sendHeaders(const MethodType method, const ActionType action)
 }
 
 
-void WSlave::sendBody(const prog_uchar bytes[])
+void WSlave::_sendBody(const prog_uchar bytes[])
 {
   uint8_t buffer[WRITEBUFFERSIZE];
   size_t i = 0;

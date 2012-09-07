@@ -115,8 +115,8 @@ class WSlave {
     
     EthernetServer _server;
     EthernetClient _client;
-    inline void sendHeaders(const MethodType method, const ActionType action);
-    void sendBody(const prog_uchar bytes[]);
+    inline void _sendHeaders(const MethodType method, const ActionType action);
+    void _sendBody(const prog_uchar bytes[]);
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
     const size_t _bufferEqualsLength(const char *str);
