@@ -16,9 +16,9 @@
 
 
 
+#include "core.h"
 #include "config.h"
 #include "macros.h"
-#include "WSlave.h"
 #include "FastTimer.h"
 #include <SPI.h>
 
@@ -28,7 +28,7 @@
 /**      connections      **/
 /** ===================== **/
 
-static intfDigital digitals[] = {
+const intfDigital digitals[] = {
   WSDIGITAL("relay1.1", 22),
   WSDIGITAL("relay1.2", 24),
   WSDIGITAL("relay1.3", 26),
@@ -38,11 +38,11 @@ static intfDigital digitals[] = {
   WSDIGITAL("relay1.7", 34),
   WSDIGITAL("relay1.8", 36)
 };
-static intfPulse pulses[] = {
+const intfPulse pulses[] = {
   WSPULSE("Pulse", 24)
 };
 byte temperaturePins[] = { 13 };
-static intfMessage messages[] = {
+const intfMessage messages[] = {
   { obsTemperature, 'x', temperaturePins, "Indoor" }
 };
 
@@ -69,6 +69,7 @@ void software_reset()
 
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
+#include "LSlave.h"
 static LiquidCrystal lcd(LCD_PINS);
 static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #define USE_LCD 1
@@ -78,7 +79,7 @@ static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 
 #if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
-#include <WSlave.h>
+#include "WSlave.h"
 static byte mac[] = { MAC };
 static IPAddress ip(IP);
 /*
