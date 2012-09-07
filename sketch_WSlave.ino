@@ -117,6 +117,9 @@ void setup()
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
   // by:     Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address, 10000);...}
+  // reduce number of client sockets to only one master (break loops)
+  // change: Ethernet.h/#define MAX_SOCK_NUM 4
+  // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   //if (0==Ethernet.begin(mac)) {
     LOGLN("Failed to configure Ethernet using DHCP");
     Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
