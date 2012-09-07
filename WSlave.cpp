@@ -9,10 +9,12 @@ WSlave::WSlave() :
   // RESETBUFFER //_unbuffer();
 }
 
+
 void WSlave::begin()
 {
   _server.begin();
 }
+
 
 void WSlave::check()
 {
@@ -94,6 +96,22 @@ void WSlave::check()
     _client.stop();
     LOGLN("client disonnected");
   }
+}
+
+
+void WSlave::_setDictionary()
+{
+/*
+  const string strings[ARRAYLEN(messages)+ARRAYLEN(pulses)+ARRAYLEN(digitals)];
+  size_t i;
+  // messages
+  for (i=0; i<ARRAYLEN(messages); i++) {
+    
+  }
+  // pulses
+  // digitals
+  // analogs
+*/
 }
 
 
