@@ -6,7 +6,7 @@
 #define WSDIGITAL(NAME, PIN) { PIN, NAME }
 #define WSPULSE(NAME, PIN) { PIN, 0, NAME }
 #define WSMESSAGE(NAME, FUNCTION, PINS...) { FUNCTION, '#', {PINS}, NAME }
-#define LONGBYTE(b) static const char b[] PROGMEM
+#define LONGBYTES(b) static const prog_uchar b[] PROGMEM
 #define LONGSTRING(str) static const prog_uchar str[] PROGMEM
 /** === **/
 
@@ -14,11 +14,11 @@
 
 /** DEBUGGING TOOLS **/
 #if DEBUG
-  #define LOG(message)    Serial.print  (message);
-  #define LOGLN(message)  Serial.println(message);
+  #define LOG(...)    Serial.print  (__VA_ARGS__);
+  #define LOGLN(...)  Serial.println(__VA_ARGS__);
 #else
-  #define LOG(message)
-  #define LOGLN(message)
+  #define LOG(...)
+  #define LOGLN(...)
 #endif
 /** === **/
 
