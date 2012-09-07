@@ -1,7 +1,5 @@
 #include "WSlave.h"
 
-#include "config.h"
-#include "macros.h"
 
 
 WSlave::WSlave() :

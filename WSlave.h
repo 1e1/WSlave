@@ -25,6 +25,8 @@
 
 #include <Arduino.h>
 #include <Ethernet.h>
+#include "config.h"
+#include "macros.h"
 
 
 #define BUFFERSIZE 8
