@@ -3,6 +3,8 @@
 
 
 #include <Arduino.h>
+#include "config.h"
+#include "macros.h"
 
 
 
@@ -61,6 +63,16 @@ struct intfMessage
 extern const intfDigital  digitals[];
 extern const intfPulse    pulses[]  ;
 extern const intfMessage  messages[];
+extern const size_t digitals_len();
+extern const size_t pulses_len();
+extern const size_t messages_len();
+
+
+namespace Core {
+  
+  // TODO
+  
+};
 
 
 
