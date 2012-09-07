@@ -21,7 +21,9 @@
 */
 
 // VELOCITY (choose inside macros.h)
-#define EMBEDTIME EMBEDTIME_65s_4h
+//#define EMBEDTIME EMBEDTIME_65s_4h
+#define EMBEDTIME EMBEDTIME_16s_1h
+
 /*
 // design conf
 //#define PIN_D00 "RX"
