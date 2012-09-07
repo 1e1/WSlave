@@ -25,14 +25,17 @@
 
 #include <Arduino.h>
 #include <Ethernet.h>
+#include <avr/pgmspace.h>
+#include "webApp.h"
 #include "config.h"
 #include "macros.h"
 
 
-#define BUFFERSIZE 8
+#define READBUFFERSIZE 8
+#define WRITEBUFFERSIZE 32
 #define MAXLINESIZE 255
 #define MAXHEADERS 255
-#define RESETBUFFER (_bufferSize = BUFFERSIZE)
+#define RESETBUFFER (_bufferSize = READBUFFERSIZE)
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
@@ -93,6 +96,10 @@ struct intfMessage
 
 
 
+LONGBYTES(webpage) = WEBPAGE;
+
+
+
 class WSlave {
   
   public:
@@ -109,6 +116,7 @@ class WSlave {
     EthernetServer _server;
     EthernetClient _client;
     inline void sendHeaders(const MethodType method, const ActionType action);
+    void sendBody(const prog_uchar bytes[]);
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
     const size_t _bufferEqualsLength(const char *str);
@@ -116,7 +124,7 @@ class WSlave {
     __attribute__((always_inline)) inline const boolean _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
-    char _reverseBuffer[BUFFERSIZE];
+    char _reverseBuffer[READBUFFERSIZE];
     size_t _bufferSize;
   
 };

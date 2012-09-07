@@ -64,6 +64,14 @@ void WSlave::check()
     
     sendHeaders(method, action);
     
+    //if (method!=HEAD) {
+      switch (action) {
+        
+        default:
+        sendBody(webpage);
+      }
+    //} // if (method!=HEAD)
+    
     _client.println("<!DOCTYPE HTML>");
     _client.println("<html>");
     // output the value of each analog input pin
@@ -102,6 +110,8 @@ void WSlave::check()
   *   3: text/cache-manifest
   * Content-Encoding:
   *   2: gzip
+  * Cache-Control:
+  *   2: max-age=604800 // 7* 24* 60* 60
   * Connection: close
   */
 void WSlave::sendHeaders(const MethodType method, const ActionType action)
@@ -129,6 +139,25 @@ void WSlave::sendHeaders(const MethodType method, const ActionType action)
   _client.println();
   LOGLN(" | Connnection: close");
   LOGLN(" |--");
+}
+
+
+void WSlave::sendBody(const prog_uchar bytes[])
+{
+  uint8_t buffer[WRITEBUFFERSIZE];
+  size_t i = 0;
+  while ((buffer[i++] = pgm_read_byte(bytes++)))
+  {
+    if (i == WRITEBUFFERSIZE) {
+      _client.write(buffer, WRITEBUFFERSIZE);
+      LOG(" | ");
+      LOGLN(buffer[0], WRITEBUFFERSIZE);
+      i = 0;
+    }
+  }
+  if (i) {
+    _client.write(buffer, i);
+  }
 }
 
 
@@ -185,7 +214,7 @@ const boolean WSlave::_scanHttpLine(const char end)
 
 const size_t WSlave::_bufferEqualsLength(const char *str)
 {
-  uint8_t i=0, j = BUFFERSIZE;
+  uint8_t i=0, j = READBUFFERSIZE;
   while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
     i++;
   }
@@ -207,5 +236,5 @@ const boolean WSlave::_bufferIsPrefixOf(const char *str)
 
 void WSlave::_unbuffer()
 {
-  _bufferSize = BUFFERSIZE;
+  _bufferSize = READBUFFERSIZE;
 }
