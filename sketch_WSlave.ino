@@ -112,6 +112,7 @@ void setup()
 #if DEBUG
   Serial.begin(9600);
 #endif
+  LOGLN();
   LOGLN("=== BEGIN SETUP ===");
 #if USE_LCD
   lcd.begin(LCD_WIDTH, LCD_HEIGHT);
@@ -138,14 +139,17 @@ void setup()
   wsengine.begin();
 #endif
   LOGLN("=== END SETUP ===");
+  LOGLN();
 }
 
 
 void loop()
 {
-  if (FastTimer::update()) {
+  const uint8_t timer = FastTimer::update();
+  if (timer) {
 #if USE_ETH
-    if (FastTimer::isNewCycle()) {
+    // no true statement since halt-maxlife
+    if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");

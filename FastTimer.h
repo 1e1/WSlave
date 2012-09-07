@@ -26,15 +26,14 @@
 **/
 
 
-class FastTimer {
-  public:
-    // call it in the main loop()
-    static boolean update();
-    // call it in the main loop() if update() is true
-    static boolean isNewCycle();
-  private:
-    static uint8_t _embedTime, _lastEmbedTime;
-};
+namespace FastTimer {
+  
+  // call it once in the main loop()
+  const uint8_t update();
+  
+  static uint8_t _embedTime = -1; // -1;
+  
+}
 
 
 #endif FASTTIMER_H_
