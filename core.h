@@ -48,7 +48,7 @@ struct intfMessage
 {
   // mega has 0..69 pin
   // char [-128..127]
-  char (*observe) (byte *pins);
+  /*const*/ char (*observe) (byte *pins);
   char value;
   const byte *pins;
   const char *label;
