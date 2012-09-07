@@ -3,11 +3,10 @@
 
 
 WSlave::WSlave() :
-  _server(PORT),
-  _client()
+  _server(PORT)/*,
+  _client()*/
 {
-  LOGLN("new server");
-  _unbuffer();
+  // RESETBUFFER //_unbuffer();
 }
 
 void WSlave::begin()
