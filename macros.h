@@ -14,11 +14,13 @@
 
 /** DEBUGGING TOOLS **/
 #if DEBUG
-  #define LOG(...)    Serial.print  (__VA_ARGS__);
-  #define LOGLN(...)  Serial.println(__VA_ARGS__);
+  #define LOG(...)    Serial.print  (__VA_ARGS__)
+  #define LOGLN(...)  Serial.println(__VA_ARGS__)
+  #define WAIT(ms)    delay(ms)
 #else
   #define LOG(...)
   #define LOGLN(...)
+  #define WAIT(ms)
 #endif
 /** === **/
 
