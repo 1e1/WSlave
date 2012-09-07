@@ -146,6 +146,8 @@ void loop()
     // DO SOMETHING NEW
 #endif
   }
+#if USE_ETH
   wsengine.check();
+#endif
 }
 
