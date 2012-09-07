@@ -135,13 +135,14 @@ void setup()
 void loop()
 {
   if (FastTimer::update()) {
-    LOGLN("new time section");
 #if USE_ETH
     if (FastTimer::isNewCycle()) {
-      LOGLN("new time cycle");
+      LOGLN("*** new time cycle ***");
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
       // OR: software_reset();
+    } else {
+      LOGLN("*** new time section ***");
     }
     // DO SOMETHING NEW
 #endif
