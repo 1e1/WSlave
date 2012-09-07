@@ -16,5 +16,12 @@
 #ifndef LSLAVE_H_
 #define LSLAVE_H_
 
+#include <Arduino.h>
+#include <LiquidCrystal.h>
+#include "core.h"
+#include "config.h"
+#include "macros.h"
+#include "webApp.h"
+
 
 #endif
