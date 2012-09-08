@@ -6,7 +6,6 @@ WSlave::WSlave() :
   _server(PORT)/*,
   _client()*/
 {
-  // RESETBUFFER //_unbuffer();
 }
 
 
@@ -222,13 +221,13 @@ const boolean WSlave::_scanHttpLine(const char end)
   int c;
   char previous = '\0';
   LOG("scanning: [");
-  while (_bufferSize && _client.connected() && _client.available()) {
+  while (_bufferSize<READBUFFERSIZE && _client.connected() && _client.available()) {
     c = _client.read();
     LOG((char)c);
     // unprintable chars are 0x0 .. 0x1F
     // 0xE0 = 0xFF - 0x1F
     if (end!=c && (c & 0xE0)) {
-      _reverseBuffer[--_bufferSize] = c;
+      _buffer[_bufferSize++] = c;
     } else if (c & 0x1F) {
       if (previous==CR && c==LF) {
         LOGLN();
@@ -245,17 +244,15 @@ const boolean WSlave::_scanHttpLine(const char end)
 
 const uint8_t WSlave::_bufferEqualsLength(const char *str)
 {
-  uint8_t i=0, j = READBUFFERSIZE;
-  while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
-    i++;
-  }
+  uint8_t i=0;
+  while (i<_bufferSize && str[i]==_buffer[i]) i++;
   return i;
 }
 
 
 const boolean WSlave::_bufferIsEqualTo(const char *str)
 {
-  return (READBUFFERSIZE-_bufferSize) == strlen(str) && _bufferEqualsLength(str) == strlen(str);
+  return _bufferSize == strlen(str) && _bufferEqualsLength(str) == strlen(str);
 }
 
 
@@ -267,5 +264,5 @@ const uint8_t WSlave::_bufferIsPrefixOf(const char *str)
 
 void WSlave::_unbuffer()
 {
-  _bufferSize = READBUFFERSIZE;
+  _bufferSize = 0;
 }

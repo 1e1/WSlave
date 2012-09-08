@@ -36,7 +36,6 @@
 #define WRITEBUFFERSIZE 64
 #define MAXLINESIZE 255
 #define MAXHEADERS 255
-#define RESETBUFFER (_bufferSize = READBUFFERSIZE)
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
@@ -77,7 +76,7 @@ class WSlave {
     __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
-    char _reverseBuffer[READBUFFERSIZE];
+    char _buffer[READBUFFERSIZE];
     uint8_t _bufferSize;
   
 };
