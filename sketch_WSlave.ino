@@ -154,7 +154,7 @@ void loop()
   digitalWrite(BUSYLED_PIN, HIGH);
 #endif
 #if USE_ETH
-    // no true statement since halt-maxlife
+    // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
