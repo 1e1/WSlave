@@ -26,7 +26,7 @@
 #include <Arduino.h>
 #include <Ethernet.h>
 #include <avr/pgmspace.h>
-#include "core.h"
+#include "Core.h"
 #include "config.h"
 #include "macros.h"
 #include "webApp.h"

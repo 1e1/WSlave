@@ -16,7 +16,7 @@
 
 
 
-#include "core.h"
+#include "Core.h"
 #include "config.h"
 #include "macros.h"
 #include "FastTimer.h"
