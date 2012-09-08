@@ -114,6 +114,9 @@ void setup()
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
+#if BUSYLED_PIN
+  pinMode(BUSYLED_PIN, OUTPUT);
+#endif
 #if USE_LCD
   lcd.begin(LCD_WIDTH, LCD_HEIGHT);
   pinMode(LCD_BLPIN, OUTPUT);
@@ -147,8 +150,11 @@ void loop()
 {
   const uint8_t timer = FastTimer::update();
   if (timer) {
+#if BUSYLED_PIN
+  digitalWrite(BUSYLED_PIN, HIGH);
+#endif
 #if USE_ETH
-    // no true statement since halt-maxlife
+    // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
@@ -159,7 +165,10 @@ void loop()
     }
     // DO SOMETHING NEW
 #endif
-  }
+#if BUSYLED_PIN
+  digitalWrite(BUSYLED_PIN, LOW);
+#endif
+  } // if (timer) 
 #if USE_ETH
   wsengine.check();
 #endif

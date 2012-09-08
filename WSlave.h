@@ -47,7 +47,7 @@
 
 
 LONGBYTES(webpage) = WEBPAGE;
-static size_t webpage_len = ARRAYLEN(webpage); // ~ 2100
+static size_t webpage_len = ARRAYLEN(webpage); // ~ 1709o
 
 
 
@@ -68,7 +68,7 @@ class WSlave {
     EthernetClient _client;
     void _setDictionary();
     inline void _sendHeaders(const MethodType method, const ActionType action);
-    void _sendBody(const prog_uchar bytes[]);
+    //void _sendBody(const prog_uchar bytes[]);
     void _sendBody(const prog_uchar data[], size_t length);
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);

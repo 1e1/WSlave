@@ -4,6 +4,9 @@
 
 #define DEBUG 1
 
+// LED
+#define BUSYLED_PIN 13
+
 // ETH conf
 #define IP          10,240,170, 12
 #define SUBNET      255,255,255,0
