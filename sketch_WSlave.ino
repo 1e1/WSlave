@@ -130,10 +130,14 @@ void setup()
   // reduce number of client sockets to only one master (break loops)
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
-  //if (0==Ethernet.begin(mac)) {
+#if USE_DHCP
+  if (0==Ethernet.begin(mac)) {
+#endif
     LOGLN("Failed to configure Ethernet using DHCP");
     Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
-  //}
+#if USE_DHCP
+  }
+#endif
   // then don't forget Ethernet.maintain()
   LOG("IP:   ");  LOGLN(Ethernet.localIP());
   LOG("MASK: ");  LOGLN(Ethernet.subnetMask());
@@ -157,8 +161,10 @@ void loop()
     // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
+#if USE_DHCP
       Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
       LOGLN("renew DHCP");
+#endif
       // OR: software_reset();
     } else {
       LOGLN("*** new time section ***");
