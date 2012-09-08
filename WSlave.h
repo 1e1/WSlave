@@ -72,7 +72,7 @@ class WSlave {
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
     const uint8_t _bufferEqualsLength(const char *str);
-    inline const boolean _bufferIsEqualTo(const char *str);
+    __attribute__((always_inline)) inline const boolean _bufferIsEqualTo(const char *str);
     __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
