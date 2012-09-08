@@ -47,6 +47,7 @@
 
 
 LONGBYTES(webpage) = WEBPAGE;
+static size_t webpage_len = ARRAYLEN(webpage); // ~ 2100
 
 
 
@@ -68,15 +69,16 @@ class WSlave {
     void _setDictionary();
     inline void _sendHeaders(const MethodType method, const ActionType action);
     void _sendBody(const prog_uchar bytes[]);
+    void _sendBody(const prog_uchar data[], size_t length);
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
-    const size_t _bufferEqualsLength(const char *str);
+    const uint8_t _bufferEqualsLength(const char *str);
     inline const boolean _bufferIsEqualTo(const char *str);
     __attribute__((always_inline)) inline const boolean _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
     char _reverseBuffer[READBUFFERSIZE];
-    size_t _bufferSize;
+    uint8_t _bufferSize;
   
 };
 

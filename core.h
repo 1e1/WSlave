@@ -63,9 +63,9 @@ struct intfMessage
 extern const intfDigital  digitals[];
 extern const intfPulse    pulses[]  ;
 extern const intfMessage  messages[];
-extern const size_t digitals_len();
-extern const size_t pulses_len();
-extern const size_t messages_len();
+extern const uint8_t digitals_len();
+extern const uint8_t pulses_len();
+extern const uint8_t messages_len();
 
 
 namespace Core {
