@@ -71,6 +71,7 @@ void WSlave::check()
       switch (action) {
         
         default:
+        LOG("webpage_len="); LOGLN(webpage_len);
         _sendBody(webpage, webpage_len);
       }
     //} // if (method!=HEAD)
@@ -137,18 +138,22 @@ void WSlave::_sendHeaders(const MethodType method, const ActionType action)
       break;
       default:
       _client.println("Content-Type: text/html"); // ; charset=utf-8
-      _client.println("Content-Encoding: gzip"); // ; charset=utf-8
-      LOGLN(" | Content-Type: text/html");
+      _client.println("Content-Encoding: gzip");
+      //_client.print("Content-Length: ");
+      //_client.println(webpage_len);
+      LOGLN(" | Content-Type: text/html"); // ; charset=utf-8
       LOGLN(" | Content-Encoding: gzip");
+      //LOG("Content-Length: ");
+      //LOGLN(webpage_len);
     }
   }
   //_client.println("Connection: close");
   _client.println();
-  LOGLN(" | Connection: close");
+  //LOGLN(" | Connection: close");
   LOGLN(" |--------");
 }
 
-
+/*
 void WSlave::_sendBody(const prog_uchar *bytes)
 {
   uint8_t buffer[WRITEBUFFERSIZE];
@@ -167,7 +172,7 @@ void WSlave::_sendBody(const prog_uchar *bytes)
   }
   LOGLN("\n |========");
 }
-
+*/
 
 void WSlave::_sendBody(const prog_uchar *data, size_t length)
 {
@@ -175,12 +180,12 @@ void WSlave::_sendBody(const prog_uchar *data, size_t length)
   uint8_t i = 0;
   while (length--)
   {
+    buffer[i++] = pgm_read_byte(data++);
+    LOG((char) buffer[i-1]);
     if (i == WRITEBUFFERSIZE) {
       _client.write(buffer, WRITEBUFFERSIZE);
       i = 0;
     }
-    buffer[i++] = pgm_read_byte(data++);
-    LOG((char) buffer[i-1]);
   }
   if (i) {
     _client.write(buffer, i);
