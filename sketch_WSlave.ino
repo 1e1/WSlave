@@ -166,6 +166,7 @@ void loop()
     // DO SOMETHING NEW
 #endif
 #if BUSYLED_PIN
+  WAIT(2000);
   digitalWrite(BUSYLED_PIN, LOW);
 #endif
   } // if (timer) 
