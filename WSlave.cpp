@@ -131,18 +131,32 @@ void WSlave::_sendHeaders(const char *codeStatus, const char *contentType)
 void WSlave::_sendDictionary()
 {
   LOGLN("< send dictionnary");
-  _client.write("{\"M0\":\"Hello World!\"}");
-  /*
-  const char *strings[messages_len()+pulses_len()+digitals_len()];
-  uint8_t i = 0;
+  _client.write("{\"M0\":\"Hello World!\"");
+  LOG("{\"M0\":\"Hello World!\"");
+  const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   // messages
-  while (i<messages_len()) {
-    i++;
+  for (uint8_t i=0; i < Core::messages_len; i++) {
+    _client.write(", \"M");
+    _client.write('0' + i);
+    _client.write("\":\"message\"");
+    LOG(", \"M"); LOG(i); LOG("\": \""); LOG(Core::messages[i].label); LOG('\"');
+  }
+  // digitals
+  for (uint8_t i=0; i < Core::digitals_len; i++) {
+    _client.write(", \"D");
+    _client.write('0' + i);
+    _client.write("\":\"digital\"");
+    LOG(", \"D"); LOG(i); LOG("\": \""); LOG(Core::digitals[i].label); LOG('\"');
   }
   // pulses
-  // digitals
-  // analogs
-  */
+  for (uint8_t i=0; i < Core::pulses_len; i++) {
+    _client.write(", \"P");
+    _client.write('0' + i);
+    _client.write("\":\"pulse\"");
+    LOG(", \"P"); LOG(i); LOG("\": \""); LOG(Core::pulses[i].label); LOG('\"');
+  }
+  _client.write('}');
+  LOGLN('}');
 }
 
 
