@@ -41,7 +41,7 @@ const intfDigital digitals[] = {
 const intfPulse pulses[] = {
   WSPULSE("Pulse", 24)
 };
-const byte temperaturePins[] = { 13 };
+static const byte temperaturePins[] = { 13 };
 const intfMessage messages[] = {
   { obsTemperature, 'x', temperaturePins, "Indoor" }
 };
@@ -50,7 +50,7 @@ const intfMessage messages[] = {
 /**       observers       **/
 /** ===================== **/
 
-/*const*/ char obsTemperature (byte *pins)
+/*const*/ char obsTemperature (const byte *pins)
 {
   return 'x';
 }

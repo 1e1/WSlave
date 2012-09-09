@@ -21,8 +21,8 @@ struct intfDigital
   // bitSet(value, bit)
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
-  byte vPin;
-  const char *label;
+  const byte vPin;
+  const char* const label;
 };
 // { 13+0b10000000 , 0, "Light" }
 // { 13+128 , 0, "Light" }
@@ -38,9 +38,9 @@ struct intfPulse
   // analog Write values: 0..255
   // first byte is writeAccess
   // digitalPinHasPWM(p)
-  byte wPin;
+  const byte wPin;
   uint8_t value;
-  const char *label;
+  const char* const label;
 };
 // { 13, 0, "Light" }
 
@@ -50,10 +50,10 @@ struct intfMessage
 {
   // mega has 0..69 pin
   // char [-128..127]
-  /*const*/ char (*observe) (byte *pins);
+  /*const*/ char (*observe) (const byte *pins);
   char value;
   const byte *pins;
-  const char *label;
+  const char* const label;
 };
 // test[i].value = test[i].observe(test[i].pins)
 // { obsTemperature, "##", { 13 }, "Outdoor" }
