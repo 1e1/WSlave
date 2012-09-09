@@ -62,6 +62,11 @@ void WSlave::check()
     // on body:
     if (method == PUT && action == SERVICE) {
       LOGLN("TODO: reading body");
+      // _readBody()
+      _scanHttpLine('=');
+      // process name: (D|P)[0-9]+
+      _scanHttpLine('&');
+      // process value: 0..255
     }
     
     _send:
