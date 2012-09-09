@@ -50,7 +50,7 @@ const intfMessage messages[] = {
 /**       observers       **/
 /** ===================== **/
 
-/*const*/ char obsTemperature (byte *pins)
+/*const*/ char obsTemperature (const byte *pins)
 {
   return 'x';
 }
@@ -64,12 +64,9 @@ void software_reset()
   asm volatile ("jmp 0");
 }
 
-__attribute__((always_inline)) inline const uint8_t digitals_len();
-__attribute__((always_inline)) inline const uint8_t pulses_len();
-__attribute__((always_inline)) inline const uint8_t messages_len();
-const uint8_t digitals_len() { return ARRAYLEN(digitals); }
-const uint8_t pulses_len()   { return ARRAYLEN(pulses);   }
-const uint8_t messages_len() { return ARRAYLEN(messages); }
+const uint8_t digitals_len = ARRAYLEN(digitals);
+const uint8_t pulses_len   = ARRAYLEN(pulses);
+const uint8_t messages_len = ARRAYLEN(messages);
 
 
 
