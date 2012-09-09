@@ -28,19 +28,6 @@
 /**      connections      **/
 /** ===================== **/
 
-const intfDigital digitals[] = {
-  WSDIGITAL("relay1.1", 22),
-  WSDIGITAL("relay1.2", 24),
-  WSDIGITAL("relay1.3", 26),
-  WSDIGITAL("relay1.4", 28),
-  WSDIGITAL("relay1.5", 30),
-  WSDIGITAL("relay1.6", 32),
-  WSDIGITAL("relay1.7", 34),
-  WSDIGITAL("relay1.8", 36)
-};
-const intfPulse pulses[] = {
-  WSPULSE("Pulse", 24)
-};
 static const byte temperaturePins[] = { 13 };
 const intfMessage messages[] = {
   { obsTemperature, 'x', temperaturePins, "Indoor" }
@@ -54,6 +41,7 @@ const intfMessage messages[] = {
 {
   return 'x';
 }
+const uint8_t messages_len = ARRAYLEN(messages);
 
 /** ===================== **/
 
@@ -63,10 +51,6 @@ void software_reset()
 {
   asm volatile ("jmp 0");
 }
-
-const uint8_t digitals_len = ARRAYLEN(digitals);
-const uint8_t pulses_len   = ARRAYLEN(pulses);
-const uint8_t messages_len = ARRAYLEN(messages);
 
 
 

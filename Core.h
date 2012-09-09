@@ -59,18 +59,29 @@ struct intfMessage
 // { obsTemperature, "##", { 13 }, "Outdoor" }
 
 
-
-extern const intfDigital  digitals[];
-extern const intfPulse    pulses[]  ;
-extern const intfMessage  messages[];
-extern const uint8_t digitals_len;
-extern const uint8_t pulses_len;
-extern const uint8_t messages_len;
-
-
 namespace Core {
+
+  /** ===================== **/
+  /**      connections      **/
+  /** ===================== **/
+  static const intfDigital  digitals[] = {
+    WSDIGITAL("relay1.1", 22),
+    WSDIGITAL("relay1.2", 24),
+    WSDIGITAL("relay1.3", 26),
+    WSDIGITAL("relay1.4", 28),
+    WSDIGITAL("relay1.5", 30),
+    WSDIGITAL("relay1.6", 32),
+    WSDIGITAL("relay1.7", 34),
+    WSDIGITAL("relay1.8", 36)
+  };
+  static const intfPulse    pulses[] = {
+    WSPULSE("Pulse", 24)
+  };
+  static const intfMessage  messages[] = {};
   
-  // TODO
+  static const uint8_t digitals_len = ARRAYLEN(digitals);
+  static const uint8_t pulses_len   = ARRAYLEN(pulses);
+  static const uint8_t messages_len = ARRAYLEN(messages);
   
 };
 
