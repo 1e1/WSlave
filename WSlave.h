@@ -66,7 +66,6 @@ class WSlave {
     EthernetServer _server;
     EthernetClient _client;
     inline void _sendHeaders(const char *codeStatus, const char *contentType);
-    //void _sendBody(const prog_uchar bytes[]);
     void _sendDictionary();
     void _sendDefault(const prog_uchar data[], size_t length);
     const boolean _nextHttpLine();
@@ -76,7 +75,7 @@ class WSlave {
     __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
-    char _buffer[READBUFFERSIZE];
+    uint8_t _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
     uint8_t _bufferSize;
   
 };

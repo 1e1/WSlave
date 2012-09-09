@@ -145,43 +145,22 @@ void WSlave::_sendDictionary()
   */
 }
 
-/*
-void WSlave::_sendBody(const prog_uchar *bytes)
-{
-  uint8_t buffer[WRITEBUFFERSIZE];
-  uint8_t i = 0;
-  while ((buffer[i++] = pgm_read_byte(bytes++)))
-  {
-    LOG((char) buffer[i-1]);
-    if (i == WRITEBUFFERSIZE) {
-      _client.write(buffer, WRITEBUFFERSIZE);
-      i = 0;
-    }
-  }
-  if (i) {
-    _client.write(buffer, i);
-    LOG(buffer[0], i);
-  }
-  LOGLN("\n |========");
-}
-*/
 
 void WSlave::_sendDefault(const prog_uchar *data, size_t length)
 {
-  uint8_t buffer[WRITEBUFFERSIZE];
-  uint8_t i = 0;
+  _unbuffer();
   while (length--)
   {
-    buffer[i++] = pgm_read_byte(data++);
-  //  LOG((char) buffer[i-1]);
-    if (i == WRITEBUFFERSIZE) {
-      _client.write(buffer, WRITEBUFFERSIZE);
-      i = 0;
+    _buffer[_bufferSize++] = pgm_read_byte(data++);
+  //  LOG((char) buffer[_bufferSize-1]);
+    if (_bufferSize == WRITEBUFFERSIZE) {
+      _client.write(_buffer, WRITEBUFFERSIZE);
+      _unbuffer();
     }
   }
-  if (i) {
-    _client.write(buffer, i);
-  //  LOG(buffer[0], i);
+  if (_bufferSize) {
+    _client.write(_buffer, _bufferSize);
+  //  LOG(buffer[0], _bufferSize);
   }
   //LOGLN("\n |========");
 }
