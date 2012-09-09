@@ -67,10 +67,13 @@ class WSlave {
     EthernetClient _client;
     inline void _sendHeaders(const char *codeStatus, const char *contentType);
     void _sendDictionary();
+    void _sendService();
     void _sendDefault(const prog_uchar data[], size_t length);
+    void _copyToBuffer(uint8_t x);
     inline void _copyToBuffer(char c);
     void _copyToBuffer(const char* str);
     void _copyToBuffer(const char chars[], uint8_t size);
+    void _copyJsonToBuffer(const char type, const char *pinChars, const char *label);
     inline void _autoSendBuffer();
     inline void _sendBuffer();
     const boolean _nextHttpLine();

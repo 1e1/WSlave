@@ -7,6 +7,14 @@
 #include "macros.h"
 
 
+#define MASK_PIN(pin)           (pin & B00111111)
+
+#define DIGITAL_VALUE_AT(index) (bitRead(Core::digitals[index].wvPin, 6))
+#define PULSE_VALUE_AT(index)   (Core::pulses[index].value)
+#define CAN_WRITE_DIGITAL_AT(i) (bitRead(Core::digitals[i].wvPin, 7))
+#define CAN_WRITE_PULSE_AT(i)   (bitRead(Core::pulses[i].wvPin, 7))
+
+
 
 
 // 3 bytes = byte + @char
