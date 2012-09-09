@@ -60,7 +60,7 @@ void WSlave::check()
     //LOGLN("ready to read body");
     
     // on body:
-    if (method == PUT && action = SERVICE) {
+    if (method == PUT && action == SERVICE) {
       LOGLN("TODO: reading body");
     }
     
