@@ -6,7 +6,6 @@ WSlave::WSlave() :
   _server(PORT)/*,
   _client()*/
 {
-  // RESETBUFFER //_unbuffer();
 }
 
 
@@ -19,7 +18,7 @@ void WSlave::begin()
 void WSlave::check()
 {
   if (_client = _server.available()) {
-    LOGLN("new client");
+    LOGLN(">>> new client");
     
     MethodType method = INVALID;
     ActionType action = ROOT;
@@ -27,15 +26,17 @@ void WSlave::check()
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     _scanHttpLine(SP);
+    LOG("method=");
     if (_bufferIsEqualTo("GET")) {
       LOGLN("GET");
       method = GET;
     } else if (_bufferIsEqualTo("POST")) {
       LOGLN("POST");
       method = POST;
-    } else goto _close;
+    } else goto _send;
     
     _scanHttpLine(SP);
+    LOG("action=");
     if (_bufferIsPrefixOf("/ws")) {
       action = SERVICE;
       LOGLN("webservice");
@@ -49,58 +50,47 @@ void WSlave::check()
     _nextHttpLine();
     
     // sweep headers until CRLF CRLF
-    LOGLN("sweeping headers");
+    //LOGLN("sweeping headers");
     _crlfcrlf:
     while (_nextHttpLine() && --watchdog);
     if (_nextHttpLine() && watchdog) goto _crlfcrlf;
     if (!watchdog) {
       method = INVALID;
     }
-    LOGLN("ready to read body");
+    //LOGLN("ready to read body");
     
     // on body:
     if (method == POST) {
-      LOGLN("reading body");
+      LOGLN("TODO: reading body");
     }
     
-    _sendHeaders(method, action);
-    //_client.println("<!DOCTYPE HTML>");
-    //_client.println("<html><body><h1>OK</h1></body></html>");
-    
-    //if (method!=HEAD) {
+    _send:
+    if (method == INVALID) {
+      _sendHeaders("417 Expectation failed", "text/plain");
+    } else {
       switch (action) {
-        
+        case SERVICE:
+        _sendHeaders("200 OK", "application/json");
+        break;
+        case DICTIONARY:
+        _sendHeaders("200 OK", "application/json");
+        _sendDictionary();
+        break;
         default:
         LOG("webpage_len="); LOGLN(webpage_len);
-        _sendBody(webpage, webpage_len);
+        _sendHeaders("200 OK", "text/html" CRLF "Content-Encoding: gzip");
+        _sendDefault(webpage, webpage_len);
       }
-    //} // if (method!=HEAD)
+    }
     
-    LOGLN("response sent");
     // give the web browser time to receive the data
     delay(1);
     _close:
     // close the connection:
-    //_client.flush();
+    _client.flush();
     _client.stop();
-    LOGLN("client disonnected");
+    LOGLN("<<< client disonnected");
   }
-}
-
-
-void WSlave::_setDictionary()
-{
-/*
-  const string strings[ARRAYLEN(messages)+ARRAYLEN(pulses)+ARRAYLEN(digitals)];
-  uint8_t i;
-  // messages
-  for (i=0; i<ARRAYLEN(messages); i++) {
-    
-  }
-  // pulses
-  // digitals
-  // analogs
-*/
 }
 
 
@@ -121,36 +111,38 @@ void WSlave::_setDictionary()
   *   2: max-age=604800 // 7* 24* 60* 60
   * Connection: close
   */
-void WSlave::_sendHeaders(const MethodType method, const ActionType action)
+void WSlave::_sendHeaders(const char *codeStatus, const char *contentType)
 {
-  LOGLN("HTTP response: ");
-  if (method == INVALID) {
-    _client.println("HTTP/1.1 417 Expectation failed");
-    LOGLN(" | HTTP/1.1 417 Expectation failed");
-  } else {
-    _client.println("HTTP/1.1 200 OK");
-    LOGLN(" | HTTP/1.1 200 OK");
-    switch (action) {
-      case SERVICE:
-      case DICTIONARY:
-      _client.println("Content-Type: application/json"); // ; charset=utf-8
-      LOGLN(" | Content-Type: application/json"); // ; charset=utf-8
-      break;
-      default:
-      _client.println("Content-Type: text/html"); // ; charset=utf-8
-      _client.println("Content-Encoding: gzip");
-      //_client.print("Content-Length: ");
-      //_client.println(webpage_len);
-      LOGLN(" | Content-Type: text/html"); // ; charset=utf-8
-      LOGLN(" | Content-Encoding: gzip");
-      //LOG("Content-Length: ");
-      //LOGLN(webpage_len);
-    }
+  _client.print("HTTP/1.1 ");
+  _client.print(codeStatus);
+  _client.print(CRLF "Content-Type: ");
+  _client.print(contentType);
+  //_client.print(CRLF "Connection: close");
+  _client.println(CRLF);
+  LOG("HTTP/1.1 ");
+  LOG(codeStatus);
+  LOG(CRLF "Content-Type: ");
+  LOG(contentType);
+  //LOGLN(CRLF "Connection: close");
+  LOGLN(CRLF);
+}
+
+
+void WSlave::_sendDictionary()
+{
+  LOGLN("< send dictionnary");
+  _client.write("{\"M0\":\"Hello World!\"}");
+  /*
+  const char *strings[messages_len()+pulses_len()+digitals_len()];
+  uint8_t i = 0;
+  // messages
+  while (i<messages_len()) {
+    i++;
   }
-  //_client.println("Connection: close");
-  _client.println();
-  //LOGLN(" | Connection: close");
-  LOGLN(" |--------");
+  // pulses
+  // digitals
+  // analogs
+  */
 }
 
 /*
@@ -174,14 +166,14 @@ void WSlave::_sendBody(const prog_uchar *bytes)
 }
 */
 
-void WSlave::_sendBody(const prog_uchar *data, size_t length)
+void WSlave::_sendDefault(const prog_uchar *data, size_t length)
 {
   uint8_t buffer[WRITEBUFFERSIZE];
   uint8_t i = 0;
   while (length--)
   {
     buffer[i++] = pgm_read_byte(data++);
-    LOG((char) buffer[i-1]);
+  //  LOG((char) buffer[i-1]);
     if (i == WRITEBUFFERSIZE) {
       _client.write(buffer, WRITEBUFFERSIZE);
       i = 0;
@@ -189,9 +181,9 @@ void WSlave::_sendBody(const prog_uchar *data, size_t length)
   }
   if (i) {
     _client.write(buffer, i);
-    LOG(buffer[0], i);
+  //  LOG(buffer[0], i);
   }
-  LOGLN("\n |========");
+  //LOGLN("\n |========");
 }
 
 
@@ -228,47 +220,49 @@ const boolean WSlave::_scanHttpLine(const char end)
   _unbuffer();
   int c;
   char previous = '\0';
-  while (_bufferSize && _client.connected() && _client.available()) {
+  LOG("scanning: [");
+  while (_bufferSize<READBUFFERSIZE && _client.connected() && _client.available()) {
     c = _client.read();
+    LOG((char)c);
     // unprintable chars are 0x0 .. 0x1F
     // 0xE0 = 0xFF - 0x1F
     if (end!=c && (c & 0xE0)) {
-      _reverseBuffer[--_bufferSize] = c;
+      _buffer[_bufferSize++] = c;
     } else if (c & 0x1F) {
       if (previous==CR && c==LF) {
+        LOGLN();
         return false;
       } else {
         previous = c;
       }
     } else break;
   }
+  LOGLN(']');
   return true;
 }
 
 
 const uint8_t WSlave::_bufferEqualsLength(const char *str)
 {
-  uint8_t i=0, j = READBUFFERSIZE;
-  while(_bufferSize<j && str[i]==_reverseBuffer[--j]) {
-    i++;
-  }
+  uint8_t i=0;
+  while (i<_bufferSize && str[i]==_buffer[i]) i++;
   return i;
 }
 
 
 const boolean WSlave::_bufferIsEqualTo(const char *str)
 {
-  return _bufferEqualsLength(str)==strlen(str);
+  return _bufferSize == strlen(str) && _bufferEqualsLength(str) == strlen(str);
 }
 
 
-const boolean WSlave::_bufferIsPrefixOf(const char *str)
+const uint8_t WSlave::_bufferIsPrefixOf(const char *str)
 {
-  return _bufferSize == strlen(str) && _bufferEqualsLength(str)==strlen(str);
+  return _bufferEqualsLength(str) == strlen(str);
 }
 
 
 void WSlave::_unbuffer()
 {
-  _bufferSize = READBUFFERSIZE;
+  _bufferSize = 0;
 }

@@ -8,6 +8,7 @@
 #define BUSYLED_PIN 13
 
 // ETH conf
+#define USE_DHCP    0
 #define IP          10,240,170, 12
 #define SUBNET      255,255,255,0
 #define GATEWAY     0,0,0,0
@@ -15,6 +16,7 @@
 // ascii code for "@lan#" + HEX 12
 #define MAC         0x40,0x6C,0x61,0x6E,0x23, 0x0C
 #define PORT        80
+#define ETH_BLPIN   53 /* power of W5100 chip */
 /*
 // LCD conf
 #define LCD_PINS    12, 11, 5, 4, 3, 2

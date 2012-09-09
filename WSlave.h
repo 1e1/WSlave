@@ -26,17 +26,16 @@
 #include <Arduino.h>
 #include <Ethernet.h>
 #include <avr/pgmspace.h>
-#include "core.h"
+#include "Core.h"
 #include "config.h"
 #include "macros.h"
 #include "webApp.h"
 
 
 #define READBUFFERSIZE 8
-#define WRITEBUFFERSIZE 32
+#define WRITEBUFFERSIZE 64
 #define MAXLINESIZE 255
 #define MAXHEADERS 255
-#define RESETBUFFER (_bufferSize = READBUFFERSIZE)
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
@@ -66,18 +65,18 @@ class WSlave {
     
     EthernetServer _server;
     EthernetClient _client;
-    void _setDictionary();
-    inline void _sendHeaders(const MethodType method, const ActionType action);
+    inline void _sendHeaders(const char *codeStatus, const char *contentType);
     //void _sendBody(const prog_uchar bytes[]);
-    void _sendBody(const prog_uchar data[], size_t length);
+    void _sendDictionary();
+    void _sendDefault(const prog_uchar data[], size_t length);
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
     const uint8_t _bufferEqualsLength(const char *str);
-    inline const boolean _bufferIsEqualTo(const char *str);
-    __attribute__((always_inline)) inline const boolean _bufferIsPrefixOf(const char *str);
+    __attribute__((always_inline)) inline const boolean _bufferIsEqualTo(const char *str);
+    __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
-    char _reverseBuffer[READBUFFERSIZE];
+    char _buffer[READBUFFERSIZE];
     uint8_t _bufferSize;
   
 };
