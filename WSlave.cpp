@@ -133,37 +133,38 @@ void WSlave::_sendDictionary()
   LOGLN("< send dictionnary");
   char pinChars[2];
   _unbuffer();
-  _client.write("{\"M0\":\"Hello World!\"");
+  _copyToBuffer('{');
   //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
     Core::pinToChars(i, pinChars);
-    _copyToBuffer(", \"M");
+    _copyToBuffer("\"M");
     _copyToBuffer(pinChars, 2);
     _copyToBuffer("\":\"");
     _copyToBuffer(Core::messages[i].label);
-    _copyToBuffer("\"");
+    _copyToBuffer("\",");
   }
+  
   // pulses
   for (uint8_t i=0; i < Core::pulses_len; i++) {
     Core::pinToChars(Core::pulses[i].wPin, pinChars);
-    _copyToBuffer(", \"P");
+    _copyToBuffer("\"P");
     _copyToBuffer(pinChars, 2);
     _copyToBuffer("\":\"");
     _copyToBuffer(Core::pulses[i].label);
-    _copyToBuffer("\"");
+    _copyToBuffer("\",");
   }
   // digitals
   for (uint8_t i=0; i < Core::digitals_len; i++) {
     Core::pinToChars(Core::digitals[i].wvPin, pinChars);
-    _copyToBuffer(", \"D");
+    _copyToBuffer("\"D");
     _copyToBuffer(pinChars, 2);
     _copyToBuffer("\":\"");
     _copyToBuffer(Core::digitals[i].label);
-    _copyToBuffer("\"");
+    _copyToBuffer("\",");
   }
+  _copyToBuffer("\"M#\":\"FastTimer\"}");
   _sendBuffer();
-  _client.write('}');
 }
 
 
