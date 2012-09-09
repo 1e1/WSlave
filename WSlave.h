@@ -60,7 +60,7 @@ class WSlave {
   
   private:
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
-    enum MethodType { INVALID/*, OPTIONS*/, GET/*, HEAD*/, POST/*, PUT, DELETE, TRACE, CONNECT*/ };
+    enum MethodType { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
     enum ActionType { ROOT, SERVICE, CACHE, DICTIONARY };
     
     EthernetServer _server;

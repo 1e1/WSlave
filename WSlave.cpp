@@ -30,9 +30,9 @@ void WSlave::check()
     if (_bufferIsEqualTo("GET")) {
       LOGLN("GET");
       method = GET;
-    } else if (_bufferIsEqualTo("POST")) {
-      LOGLN("POST");
-      method = POST;
+    } else if (_bufferIsEqualTo("PUT")) {
+      LOGLN("PUT");
+      method = PUT;
     } else goto _send;
     
     _scanHttpLine(SP);
@@ -60,7 +60,7 @@ void WSlave::check()
     //LOGLN("ready to read body");
     
     // on body:
-    if (method == POST) {
+    if (method == PUT && action = SERVICE) {
       LOGLN("TODO: reading body");
     }
     
@@ -152,7 +152,7 @@ void WSlave::_sendDictionary()
     Core::pinToChars(Core::digitals[i].wvPin, pinChars);
     _copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
   }
-  _copyToBuffer("\"M#\":\"FastTimer\"}");
+  _copyToBuffer("\"M99\":\"FastTimer\"}");
   _sendBuffer();
 }
 
