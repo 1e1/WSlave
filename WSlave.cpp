@@ -152,7 +152,7 @@ void WSlave::_sendDictionary()
     Core::pinToChars(Core::digitals[i].wvPin, pinChars);
     _copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
   }
-  _copyToBuffer("\"M99\":\"FastTimer\"}");
+  _copyToBuffer("\"M#\":\"FastTimer\"}");
   _sendBuffer();
 }
 
@@ -160,7 +160,7 @@ void WSlave::_sendDictionary()
 void WSlave::_sendService()
 {
   _unbuffer();
-  _copyToBuffer('{');
+  _copyToBuffer('[');
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
     _copyToBuffer(Core::messages[i].value);
@@ -177,7 +177,7 @@ void WSlave::_sendService()
     _copyToBuffer(',');
   }
   _copyToBuffer("\"#\"");
-  _copyToBuffer('}');
+  _copyToBuffer(']');
   _sendBuffer();
 }
 
