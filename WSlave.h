@@ -68,6 +68,11 @@ class WSlave {
     inline void _sendHeaders(const char *codeStatus, const char *contentType);
     void _sendDictionary();
     void _sendDefault(const prog_uchar data[], size_t length);
+    inline void _copyToBuffer(char c);
+    void _copyToBuffer(const char* str);
+    void _copyToBuffer(const char chars[], uint8_t size);
+    inline void _autoSendBuffer();
+    inline void _sendBuffer();
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
     const uint8_t _bufferEqualsLength(const char *str);

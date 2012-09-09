@@ -131,32 +131,39 @@ void WSlave::_sendHeaders(const char *codeStatus, const char *contentType)
 void WSlave::_sendDictionary()
 {
   LOGLN("< send dictionnary");
+  char pinChars[2];
+  _unbuffer();
   _client.write("{\"M0\":\"Hello World!\"");
-  LOG("{\"M0\":\"Hello World!\"");
-  const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
+  //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
-    _client.write(", \"M");
-    _client.write('0' + i);
-    _client.write("\":\"message\"");
-    LOG(", \"M"); LOG(i); LOG("\": \""); LOG(Core::messages[i].label); LOG('\"');
-  }
-  // digitals
-  for (uint8_t i=0; i < Core::digitals_len; i++) {
-    _client.write(", \"D");
-    _client.write('0' + i);
-    _client.write("\":\"digital\"");
-    LOG(", \"D"); LOG(i); LOG("\": \""); LOG(Core::digitals[i].label); LOG('\"');
+    Core::pinToChars(i, pinChars);
+    _copyToBuffer(", \"M");
+    _copyToBuffer(pinChars, 2);
+    _copyToBuffer("\":\"");
+    _copyToBuffer(Core::messages[i].label);
+    _copyToBuffer("\"");
   }
   // pulses
   for (uint8_t i=0; i < Core::pulses_len; i++) {
-    _client.write(", \"P");
-    _client.write('0' + i);
-    _client.write("\":\"pulse\"");
-    LOG(", \"P"); LOG(i); LOG("\": \""); LOG(Core::pulses[i].label); LOG('\"');
+    Core::pinToChars(Core::pulses[i].wPin, pinChars);
+    _copyToBuffer(", \"P");
+    _copyToBuffer(pinChars, 2);
+    _copyToBuffer("\":\"");
+    _copyToBuffer(Core::pulses[i].label);
+    _copyToBuffer("\"");
   }
+  // digitals
+  for (uint8_t i=0; i < Core::digitals_len; i++) {
+    Core::pinToChars(Core::digitals[i].wvPin, pinChars);
+    _copyToBuffer(", \"D");
+    _copyToBuffer(pinChars, 2);
+    _copyToBuffer("\":\"");
+    _copyToBuffer(Core::digitals[i].label);
+    _copyToBuffer("\"");
+  }
+  _sendBuffer();
   _client.write('}');
-  LOGLN('}');
 }
 
 
@@ -166,17 +173,51 @@ void WSlave::_sendDefault(const prog_uchar *data, size_t length)
   while (length--)
   {
     _buffer[_bufferSize++] = pgm_read_byte(data++);
-  //  LOG((char) buffer[_bufferSize-1]);
-    if (_bufferSize == WRITEBUFFERSIZE) {
-      _client.write(_buffer, WRITEBUFFERSIZE);
-      _unbuffer();
-    }
+    _autoSendBuffer();
   }
+  _sendBuffer();
+}
+
+
+void WSlave::_copyToBuffer(const char c)
+{
+  _buffer[_bufferSize++] = c;
+  _autoSendBuffer();
+}
+
+
+void WSlave::_copyToBuffer(const char* str)
+{
+  while (*str) {
+    _buffer[_bufferSize++] = *str++;
+    _autoSendBuffer();
+  }
+}
+
+
+void WSlave::_copyToBuffer(const char chars[], uint8_t size)
+{
+  for (uint8_t i=0; i<size; i++) {
+    _buffer[_bufferSize++] = chars[i];
+    _autoSendBuffer();
+  }
+}
+
+
+void WSlave::_autoSendBuffer()
+{
+  if (_bufferSize == WRITEBUFFERSIZE) {
+    _client.write(_buffer, WRITEBUFFERSIZE);
+    _unbuffer();
+  }
+}
+
+
+void WSlave::_sendBuffer()
+{
   if (_bufferSize) {
     _client.write(_buffer, _bufferSize);
-  //  LOG(buffer[0], _bufferSize);
   }
-  //LOGLN("\n |========");
 }
 
 

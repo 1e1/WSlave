@@ -16,12 +16,13 @@ struct intfDigital
   // mega has 0..69 pin
   // byte [0..255]
   // digital values: 0..1
-  // first byte is the value
+  // first left byte is writeAccess
+  // second left byte is the value
   // bitRead(value, bit)
   // bitSet(value, bit)
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
-  const byte vPin;
+  const byte wvPin;
   const char* const label;
 };
 // { 13+0b10000000 , 0, "Light" }
@@ -36,7 +37,7 @@ struct intfPulse
   // byte [0..255]
   // analog Read values: 0..1023 -> translate value>>8
   // analog Write values: 0..255
-  // first byte is writeAccess
+  // first left byte is writeAccess
   // digitalPinHasPWM(p)
   const byte wPin;
   uint8_t value;
@@ -82,6 +83,8 @@ namespace Core {
   static const uint8_t digitals_len = ARRAYLEN(digitals);
   static const uint8_t pulses_len   = ARRAYLEN(pulses);
   static const uint8_t messages_len = ARRAYLEN(messages);
+  
+  void pinToChars(uint8_t pin, char out[2]);
   
 };
 
