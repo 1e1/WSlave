@@ -52,7 +52,7 @@ struct intfMessage
   // char [-128..127]
   /*const*/ char (*observe) (const byte *pins);
   char value;
-  const byte *pins;
+  const byte* const pins;
   const char* const label;
 };
 // test[i].value = test[i].observe(test[i].pins)
@@ -63,9 +63,9 @@ struct intfMessage
 extern const intfDigital  digitals[];
 extern const intfPulse    pulses[]  ;
 extern const intfMessage  messages[];
-extern const uint8_t digitals_len();
-extern const uint8_t pulses_len();
-extern const uint8_t messages_len();
+extern const uint8_t digitals_len;
+extern const uint8_t pulses_len;
+extern const uint8_t messages_len;
 
 
 namespace Core {
