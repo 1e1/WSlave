@@ -8,7 +8,6 @@
 #define BUSYLED_PIN 13
 
 // USB conf
-#define USE_USB     0
 #define USB_SPEED   57600
 
 // ETH conf

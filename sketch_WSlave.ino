@@ -55,6 +55,13 @@ void software_reset()
 
 
 
+#if defined(USB_SPEED)
+#include "USlave.h"
+#define USE_USB 1
+#else
+#define USE_USB 0
+#endif
+
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
 #include "LSlave.h"
@@ -90,12 +97,10 @@ static WSlave wsengine;
 
 void setup()
 {
-#if (DEBUG || USE_USB)
-#if USB_SPEED
+#if USE_USB
   Serial.begin(USB_SPEED);
-#else
+#elif DEBUG
   Serial.begin(9600);
-#endif
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
