@@ -98,6 +98,7 @@ void setup()
 #if BUSYLED_PIN
   pinMode(BUSYLED_PIN, OUTPUT);
 #endif
+  Core::setup();
 #if USE_LCD
   lcd.begin(LCD_WIDTH, LCD_HEIGHT);
   pinMode(LCD_BLPIN, OUTPUT);
