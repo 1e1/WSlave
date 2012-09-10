@@ -92,9 +92,13 @@ namespace Core {
   static const uint8_t messages_len = ARRAYLEN(messages);
   
   void setup();
+  void readLine(Stream *inputStream);
   void pinToChars(uint8_t pin, char out[2]);
-  void setDigitalAtPin(uint8_t pin, boolean value);
-  void setPulseAtPin(uint8_t pin, uint8_t value);
+  void _readUint8(uint8_t &out);
+  boolean setDigitalAtPin(uint8_t pin, boolean value);
+  boolean setPulseAtPin(uint8_t pin, uint8_t value);
+  
+  static Stream *_currentStream;
   
 };
 

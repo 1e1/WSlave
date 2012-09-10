@@ -65,8 +65,8 @@ void WSlave::check()
     // on body:
     if (method == PUT && action == SERVICE) {
       LOGLN("TODO: reading body");
-      // (D|P)[0-9]+=[0-9]+
-      _processOneParameter();
+      // [0-9]+=[0-9]+(&[0-9]+=[0-9]+)*
+      Core::readLine(&_client);
     }
     
     _send:
@@ -277,60 +277,6 @@ const boolean WSlave::_nextHttpLine()
     goto _carriageReturn;
   }
   return watchdog != MAXLINESIZE;
-}
-
-
-/** 
-  * body: (D|P)[0-9]+=[0-9]+)
-  * @return boolean true if last char is '&'
-  */
-const boolean WSlave::_processOneParameter()
-{
-  ParameterType type = UNKNOWN;
-  uint8_t pin = 0;
-  uint8_t value = 0;
-  int c;
-  if (_client.connected() && _client.available()) {
-     // read 1st char
-     c = _client.read();
-     switch (c) {
-       case 'D':
-       type = DIGITAL;
-       LOG("SET DIGITAL #");
-       break;
-       case 'P':
-       type = PULSE;
-       LOG("SET PULSE #");
-       break;
-       default:
-       goto _end;
-     }
-     _readUint8(pin);
-     _readUint8(value);
-     LOG(pin);
-     LOG(" = ");
-     LOG(value);
-     LOGLN(';');
-     switch (c) {
-       case 'D':
-       Core::setDigitalAtPin(pin, value);
-       break;
-       case 'P':
-       Core::setPulseAtPin(pin, value);
-       break;
-     }
-  }
-  _end:
-  return false;
-}
-
-
-void WSlave::_readUint8(uint8_t &out)
-{
-  int c;
-  while (/*_client.connected() && _client.available() && */(c=_client.read())/*>=0*/ && '0'<=c && 'c'<='9') {
-    out = (out *10) + ((uint8_t) (c -'0'));
-  }
 }
 
 
