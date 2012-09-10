@@ -35,6 +35,7 @@ namespace Core {
   {
     for (uint8_t i=0; i<digitals_len; i++) {
       if (MASK_PIN(digitals[i].vPin) == pin) {
+        // value = value > 0; // if value >1 occurs issue
         bitWrite(digitals[i].vPin, DIGITAL_BITVALUE, value);
         digitalWrite(pin, value);
         return;

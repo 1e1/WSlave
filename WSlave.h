@@ -78,7 +78,6 @@ class WSlave {
     inline void _autoSendBuffer();
     inline void _sendBuffer();
     const boolean _nextHttpLine();
-    const boolean _scanHttpLine(const char end);
     const boolean _processOneParameter();
     void _readUint8(uint8_t &out);
     const uint8_t _bufferEqualsLength(const char *str);
@@ -86,7 +85,7 @@ class WSlave {
     __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
     __attribute__((always_inline)) inline void _unbuffer();
     
-    uint8_t _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
+    char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
     uint8_t _bufferSize;
   
 };

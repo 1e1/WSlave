@@ -25,7 +25,9 @@ void WSlave::check()
     uint8_t watchdog  = MAXHEADERS;
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
-    _scanHttpLine(SP);
+    //_scanHttpLine(SP);
+    _unbuffer();
+    _client.readBytesUntil(SP, _buffer, READBUFFERSIZE);
     LOG("method=");
     if (_bufferIsEqualTo("GET")) {
       LOGLN("GET");
@@ -35,7 +37,8 @@ void WSlave::check()
       method = PUT;
     } else goto _send;
     
-    _scanHttpLine(SP);
+    _unbuffer();
+    _client.readBytesUntil(SP, _buffer, READBUFFERSIZE);
     LOG("action=");
     if (_bufferIsPrefixOf("/ws")) {
       action = SERVICE;
@@ -243,7 +246,7 @@ void WSlave::_copyJsonToBuffer(const char type, const char *pinChars, const char
 void WSlave::_autoSendBuffer()
 {
   if (_bufferSize == WRITEBUFFERSIZE) {
-    _client.write(_buffer, WRITEBUFFERSIZE);
+    _client.write((uint8_t *)_buffer, WRITEBUFFERSIZE);
     _unbuffer();
   }
 }
@@ -252,7 +255,7 @@ void WSlave::_autoSendBuffer()
 void WSlave::_sendBuffer()
 {
   if (_bufferSize) {
-    _client.write(_buffer, _bufferSize);
+    _client.write((uint8_t *)_buffer, _bufferSize);
   }
 }
 
@@ -274,41 +277,6 @@ const boolean WSlave::_nextHttpLine()
     goto _carriageReturn;
   }
   return watchdog != MAXLINESIZE;
-}
-
-
-/** 
-  * copy the string starting here until the end character
-  * into buffer (reduce the bufferSiez)
-  * 
-  * @param end   searched char
-  * @param flags <allow multilines> <fail at end>
-  * @return false if end by a new line
-  */
-const boolean WSlave::_scanHttpLine(const char end)
-{
-  _unbuffer();
-  int c;
-  char previous = '\0';
-  LOG("scanning: [");
-  while (_bufferSize<READBUFFERSIZE && _client.connected() && _client.available()) {
-    c = _client.read();
-    LOG((char)c);
-    // unprintable chars are 0x0 .. 0x1F
-    // 0xE0 = 0xFF - 0x1F
-    if (end!=c && (c & 0xE0)) {
-      _buffer[_bufferSize++] = c;
-    } else if (c & 0x1F) {
-      if (previous==CR && c==LF) {
-        LOGLN(']');
-        return false;
-      } else {
-        previous = c;
-      }
-    } else break;
-  }
-  LOGLN(']');
-  return true;
 }
 
 
@@ -343,6 +311,14 @@ const boolean WSlave::_processOneParameter()
      LOG(" = ");
      LOG(value);
      LOGLN(';');
+     switch (c) {
+       case 'D':
+       Core::setDigitalAtPin(pin, value);
+       break;
+       case 'P':
+       Core::setPulseAtPin(pin, value);
+       break;
+     }
   }
   _end:
   return false;
