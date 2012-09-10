@@ -21,7 +21,6 @@
 #include "Core.h"
 #include "config.h"
 #include "macros.h"
-#include "webApp.h"
 
 
 #endif
