@@ -56,7 +56,7 @@ void WSlave::check()
     //LOGLN("sweeping headers");
     _crlfcrlf:
     while (_nextHttpLine() && --watchdog);
-    if (_nextHttpLine() && watchdog) goto _crlfcrlf;
+    //if (_nextHttpLine() && watchdog) goto _crlfcrlf;
     if (!watchdog) {
       method = INVALID;
     }
