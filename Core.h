@@ -96,6 +96,7 @@ namespace Core {
   
   void setup();
   void readLine(Stream *inputStream);
+  void readLine(Stream *inputStream, const char until);
   void pinToChars(uint8_t pin, char out[2]);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);

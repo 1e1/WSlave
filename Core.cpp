@@ -17,10 +17,10 @@ namespace Core {
   }
   
   
-  void readLine(Stream *currentStream)
+  void readLine(Stream *inputStream)
   {
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
-    _currentStream = currentStream;
+    _currentStream = inputStream;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
     while (_currentStream->available() && watchdog--) {
       _readUint8(pin);
@@ -28,6 +28,14 @@ namespace Core {
       setDigitalAtPin(pin, value) || setPulseAtPin(pin, value);
       LOG("SET pin #"); LOG(pin); LOG(" <- "); LOG(value); LOGLN(';');
     }
+  }
+  
+  
+  void readLine(Stream *inputStream, const char until)
+  {
+    _currentStream = inputStream;
+    _unbuffer();
+    _bufferSize = _currentStream->readBytesUntil(until, _buffer, READBUFFERSIZE);
   }
   
   /** 
