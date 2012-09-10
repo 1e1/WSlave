@@ -26,20 +26,16 @@ void WSlave::check()
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     //_scanHttpLine(SP);
-    Core::_unbuffer();
-    _client.readBytesUntil(SP, Core::_buffer, READBUFFERSIZE);
-    LOG("method=");
+    Core::readLine(&_client, SP);
     if (Core::_bufferIsEqualTo("GET")) {
-      LOGLN("GET");
+      LOG("GET ");
       method = GET;
     } else if (Core::_bufferIsEqualTo("PUT")) {
-      LOGLN("PUT");
+      LOG("PUT ");
       method = PUT;
     } else goto _send;
     
-    Core::_unbuffer();
-    _client.readBytesUntil(SP, Core::_buffer, READBUFFERSIZE);
-    LOG("action=");
+    Core::readLine(&_client, SP);
     if (Core::_bufferIsPrefixOf("/ws")) {
       action = SERVICE;
       LOGLN("webservice");
