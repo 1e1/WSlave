@@ -60,8 +60,9 @@ class WSlave {
   
   private:
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
-    enum MethodType { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
-    enum ActionType { ROOT, SERVICE, CACHE, DICTIONARY };
+    enum MethodType     { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
+    enum ActionType     { ROOT, SERVICE, CACHE, DICTIONARY };
+    enum ParameterType  { UNKNOWN, DIGITAL, PULSE };
     
     EthernetServer _server;
     EthernetClient _client;
@@ -78,6 +79,8 @@ class WSlave {
     inline void _sendBuffer();
     const boolean _nextHttpLine();
     const boolean _scanHttpLine(const char end);
+    const boolean _processOneParameter();
+    void _readUint8(uint8_t &out);
     const uint8_t _bufferEqualsLength(const char *str);
     __attribute__((always_inline)) inline const boolean _bufferIsEqualTo(const char *str);
     __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
