@@ -328,7 +328,7 @@ const boolean WSlave::_processOneParameter()
 void WSlave::_readUint8(uint8_t &out)
 {
   int c;
-  while (_client.connected()/* && _client.available()*/ && (c=_client.read()) && '0'<=c && 'c'<='9') {
+  while (/*_client.connected() && _client.available() && */(c=_client.read())/*>=0*/ && '0'<=c && 'c'<='9') {
     out = (out *10) + ((uint8_t) (c -'0'));
   }
 }
