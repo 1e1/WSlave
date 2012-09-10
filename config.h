@@ -7,6 +7,10 @@
 // LED
 #define BUSYLED_PIN 13
 
+// USB conf
+#define USE_USB     0
+#define USB_SPEED   57600
+
 // ETH conf
 #define USE_DHCP    0
 #define IP          10,240,170, 12

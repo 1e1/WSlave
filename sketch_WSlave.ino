@@ -90,8 +90,12 @@ static WSlave wsengine;
 
 void setup()
 {
-#if DEBUG
+#if (DEBUG || USE_USB)
+#if USB_SPEED
+  Serial.begin(USB_SPEED);
+#else
   Serial.begin(9600);
+#endif
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
