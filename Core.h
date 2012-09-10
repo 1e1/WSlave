@@ -7,12 +7,11 @@
 #include "macros.h"
 
 
-#define MASK_PIN(pin)           (pin & B00111111)
+#define MASK_PIN(pin)           (pin & B01111111)
 
-#define DIGITAL_VALUE_AT(index) (bitRead(Core::digitals[index].wvPin, 6))
-#define PULSE_VALUE_AT(index)   (Core::pulses[index].value)
-#define CAN_WRITE_DIGITAL_AT(i) (bitRead(Core::digitals[i].wvPin, 7))
-#define CAN_WRITE_PULSE_AT(i)   (bitRead(Core::pulses[i].wvPin, 7))
+#define DIGITAL_BITVALUE        7
+#define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vPin, DIGITAL_BITVALUE))
+#define PULSE_VALUE_AT(i)       (Core::pulses[i].value)
 
 
 
@@ -30,7 +29,7 @@ struct intfDigital
   // bitSet(value, bit)
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
-  const byte wvPin;
+  byte vPin;
   const char* const label;
 };
 // { 13+0b10000000 , 0, "Light" }
@@ -47,7 +46,7 @@ struct intfPulse
   // analog Write values: 0..255
   // first left byte is writeAccess
   // digitalPinHasPWM(p)
-  const byte wPin;
+  const byte pin;
   uint8_t value;
   const char* const label;
 };
@@ -73,7 +72,7 @@ namespace Core {
   /** ===================== **/
   /**      connections      **/
   /** ===================== **/
-  static const intfDigital  digitals[] = {
+  static intfDigital digitals[] = {
     WSDIGITAL("relay1.1", 22),
     WSDIGITAL("relay1.2", 24),
     WSDIGITAL("relay1.3", 26),
@@ -83,16 +82,19 @@ namespace Core {
     WSDIGITAL("relay1.7", 34),
     WSDIGITAL("relay1.8", 36)
   };
-  static const intfPulse    pulses[] = {
+  static intfPulse pulses[] = {
     WSPULSE("Pulse", 24)
   };
-  static const intfMessage  messages[] = {};
+  static intfMessage messages[] = {};
   
   static const uint8_t digitals_len = ARRAYLEN(digitals);
   static const uint8_t pulses_len   = ARRAYLEN(pulses);
   static const uint8_t messages_len = ARRAYLEN(messages);
   
+  void setup();
   void pinToChars(uint8_t pin, char out[2]);
+  void setDigitalAtPin(uint8_t pin, boolean value);
+  void setPulseAtPin(uint8_t pin, uint8_t value);
   
 };
 

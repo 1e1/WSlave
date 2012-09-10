@@ -146,12 +146,12 @@ void WSlave::_sendDictionary()
   }
   // pulses
   for (uint8_t i=0; i < Core::pulses_len; i++) {
-    Core::pinToChars(Core::pulses[i].wPin, pinChars);
+    Core::pinToChars(Core::pulses[i].pin, pinChars);
     _copyJsonToBuffer('P', pinChars, Core::pulses[i].label);
   }
   // digitals
   for (uint8_t i=0; i < Core::digitals_len; i++) {
-    Core::pinToChars(Core::digitals[i].wvPin, pinChars);
+    Core::pinToChars(Core::digitals[i].vPin, pinChars);
     _copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
   }
   _copyToBuffer("\"M#\":\"FastTimer\"}");
@@ -300,7 +300,7 @@ const boolean WSlave::_scanHttpLine(const char end)
       _buffer[_bufferSize++] = c;
     } else if (c & 0x1F) {
       if (previous==CR && c==LF) {
-        LOGLN();
+        LOGLN(']');
         return false;
       } else {
         previous = c;
@@ -352,7 +352,7 @@ const boolean WSlave::_processOneParameter()
 void WSlave::_readUint8(uint8_t &out)
 {
   int c;
-  while (_client.connected() && _client.available() && (c=_client.read()) && '0'<=c && 'c'<='9') {
+  while (_client.connected()/* && _client.available()*/ && (c=_client.read()) && '0'<=c && 'c'<='9') {
     out = (out *10) + ((uint8_t) (c -'0'));
   }
 }
