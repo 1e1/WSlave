@@ -22,7 +22,7 @@ namespace Core {
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     _currentStream = currentStream;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
-    while (_currentStream.available() && watchdog--) {
+    while (_currentStream->available() && watchdog--) {
       _readUint8(pin);
       _readUint8(value);
       setDigitalAtPin(pin, value) || setPulseAtPin(pin, value);
