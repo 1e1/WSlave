@@ -32,8 +32,6 @@
 #include "webApp.h"
 
 
-#define READBUFFERSIZE 8
-#define WRITEBUFFERSIZE 64
 #define MAXLINESIZE 255
 #define MAXHEADERS 255
 
@@ -65,25 +63,12 @@ class WSlave {
     
     EthernetServer _server;
     EthernetClient _client;
+    
     inline void _sendHeaders(const char *codeStatus, const char *contentType);
     void _sendDictionary();
     void _sendService();
     void _sendDefault(const prog_uchar data[], size_t length);
-    void _copyToBuffer(uint8_t x);
-    inline void _copyToBuffer(char c);
-    void _copyToBuffer(const char* str);
-    void _copyToBuffer(const char chars[], uint8_t size);
-    void _copyJsonToBuffer(const char type, const char *pinChars, const char *label);
-    inline void _autoSendBuffer();
-    inline void _sendBuffer();
     const boolean _nextHttpLine();
-    const uint8_t _bufferEqualsLength(const char *str);
-    __attribute__((always_inline)) inline const boolean _bufferIsEqualTo(const char *str);
-    __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf(const char *str);
-    __attribute__((always_inline)) inline void _unbuffer();
-    
-    char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
-    uint8_t _bufferSize;
   
 };
 

@@ -26,25 +26,25 @@ void WSlave::check()
     
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     //_scanHttpLine(SP);
-    _unbuffer();
-    _client.readBytesUntil(SP, _buffer, READBUFFERSIZE);
+    Core::_unbuffer();
+    _client.readBytesUntil(SP, Core::_buffer, READBUFFERSIZE);
     LOG("method=");
-    if (_bufferIsEqualTo("GET")) {
+    if (Core::_bufferIsEqualTo("GET")) {
       LOGLN("GET");
       method = GET;
-    } else if (_bufferIsEqualTo("PUT")) {
+    } else if (Core::_bufferIsEqualTo("PUT")) {
       LOGLN("PUT");
       method = PUT;
     } else goto _send;
     
-    _unbuffer();
-    _client.readBytesUntil(SP, _buffer, READBUFFERSIZE);
+    Core::_unbuffer();
+    _client.readBytesUntil(SP, Core::_buffer, READBUFFERSIZE);
     LOG("action=");
-    if (_bufferIsPrefixOf("/ws")) {
+    if (Core::_bufferIsPrefixOf("/ws")) {
       action = SERVICE;
       LOGLN("webservice");
       // TODO catch /ws?param!!!
-    } else if (_bufferIsPrefixOf("/dict")) {
+    } else if (Core::_bufferIsPrefixOf("/dict")) {
       action = DICTIONARY;
       LOGLN("dictionary");
     } else {
@@ -140,123 +140,61 @@ void WSlave::_sendDictionary()
 {
   //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   char pinChars[2];
-  _unbuffer();
-  _copyToBuffer('{');
+  Core::_unbuffer();
+  Core::_copyToBuffer('{');
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
     Core::pinToChars(i, pinChars);
-    _copyJsonToBuffer('M', pinChars, Core::messages[i].label);
+    Core::_copyJsonToBuffer('M', pinChars, Core::messages[i].label);
   }
   // pulses
   for (uint8_t i=0; i < Core::pulses_len; i++) {
     Core::pinToChars(Core::pulses[i].pin, pinChars);
-    _copyJsonToBuffer('P', pinChars, Core::pulses[i].label);
+    Core::_copyJsonToBuffer('P', pinChars, Core::pulses[i].label);
   }
   // digitals
   for (uint8_t i=0; i < Core::digitals_len; i++) {
     Core::pinToChars(Core::digitals[i].vPin, pinChars);
-    _copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
+    Core::_copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
   }
-  _copyToBuffer("\"M#\":\"FastTimer\"}");
-  _sendBuffer();
+  Core::_copyToBuffer("\"M#\":\"FastTimer\"}");
+  Core::_sendBuffer();
 }
 
 
 void WSlave::_sendService()
 {
-  _unbuffer();
-  _copyToBuffer('[');
+  Core::_unbuffer();
+  Core::_copyToBuffer('[');
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
-    _copyToBuffer(Core::messages[i].value);
-    _copyToBuffer(',');
+    Core::_copyToBuffer(Core::messages[i].value);
+    Core::_copyToBuffer(',');
   }
   // pulses
   for (uint8_t i=0; i < Core::pulses_len; i++) {
-    _copyToBuffer(PULSE_VALUE_AT(i));
-    _copyToBuffer(',');
+    Core::_copyToBuffer(PULSE_VALUE_AT(i));
+    Core::_copyToBuffer(',');
   }
   // digitals
   for (uint8_t i=0; i < Core::digitals_len; i++) {
-    _copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
-    _copyToBuffer(',');
+    Core::_copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
+    Core::_copyToBuffer(',');
   }
-  _copyToBuffer("\"#\"");
-  _copyToBuffer(']');
-  _sendBuffer();
+  Core::_copyToBuffer("\"#\"");
+  Core::_copyToBuffer(']');
+  Core::_sendBuffer();
 }
 
 
 void WSlave::_sendDefault(const prog_uchar *data, size_t length)
 {
-  _unbuffer();
+  Core::_unbuffer();
   while (length--) {
-    _buffer[_bufferSize++] = pgm_read_byte(data++);
-    _autoSendBuffer();
+    Core::_buffer[Core::_bufferSize++] = pgm_read_byte(data++);
+    Core::_autoSendBuffer();
   }
-  _sendBuffer();
-}
-
-
-void WSlave::_copyToBuffer(uint8_t x)
-{
-  do {
-    _copyToBuffer((char) ('0'+(x%10)));
-    x/= 10;
-  } while (x);
-}
-
-
-void WSlave::_copyToBuffer(const char c)
-{
-  _buffer[_bufferSize++] = c;
-  _autoSendBuffer();
-}
-
-
-void WSlave::_copyToBuffer(const char* str)
-{
-  while (*str) {
-    _buffer[_bufferSize++] = *str++;
-    _autoSendBuffer();
-  }
-}
-
-
-void WSlave::_copyToBuffer(const char chars[], uint8_t size)
-{
-  for (uint8_t i=0; i<size; i++) {
-    _buffer[_bufferSize++] = chars[i];
-    _autoSendBuffer();
-  }
-}
-
-
-void WSlave::_copyJsonToBuffer(const char type, const char *pinChars, const char *label)
-{
-  _copyToBuffer('"');
-  _copyToBuffer(type);
-  _copyToBuffer(pinChars, 2);
-  _copyToBuffer("\":\"");
-  _copyToBuffer(label);
-  _copyToBuffer("\",");
-}
-
-
-void WSlave::_autoSendBuffer()
-{
-  if (_bufferSize == WRITEBUFFERSIZE) {
-    _client.write((uint8_t *)_buffer, WRITEBUFFERSIZE);
-    _unbuffer();
-  }
-}
-
-
-void WSlave::_sendBuffer()
-{
-  if (_bufferSize) {
-    _client.write((uint8_t *)_buffer, _bufferSize);
-  }
+  Core::_sendBuffer();
 }
 
 
@@ -277,30 +215,4 @@ const boolean WSlave::_nextHttpLine()
     goto _carriageReturn;
   }
   return watchdog != MAXLINESIZE;
-}
-
-
-const uint8_t WSlave::_bufferEqualsLength(const char *str)
-{
-  uint8_t i=0;
-  while (i<_bufferSize && str[i]==_buffer[i]) i++;
-  return i;
-}
-
-
-const boolean WSlave::_bufferIsEqualTo(const char *str)
-{
-  return _bufferSize == strlen(str) && _bufferEqualsLength(str) == strlen(str);
-}
-
-
-const uint8_t WSlave::_bufferIsPrefixOf(const char *str)
-{
-  return _bufferEqualsLength(str) == strlen(str);
-}
-
-
-void WSlave::_unbuffer()
-{
-  _bufferSize = 0;
 }

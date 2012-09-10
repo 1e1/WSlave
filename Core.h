@@ -13,6 +13,9 @@
 #define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vPin, DIGITAL_BITVALUE))
 #define PULSE_VALUE_AT(i)       (Core::pulses[i].value)
 
+#define READBUFFERSIZE          8
+#define WRITEBUFFERSIZE         64
+
 
 
 
@@ -94,11 +97,26 @@ namespace Core {
   void setup();
   void readLine(Stream *inputStream);
   void pinToChars(uint8_t pin, char out[2]);
-  void _readUint8(uint8_t &out);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);
   
+  void _copyToBuffer(uint8_t x);
+  /*inline */void _copyToBuffer(char c);
+  void _copyToBuffer(const char* str);
+  void _copyToBuffer(const char chars[], uint8_t size);
+  void _copyJsonToBuffer(const char type, const char *pinChars, const char *label);
+  /*inline */void _autoSendBuffer();
+  /*inline */void _sendBuffer();
+  void _readUint8(uint8_t &out);
+  const uint8_t _bufferEqualsLength(const char *str);
+  /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo(const char *str);
+  /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf(const char *str);
+  /*__attribute__((always_inline)) inline */void _unbuffer();
+    
   static Stream *_currentStream;
+  static char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
+  static uint8_t _bufferSize;
+  
   
 };
 
