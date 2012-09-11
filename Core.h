@@ -16,6 +16,7 @@
 #define PULSE_LABEL_AT(i)       (Core::pulses[i].label)
 #define PULSE_PIN_AT(i)         (Core::pulses[i].pin)
 #define PULSE_VALUE_AT(i)       (Core::pulses[i].value)
+#define MESSAGE_LABEL_AT(i)     (Core::messages[i].label)
 
 #define READBUFFERSIZE          8
 #define WRITEBUFFERSIZE         64
