@@ -112,7 +112,7 @@ namespace Core {
   void _copyToBuffer_P(const prog_uchar *data);
   void _copyToBuffer(const char chars[], uint8_t size);
   void _copyToBuffer_P(const prog_uchar data[], size_t size);
-  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label);
+  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label, boolean hasMoreElement);
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);

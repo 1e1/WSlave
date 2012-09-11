@@ -132,7 +132,7 @@ namespace Core {
   }
   
   
-  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label)
+  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label, boolean hasMoreElement)
   {
     char pinChars[2];
     Core::pinToChars(pin, pinChars);
@@ -141,7 +141,9 @@ namespace Core {
     _copyToBuffer(pinChars, 2);
     _copyToBuffer("\":\"");
     _copyToBuffer(label);
-    _copyToBuffer("\",");
+    if (hasMoreElement) {
+        _copyToBuffer("\",");
+    }
   }
   
   

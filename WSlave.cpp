@@ -154,22 +154,21 @@ namespace WSlave {
   
   void _sendDictionary()
   {
-    uint8_t comas = Core::messages_len + Core::pulses_len + Core::digitals_len;
+    uint8_t coma = Core::messages_len + Core::pulses_len + Core::digitals_len;
     Core_unbuffer();
     Core::_copyToBuffer('{');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
-      Core::_copyJsonToBuffer('M', i, MESSAGE_LABEL_AT(i));
+      Core::_copyJsonToBuffer('M', i, MESSAGE_LABEL_AT(i), --coma);
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
-      Core::_copyJsonToBuffer('P', PULSE_PIN_AT(i), PULSE_LABEL_AT(i));
+      Core::_copyJsonToBuffer('P', PULSE_PIN_AT(i), PULSE_LABEL_AT(i), --coma);
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      Core::_copyJsonToBuffer('D', DIGITAL_PIN_AT(i), DIGITAL_LABEL_AT(i));
+      Core::_copyJsonToBuffer('D', DIGITAL_PIN_AT(i), DIGITAL_LABEL_AT(i), --coma);
     }
-    Core::_copyToBuffer("\"M#\":\"FastTimer\"}");
     Core::_sendBuffer();
   }
   
@@ -193,7 +192,6 @@ namespace WSlave {
       Core::_copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
       Core::_copyToBuffer(',');
     }
-    Core::_copyToBuffer("\"#\"");
     Core::_copyToBuffer(']');
     Core::_sendBuffer();
   }
