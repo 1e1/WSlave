@@ -194,7 +194,7 @@ namespace WSlave {
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      Core::_copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
+      Core::_copyToBuffer(DIGITAL_VALUE_AT(i));
       Core::_copyToBuffer(',');
     }
     Core::_copyToBuffer("\"#\"");
