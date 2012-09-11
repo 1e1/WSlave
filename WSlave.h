@@ -61,6 +61,7 @@ class WSlave {
     
     void begin();
     void check();
+    void maintain();
   
   private:
     // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html

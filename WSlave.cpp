@@ -112,6 +112,15 @@ void WSlave::check()
 }
 
 
+void WSlave::maintain()
+{
+#if USE_DHCP
+  Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
+  LOGLN("renew DHCP");
+#endif
+}
+
+
 /** 
   * Status:
   *   1: 200

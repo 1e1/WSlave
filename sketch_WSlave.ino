@@ -132,10 +132,7 @@ void loop()
     // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
-#if USE_DHCP
-      Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
-      LOGLN("renew DHCP");
-#endif
+      wsengine.maintain();
       // OR: software_reset();
     } else {
       LOGLN("*** new time section ***");
