@@ -37,7 +37,7 @@ struct intfDigital
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
   byte vPin;
-  const char* const label;
+  const char* const label PROGMEM;
 };
 // { 13+0b10000000 , 0, "Light" }
 // { 13+128 , 0, "Light" }
@@ -55,7 +55,7 @@ struct intfPulse
   // digitalPinHasPWM(p)
   const byte pin;
   uint8_t value;
-  const char* const label;
+  const char* const label PROGMEM;
 };
 // { 13, 0, "Light" }
 
@@ -68,7 +68,7 @@ struct intfMessage
   /*const*/ char (*observe) (const byte *pins);
   char value;
   const byte* const pins;
-  const char* const label;
+  const char* const label PROGMEM;
 };
 // test[i].value = test[i].observe(test[i].pins)
 // { obsTemperature, "##", { 13 }, "Outdoor" }
