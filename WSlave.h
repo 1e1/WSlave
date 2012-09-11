@@ -50,7 +50,7 @@ static IPAddress gateway(GATEWAY);
 static IPAddress subnet(SUBNET);
 */
 LONGBYTES(webpage) = WEBPAGE;
-static size_t webpage_len = ARRAYLEN(webpage); // ~ 1600o / 1709o / 2100o
+static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
 
 
 
