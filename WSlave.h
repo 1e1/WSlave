@@ -73,11 +73,11 @@ namespace WSlave {
   static EthernetServer _server(PORT);
   static EthernetClient _client;
   
-  inline void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType);
-  void _sendDictionary();
-  void _sendService();
-  void _sendDefault_P(const prog_uchar data[], size_t length);
-  const boolean _nextHttpLine();
+  static void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType);
+  static void _sendDictionary();
+  static void _sendService();
+  static void _sendDefault_P(const prog_uchar data[], size_t length);
+  static const boolean _nextHttpLine();
   
 };
 
