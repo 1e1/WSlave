@@ -7,6 +7,7 @@ namespace USlave {
   void begin()
   {
     Serial.begin(USB_SPEED);
+    LOGLN("listen USB");
   }
   
   
