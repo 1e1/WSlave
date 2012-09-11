@@ -55,7 +55,7 @@ void software_reset()
 
 
 
-#if defined(USB_SPEED)
+#if defined(USB_SPEED) && !DEBUG
 #include "USlave.h"
 #define USE_USB 1
 #else
