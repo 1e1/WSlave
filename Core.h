@@ -104,7 +104,9 @@ namespace Core {
   void _copyToBuffer(uint8_t x);
   /*inline */void _copyToBuffer(char c);
   void _copyToBuffer(const char* str);
+  void _copyToBuffer_P(const prog_uchar *data);
   void _copyToBuffer(const char chars[], uint8_t size);
+  void _copyToBuffer_P(const prog_uchar data[], size_t size);
   void _copyJsonToBuffer(const char type, const char *pinChars, const char *label);
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
@@ -112,7 +114,8 @@ namespace Core {
   const uint8_t _bufferEqualsLength(const char *str);
   /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo(const char *str);
   /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf(const char *str);
-  /*__attribute__((always_inline)) inline */void _unbuffer();
+//  /*__attribute__((always_inline)) inline */void _unbuffer();
+#define Core_unbuffer() Core::_bufferSize = 0
     
   static Stream *_currentStream;
   static char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];

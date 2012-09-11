@@ -36,20 +36,20 @@ void check()
     // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
     //_scanHttpLine(SP);
     Core::readLine(&_client, SP);
-    if (Core::_bufferIsEqualTo("GET")) {
+    if (Core::_bufferIsEqualTo(PSTR("GET"))) {
       LOG("GET ");
       method = GET;
-    } else if (Core::_bufferIsEqualTo("PUT")) {
+    } else if (Core::_bufferIsEqualTo(PSTR("PUT"))) {
       LOG("PUT ");
       method = PUT;
     } else goto _send;
     
     Core::readLine(&_client, SP);
-    if (Core::_bufferIsPrefixOf("/ws")) {
+    if (Core::_bufferIsPrefixOf(PSTR("/ws"))) {
       action = SERVICE;
       LOGLN("webservice");
       // TODO catch /ws?param!!!
-    } else if (Core::_bufferIsPrefixOf("/dict")) {
+    } else if (Core::_bufferIsPrefixOf(PSTR("/dict"))) {
       action = DICTIONARY;
       LOGLN("dictionary");
     } else {
@@ -76,23 +76,23 @@ void check()
     
     _send:
     if (method == INVALID) {
-      _sendHeaders("417 Expectation failed", "text/plain");
+      _sendHeaders_P(header_417, header_text);
     } else {
       switch (action) {
         case SERVICE:
-        _sendHeaders("200 OK", "application/json");
+        _sendHeaders_P(header_200, header_json);
         LOGLN("< send service");
         _sendService();
         break;
         case DICTIONARY:
-        _sendHeaders("200 OK", "application/json");
+        _sendHeaders_P(header_200, header_json);
         LOGLN("< send dictionnary");
         _sendDictionary();
         break;
         default:
         LOG("< webpage_len="); LOGLN(webpage_len);
-        _sendHeaders("200 OK", "text/html" CRLF "Content-Encoding: gzip");
-        _sendDefault(webpage, webpage_len);
+        _sendHeaders_P(header_200, header_htZ);
+        _sendDefault_P(webpage, webpage_len);
       }
     }
     
@@ -133,20 +133,22 @@ void maintain()
   *   2: max-age=604800 // 7* 24* 60* 60
   * Connection: close
   */
-void _sendHeaders(const char *codeStatus, const char *contentType)
+void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType)
 {
-  _client.print("HTTP/1.1 ");
-  _client.print(codeStatus);
-  _client.print(CRLF "Content-Type: ");
-  _client.print(contentType);
-  //_client.print(CRLF "Connection: close");
-  _client.println(CRLF);
-  LOG("HTTP/1.1 ");
-  LOG(codeStatus);
-  LOG(CRLF "Content-Type: ");
-  LOG(contentType);
-  //LOGLN(CRLF "Connection: close");
-  LOGLN(CRLF);
+  Core_unbuffer();
+  Core::_copyToBuffer(PSTR("HTTP/1.1 "));
+  LOG("-");
+  Core::_copyToBuffer_P(codeStatus);
+  LOG("-");
+  Core::_copyToBuffer(PSTR(CRLF "Content-Type: "));
+  LOG("-");
+  Core::_copyToBuffer_P(contentType);
+  LOG("-");
+  //Core::_copyToBuffer(PSTR(CRLF "Connection: close"));
+  LOG("-");
+  Core::_copyToBuffer(CRLF);
+  LOG("-");
+  Core::_sendBuffer();
 }
 
 
@@ -154,7 +156,7 @@ void _sendDictionary()
 {
   //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   char pinChars[2];
-  Core::_unbuffer();
+  Core_unbuffer();
   Core::_copyToBuffer('{');
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
@@ -178,7 +180,7 @@ void _sendDictionary()
 
 void _sendService()
 {
-  Core::_unbuffer();
+  Core_unbuffer();
   Core::_copyToBuffer('[');
   // messages
   for (uint8_t i=0; i < Core::messages_len; i++) {
@@ -201,12 +203,11 @@ void _sendService()
 }
 
 
-void _sendDefault(const prog_uchar *data, size_t length)
+void _sendDefault_P(const prog_uchar *data, size_t length)
 {
-  Core::_unbuffer();
+  Core_unbuffer();
   while (length--) {
-    Core::_buffer[Core::_bufferSize++] = pgm_read_byte(data++);
-    Core::_autoSendBuffer();
+    Core::_copyToBuffer(pgm_read_byte(data++));
   }
   Core::_sendBuffer();
 }

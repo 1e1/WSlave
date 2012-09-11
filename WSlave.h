@@ -49,7 +49,13 @@ static IPAddress ip(IP);
 static IPAddress gateway(GATEWAY);
 static IPAddress subnet(SUBNET);
 */
-LONGBYTES(webpage) = WEBPAGE;
+
+LONGSTRING(header_200)    = "200 OK";
+LONGSTRING(header_417)    = "417 Expectation failed";
+LONGSTRING(header_text)   = "text/plain";
+LONGSTRING(header_json)   = "application/json";
+LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
+LONGBYTES(webpage)        = WEBPAGE;
 static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
 
 
@@ -67,10 +73,10 @@ namespace WSlave {
   static EthernetServer _server(PORT);
   static EthernetClient _client;
   
-  inline void _sendHeaders(const char *codeStatus, const char *contentType);
+  inline void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType);
   void _sendDictionary();
   void _sendService();
-  void _sendDefault(const prog_uchar data[], size_t length);
+  void _sendDefault_P(const prog_uchar data[], size_t length);
   const boolean _nextHttpLine();
   
 };
