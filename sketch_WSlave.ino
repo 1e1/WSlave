@@ -75,7 +75,6 @@ static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
 #include "WSlave.h"
-static WSlave wsengine;
 #define USE_ETH 1
 #else
 #define USE_ETH 0
@@ -114,7 +113,7 @@ void setup()
   // reduce number of client sockets to only one master (break loops)
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
-  wsengine.begin();
+  WSlave::begin();
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
@@ -132,7 +131,7 @@ void loop()
     // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
-      wsengine.maintain();
+      WSlave::maintain();
       // OR: software_reset();
     } else {
       LOGLN("*** new time section ***");
@@ -145,7 +144,7 @@ void loop()
 #endif
   } // if (timer) 
 #if USE_ETH
-  wsengine.check();
+  WSlave::check();
 #endif
 }
 

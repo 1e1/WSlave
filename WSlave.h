@@ -54,28 +54,24 @@ static size_t webpage_len = ARRAYLEN(webpage); // ~ 1600o / 1709o / 2100o
 
 
 
-class WSlave {
+namespace WSlave {
   
-  public:
-    WSlave();
-    
-    void begin();
-    void check();
-    void maintain();
+  void begin();
+  void check();
+  void maintain();
   
-  private:
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
-    enum MethodType     { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
-    enum ActionType     { ROOT, SERVICE, CACHE, DICTIONARY };
-    
-    EthernetServer _server;
-    EthernetClient _client;
-    
-    inline void _sendHeaders(const char *codeStatus, const char *contentType);
-    void _sendDictionary();
-    void _sendService();
-    void _sendDefault(const prog_uchar data[], size_t length);
-    const boolean _nextHttpLine();
+  // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
+  enum MethodType     { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
+  enum ActionType     { ROOT, SERVICE, CACHE, DICTIONARY };
+  
+  static EthernetServer _server(PORT);
+  static EthernetClient _client;
+  
+  inline void _sendHeaders(const char *codeStatus, const char *contentType);
+  void _sendDictionary();
+  void _sendService();
+  void _sendDefault(const prog_uchar data[], size_t length);
+  const boolean _nextHttpLine();
   
 };
 

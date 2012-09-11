@@ -2,14 +2,9 @@
 
 
 
-WSlave::WSlave() :
-  _server(PORT)/*,
-  _client()*/
-{
-}
-
-
-void WSlave::begin()
+namespace WSlave {
+  
+void begin()
 {
 #if USE_DHCP
   LOGLN("Trying to get an IP address using DHCP");
@@ -29,7 +24,7 @@ void WSlave::begin()
 }
 
 
-void WSlave::check()
+void check()
 {
   if (_client = _server.available()) {
     LOGLN(">>> new client");
@@ -112,7 +107,7 @@ void WSlave::check()
 }
 
 
-void WSlave::maintain()
+void maintain()
 {
 #if USE_DHCP
   Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
@@ -138,7 +133,7 @@ void WSlave::maintain()
   *   2: max-age=604800 // 7* 24* 60* 60
   * Connection: close
   */
-void WSlave::_sendHeaders(const char *codeStatus, const char *contentType)
+void _sendHeaders(const char *codeStatus, const char *contentType)
 {
   _client.print("HTTP/1.1 ");
   _client.print(codeStatus);
@@ -155,7 +150,7 @@ void WSlave::_sendHeaders(const char *codeStatus, const char *contentType)
 }
 
 
-void WSlave::_sendDictionary()
+void _sendDictionary()
 {
   //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
   char pinChars[2];
@@ -181,7 +176,7 @@ void WSlave::_sendDictionary()
 }
 
 
-void WSlave::_sendService()
+void _sendService()
 {
   Core::_unbuffer();
   Core::_copyToBuffer('[');
@@ -206,7 +201,7 @@ void WSlave::_sendService()
 }
 
 
-void WSlave::_sendDefault(const prog_uchar *data, size_t length)
+void _sendDefault(const prog_uchar *data, size_t length)
 {
   Core::_unbuffer();
   while (length--) {
@@ -223,7 +218,7 @@ void WSlave::_sendDefault(const prog_uchar *data, size_t length)
   *
   * @return false if end by a new line
   */
-const boolean WSlave::_nextHttpLine()
+const boolean _nextHttpLine()
 {
   int c;
   uint8_t watchdog = MAXLINESIZE;
@@ -234,4 +229,6 @@ const boolean WSlave::_nextHttpLine()
     goto _carriageReturn;
   }
   return watchdog != MAXLINESIZE;
+}
+
 }
