@@ -41,7 +41,7 @@ namespace Core {
   /** 
     * pin number MUST be in 0..99
     */
-  void pinToChars(uint8_t pin, char out[2])
+  void pinToChars(const uint8_t pin, char out[2])
   {
     out[1] = '0' + (pin % 10);
     if (pin > 9) {
@@ -132,15 +132,12 @@ namespace Core {
   }
   
   
-  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label, boolean hasMoreElement)
+  void _copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement)
   {
-    char pinChars[2];
-    Core::pinToChars(pin, pinChars);
     _copyToBuffer('"');
-    _copyToBuffer(type);
-    _copyToBuffer(pinChars, 2);
-    _copyToBuffer("\":\"");
     _copyToBuffer(label);
+    _copyToBuffer("\":\"");
+    _copyToBuffer(value);
     if (hasMoreElement) {
         _copyToBuffer("\",");
     }

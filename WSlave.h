@@ -78,6 +78,7 @@ namespace WSlave {
   static void _sendService();
   static void _sendDefault_P(const prog_uchar data[], size_t length);
   static const boolean _nextHttpLine();
+  static void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma);
   
 };
 

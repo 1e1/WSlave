@@ -159,15 +159,15 @@ namespace WSlave {
     Core::_copyToBuffer('{');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
-      Core::_copyJsonToBuffer('M', i, MESSAGE_LABEL_AT(i), --coma);
+      _sendToJson(i, 'M', MESSAGE_LABEL_AT(i), --coma);
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
-      Core::_copyJsonToBuffer('P', PULSE_PIN_AT(i), PULSE_LABEL_AT(i), --coma);
+      _sendToJson(PULSE_PIN_AT(i), 'P', MESSAGE_LABEL_AT(i), --coma);
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      Core::_copyJsonToBuffer('D', DIGITAL_PIN_AT(i), DIGITAL_LABEL_AT(i), --coma);
+      _sendToJson(DIGITAL_PIN_AT(i), 'D', MESSAGE_LABEL_AT(i), --coma);
     }
     Core::_sendBuffer();
   }
@@ -224,6 +224,13 @@ namespace WSlave {
       goto _carriageReturn;
     }
     return watchdog != MAXLINESIZE;
+  }
+  
+  
+  void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma)
+  {
+    char pinChars[3] = { type, pin/10, pin%10 };
+    Core::_copyJsonToBuffer(pinChars, label, coma);
   }
 
 }

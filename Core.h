@@ -102,7 +102,7 @@ namespace Core {
   void setup();
   void readLine(Stream *inputStream);
   void readLine(Stream *inputStream, const char until);
-  void pinToChars(uint8_t pin, char out[2]);
+  void pinToChars(const uint8_t pin, char out[]);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);
   
@@ -112,7 +112,7 @@ namespace Core {
   void _copyToBuffer_P(const prog_uchar *data);
   void _copyToBuffer(const char chars[], uint8_t size);
   void _copyToBuffer_P(const prog_uchar data[], size_t size);
-  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label, boolean hasMoreElement);
+  void _copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement);
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);
