@@ -8,7 +8,11 @@
 #define BUSYLED_PIN 13
 
 // USB conf
-#define USB_SPEED   57600
+#if defined(__AVR_ATmega1280__)
+#define USB_SPEED   9600
+#else
+#define USB_SPEED   115200
+#endif
 
 // ETH conf
 #define USE_DHCP    0
