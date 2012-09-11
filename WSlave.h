@@ -32,7 +32,6 @@
 #include "webApp.h"
 
 
-#define MAXLINESIZE 255
 #define MAXHEADERS 255
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
@@ -73,7 +72,7 @@ namespace WSlave {
   static EthernetServer _server(PORT);
   static EthernetClient _client;
   
-  static void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType);
+  static void _sendHeaders_P(const prog_char *codeStatus, const prog_char *contentType);
   static void _sendDictionary();
   static void _sendService();
   static void _sendDefault_P(const prog_uchar data[], size_t length);

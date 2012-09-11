@@ -87,19 +87,21 @@ namespace Core {
   }
   
   
-  void _copyToBuffer(const char* str)
+  void _copyToBuffer(const char* const str)
   {
-    while (*str) {
-      _buffer[_bufferSize++] = *str++;
+    uint8_t i = 0;
+    while (str[i] && i<MAXLINESIZE) {
+      _buffer[_bufferSize++] = str[i++];
       _autoSendBuffer();
     }
   }
   
   
-  void _copyToBuffer_P(const prog_uchar *data)
+  void _copyToBuffer_P(const prog_uchar* const data)
   {
-    while (*data) {
-      _buffer[_bufferSize++] = pgm_read_byte(data++);
+    uint8_t i = 0;
+    while (pgm_read_byte(data) && i<MAXLINESIZE) {
+      _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
       _autoSendBuffer();
     }
   }
@@ -117,7 +119,7 @@ namespace Core {
   void _copyToBuffer_P(const prog_uchar data[], size_t size)
   {
     for (uint8_t i=0; i<size; i++) {
-      _buffer[_bufferSize++] = pgm_read_byte(data[i]);
+      _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
       _autoSendBuffer();
     }
   }
@@ -161,23 +163,25 @@ namespace Core {
   }
   
   
-  const uint8_t _bufferEqualsLength(const char *str)
+  const uint8_t _bufferEqualsLength_P(const prog_char *str)
   {
-    uint8_t i=0;
-    while (i<_bufferSize && str[i]==_buffer[i]) i++;
+    uint8_t i = 0;
+    while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
+      i++;
+    }
     return i;
   }
   
   
-  const boolean _bufferIsEqualTo(const char *str)
+  const boolean _bufferIsEqualTo_P(const prog_char *str)
   {
-    return _bufferSize == strlen(str) && _bufferEqualsLength(str) == strlen(str);
+    return _bufferSize == strlen_P(str) && strlen_P(str) == _bufferEqualsLength_P(str);
   }
   
   
-  const uint8_t _bufferIsPrefixOf(const char *str)
+  const uint8_t _bufferIsPrefixOf_P(const prog_char *str)
   {
-    return _bufferEqualsLength(str) == strlen(str);
+    return _bufferEqualsLength_P(str) == strlen_P(str);
   }
   
   /*

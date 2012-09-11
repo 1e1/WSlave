@@ -20,6 +20,7 @@ namespace WSlave {
     LOG("MASK: ");  LOGLN(Ethernet.subnetMask());
     LOG("GATE: ");  LOGLN(Ethernet.gatewayIP());
     LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
+    LOG("listen "); LOGLN(PORT);
     _server.begin();
   }
   
@@ -36,20 +37,20 @@ namespace WSlave {
       // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
       //_scanHttpLine(SP);
       Core::readLine(&_client, SP);
-      if (Core::_bufferIsEqualTo(PSTR("GET"))) {
+      if (Core::_bufferIsEqualTo_P(PSTR("GET"))) {
         LOG("GET ");
         method = GET;
-      } else if (Core::_bufferIsEqualTo(PSTR("PUT"))) {
+      } else if (Core::_bufferIsEqualTo_P(PSTR("PUT"))) {
         LOG("PUT ");
         method = PUT;
       } else goto _send;
       
       Core::readLine(&_client, SP);
-      if (Core::_bufferIsPrefixOf(PSTR("/ws"))) {
+      if (Core::_bufferIsPrefixOf_P(PSTR("/ws"))) {
         action = SERVICE;
         LOGLN("webservice");
         // TODO catch /ws?param!!!
-      } else if (Core::_bufferIsPrefixOf(PSTR("/dict"))) {
+      } else if (Core::_bufferIsPrefixOf_P(PSTR("/dict"))) {
         action = DICTIONARY;
         LOGLN("dictionary");
       } else {
@@ -133,21 +134,15 @@ namespace WSlave {
     *   2: max-age=604800 // 7* 24* 60* 60
     * Connection: close
     */
-  void _sendHeaders_P(const prog_uchar *codeStatus, const prog_uchar *contentType)
+  void _sendHeaders_P(const prog_char *codeStatus, const prog_char *contentType)
   {
-    Core_unbuffer();
-    Core::_copyToBuffer(PSTR("HTTP/1.1 "));
-    LOG("-");
+    Core_unbuffer();/*
+    Core::_copyToBuffer_P(PSTR("HTTP/1.1 "));
     Core::_copyToBuffer_P(codeStatus);
-    LOG("-");
-    Core::_copyToBuffer(PSTR(CRLF "Content-Type: "));
-    LOG("-");
+    Core::_copyToBuffer_P(PSTR(CRLF "Content-Type: "));
     Core::_copyToBuffer_P(contentType);
-    LOG("-");
-    //Core::_copyToBuffer(PSTR(CRLF "Connection: close"));
-    LOG("-");
-    Core::_copyToBuffer(CRLF);
-    LOG("-");
+    //Core::_copyToBuffer_P(PSTR(CRLF "Connection: close"));
+    Core::_copyToBuffer(CRLF);*/
     Core::_sendBuffer();
   }
   
@@ -169,6 +164,7 @@ namespace WSlave {
     for (uint8_t i=0; i < Core::digitals_len; i++) {
       _sendToJson(DIGITAL_PIN_AT(i), 'D', MESSAGE_LABEL_AT(i), --coma);
     }
+    Core::_copyToBuffer('}');
     Core::_sendBuffer();
   }
   
@@ -199,11 +195,14 @@ namespace WSlave {
   
   void _sendDefault_P(const prog_uchar *data, size_t length)
   {
+    Core::_copyToBuffer_P(data, length);
+    /*
     Core_unbuffer();
     while (length--) {
-      Core::_copyToBuffer(pgm_read_byte(data++));
+      Core::_copyToBuffer_P(data++);
     }
     Core::_sendBuffer();
+    */
   }
   
   

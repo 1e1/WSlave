@@ -20,6 +20,7 @@
 
 #define READBUFFERSIZE          8
 #define WRITEBUFFERSIZE         64
+#define MAXLINESIZE   255
 
 
 
@@ -107,17 +108,17 @@ namespace Core {
   
   void _copyToBuffer(uint8_t x);
   /*inline */void _copyToBuffer(char c);
-  void _copyToBuffer(const char* str);
-  void _copyToBuffer_P(const prog_uchar *data);
+  void _copyToBuffer(const char* const str);
+  void _copyToBuffer_P(const prog_char* const data);
   void _copyToBuffer(const char chars[], uint8_t size);
   void _copyToBuffer_P(const prog_uchar data[], size_t size);
   void _copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement=false);
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);
-  const uint8_t _bufferEqualsLength(const char *str);
-  /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo(const char *str);
-  /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf(const char *str);
+  const uint8_t _bufferEqualsLength_P(const prog_char *str);
+  /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo_P(const prog_char *str);
+  /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf_P(const prog_char *str);
 //  /*__attribute__((always_inline)) inline */void _unbuffer();
 #define Core_unbuffer() Core::_bufferSize = 0
     
