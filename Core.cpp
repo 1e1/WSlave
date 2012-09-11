@@ -132,8 +132,10 @@ namespace Core {
   }
   
   
-  void _copyJsonToBuffer(const char type, const char *pinChars, const char *label)
+  void _copyJsonToBuffer(const char type, uint8_t pin, const char *label)
   {
+    char pinChars[2];
+    Core::pinToChars(pin, pinChars);
     _copyToBuffer('"');
     _copyToBuffer(type);
     _copyToBuffer(pinChars, 2);

@@ -154,24 +154,20 @@ namespace WSlave {
   
   void _sendDictionary()
   {
-    //const char *strings[Core::messages_len + Core::pulses_len + Core::digitals_len];
-    char pinChars[2];
+    uint8_t comas = Core::messages_len + Core::pulses_len + Core::digitals_len;
     Core_unbuffer();
     Core::_copyToBuffer('{');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
-      Core::pinToChars(i, pinChars);
-      Core::_copyJsonToBuffer('M', pinChars, Core::messages[i].label);
+      Core::_copyJsonToBuffer('M', i, MESSAGE_LABEL_AT(i));
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
-      Core::pinToChars(Core::pulses[i].pin, pinChars);
-      Core::_copyJsonToBuffer('P', pinChars, Core::pulses[i].label);
+      Core::_copyJsonToBuffer('P', PULSE_PIN_AT(i), PULSE_LABEL_AT(i));
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      Core::pinToChars(Core::digitals[i].vPin, pinChars);
-      Core::_copyJsonToBuffer('D', pinChars, Core::digitals[i].label);
+      Core::_copyJsonToBuffer('D', DIGITAL_PIN_AT(i), DIGITAL_LABEL_AT(i));
     }
     Core::_copyToBuffer("\"M#\":\"FastTimer\"}");
     Core::_sendBuffer();
