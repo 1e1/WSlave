@@ -43,6 +43,12 @@
 
 
 
+static byte mac[] = { MAC };
+static IPAddress ip(IP);
+/*
+static IPAddress gateway(GATEWAY);
+static IPAddress subnet(SUBNET);
+*/
 LONGBYTES(webpage) = WEBPAGE;
 static size_t webpage_len = ARRAYLEN(webpage); // ~ 1600o / 1709o / 2100o
 

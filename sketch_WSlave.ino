@@ -75,12 +75,6 @@ static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
 #include "WSlave.h"
-static byte mac[] = { MAC };
-static IPAddress ip(IP);
-/*
-static IPAddress gateway(GATEWAY);
-static IPAddress subnet(SUBNET);
-*/
 static WSlave wsengine;
 #define USE_ETH 1
 #else
@@ -114,26 +108,12 @@ void setup()
   digitalWrite(LCD_BLPIN, HIGH);
 #endif
 #if USE_ETH
-  LOGLN("Trying to get an IP address using DHCP");
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
   // by:     Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address, 10000);...}
   // reduce number of client sockets to only one master (break loops)
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
-#if USE_DHCP
-  if (0==Ethernet.begin(mac)) {
-#endif
-    LOGLN("Failed to configure Ethernet using DHCP");
-    Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
-#if USE_DHCP
-  }
-#endif
-  // then don't forget Ethernet.maintain()
-  LOG("IP:   ");  LOGLN(Ethernet.localIP());
-  LOG("MASK: ");  LOGLN(Ethernet.subnetMask());
-  LOG("GATE: ");  LOGLN(Ethernet.gatewayIP());
-  LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
   wsengine.begin();
 #endif
   LOGLN("=== END SETUP ===");

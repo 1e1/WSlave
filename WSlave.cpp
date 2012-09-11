@@ -11,6 +11,20 @@ WSlave::WSlave() :
 
 void WSlave::begin()
 {
+#if USE_DHCP
+  LOGLN("Trying to get an IP address using DHCP");
+  if (0==Ethernet.begin(mac)) {
+    LOGLN("Failed to configure Ethernet using DHCP");
+#endif
+    Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
+#if USE_DHCP
+  }
+#endif
+  // then don't forget Ethernet.maintain()
+  LOG("IP:   ");  LOGLN(Ethernet.localIP());
+  LOG("MASK: ");  LOGLN(Ethernet.subnetMask());
+  LOG("GATE: ");  LOGLN(Ethernet.gatewayIP());
+  LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
   _server.begin();
 }
 
