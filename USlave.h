@@ -19,6 +19,7 @@ namespace USlave {
   void check();
   
   static void _sendStatus();
+  static void _statusLine(uint8_t pin, uint8_t value, const char *label);
   
 };
 
