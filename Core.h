@@ -10,7 +10,11 @@
 #define MASK_PIN(pin)           (pin & B01111111)
 
 #define DIGITAL_BITVALUE        7
+#define DIGITAL_LABEL_AT(i)     (Core::digitals[i].label)
+#define DIGITAL_PIN_AT(i)       (MASK_PIN(Core::digitals[i].vPin))
 #define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vPin, DIGITAL_BITVALUE))
+#define PULSE_LABEL_AT(i)       (Core::pulses[i].label)
+#define PULSE_PIN_AT(i)         (Core::pulses[i].pin)
 #define PULSE_VALUE_AT(i)       (Core::pulses[i].value)
 
 #define READBUFFERSIZE          8
