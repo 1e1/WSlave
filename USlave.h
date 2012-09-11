@@ -12,4 +12,15 @@
 #include "macros.h"
 
 
+
+namespace USlave {
+  
+  void begin();
+  void check();
+  
+  static void _sendStatus();
+  
+};
+
+
 #endif

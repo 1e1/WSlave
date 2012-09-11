@@ -91,7 +91,7 @@ static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 void setup()
 {
 #if USE_USB
-  Serial.begin(USB_SPEED);
+  USlave::begin();
 #elif DEBUG
   Serial.begin(9600);
 #endif
