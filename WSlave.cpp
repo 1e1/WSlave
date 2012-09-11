@@ -27,7 +27,7 @@ void begin()
 void check()
 {
   if (_client = _server.available()) {
-    LOGLN(">>> new client");
+    LOGLN(">>> ETH0");
     
     MethodType method = INVALID;
     ActionType action = ROOT;
@@ -102,7 +102,7 @@ void check()
     // close the connection:
     _client.flush();
     _client.stop();
-    LOGLN("<<< client disonnected");
+    LOGLN("<<< ETH0");
   }
 }
 
