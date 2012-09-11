@@ -25,7 +25,6 @@ namespace USlave {
   
   void _sendStatus()
   {
-    char pin[2];
     Core_unbuffer();
     // digitals
     Core::_copyToBuffer(PSTR("\n=== DIGITALS ===\n"));
@@ -51,13 +50,11 @@ namespace USlave {
   
   void _statusLine(uint8_t pin, uint8_t value, const char *label)
   {
-    char cpin[2];
-    Core::pinToChars(pin, cpin);
-    Core::_copyToBuffer(label);
+    Core::_copyToBuffer(pin);
     Core::_copyToBuffer('\t');
-    Core::_copyToBuffer(cpin);
-    Core::_copyToBuffer('=');
     Core::_copyToBuffer(value);
+    Core::_copyToBuffer('\t');
+    Core::_copyToBuffer(label);
     Core::_copyToBuffer('\n');
   }
 
