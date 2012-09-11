@@ -38,20 +38,6 @@ namespace Core {
     _bufferSize = _currentStream->readBytesUntil(until, _buffer, READBUFFERSIZE);
   }
   
-  /** 
-    * pin number MUST be in 0..99
-    */
-  void pinToChars(const uint8_t pin, char out[2])
-  {
-    out[1] = '0' + (pin % 10);
-    if (pin > 9) {
-      out[0] = '0' + (pin / 10);
-    } else {
-      out[0] = '0';
-    }
-    // LOG(pin); LOG(": "); LOG(out[0]); LOG("; "); LOG(out[1]); LOGLN("; ");
-  }
-  
   
   boolean setDigitalAtPin(uint8_t pin, boolean value)
   {
@@ -80,12 +66,17 @@ namespace Core {
   }
   
   
+  /** 
+    * value from 0 to 999
+    */
   void _copyToBuffer(uint8_t x)
   {
+    char buf[3];
+    uint8_t i = 3;
     do {
-      _copyToBuffer((char) ('0'+(x%10)));
-      x/= 10;
-    } while (x);
+      buf[--i] = '0'+ (x %10);
+    } while (x && i>0 && (x/=10));
+    _copyToBuffer(buf+i);
   }
   
   
