@@ -99,6 +99,7 @@ namespace Core {
   static const uint8_t digitals_len = ARRAYLEN(digitals);
   static const uint8_t pulses_len   = ARRAYLEN(pulses);
   static const uint8_t messages_len = ARRAYLEN(messages);
+  static const uint8_t total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages);
   
   void setup();
   void readLine(Stream *inputStream);

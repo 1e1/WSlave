@@ -71,8 +71,9 @@ namespace Core {
     */
   void _copyToBuffer(uint8_t x)
   {
-    char buf[3];
+    char buf[4];
     uint8_t i = 3;
+    buf[3] = '\0';
     do {
       buf[--i] = '0'+ (x %10);
     } while (x && i>0 && (x/=10));

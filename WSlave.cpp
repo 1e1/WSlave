@@ -149,7 +149,7 @@ namespace WSlave {
   
   void _sendDictionary()
   {
-    uint8_t coma = Core::messages_len + Core::pulses_len + Core::digitals_len;
+    uint8_t coma = Core::total_len;
     Core::_unbuffer();
     Core::_copyToBuffer('{');
     // messages
@@ -171,22 +171,29 @@ namespace WSlave {
   
   void _sendService()
   {
+    uint8_t coma = Core::total_len;
     Core::_unbuffer();
     Core::_copyToBuffer('[');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
       Core::_copyToBuffer(Core::messages[i].value);
-      Core::_copyToBuffer(',');
+      if (--coma) {
+        Core::_copyToBuffer(',');
+      }
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
       Core::_copyToBuffer(PULSE_VALUE_AT(i));
-      Core::_copyToBuffer(',');
+      if (--coma) {
+        Core::_copyToBuffer(',');
+      }
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
       Core::_copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
-      Core::_copyToBuffer(',');
+      if (--coma) {
+        Core::_copyToBuffer(',');
+      }
     }
     Core::_copyToBuffer(']');
     Core::_sendBuffer();
