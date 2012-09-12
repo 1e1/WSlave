@@ -7,7 +7,7 @@
 #define WSPULSE(NAME, PIN) { PIN, 0, NAME }
 #define WSMESSAGE(NAME, FUNCTION, PINS...) { FUNCTION, '#', {PINS}, NAME }
 #define LONGBYTES(b) static const prog_uchar b[] PROGMEM
-#define LONGSTRING(str) static const prog_uchar str[] PROGMEM
+#define LONGSTRING(str) static const prog_char str[] PROGMEM
 /** === **/
 
 
