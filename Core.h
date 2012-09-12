@@ -121,7 +121,6 @@ namespace Core {
   /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo_P(const prog_char *str);
   /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf_P(const prog_char *str);
   /*__attribute__((always_inline)) inline */void _unbuffer();
-//#define Core_unbuffer() Core::_bufferSize = 0
     
   static Stream *_currentStream;
   static char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
