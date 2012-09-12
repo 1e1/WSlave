@@ -65,8 +65,6 @@ void software_reset()
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
 #include "LSlave.h"
-static LiquidCrystal lcd(LCD_PINS);
-static char lcdLines[LCD_HEIGHT][LCD_WIDTH];
 #define USE_LCD 1
 #else
 #define USE_LCD 0
@@ -101,11 +99,6 @@ void setup()
   pinMode(BUSYLED_PIN, OUTPUT);
 #endif
   Core::setup();
-#if USE_LCD
-  lcd.begin(LCD_WIDTH, LCD_HEIGHT);
-  pinMode(LCD_BLPIN, OUTPUT);
-  digitalWrite(LCD_BLPIN, HIGH);
-#endif
 #if USE_ETH
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -114,6 +107,9 @@ void setup()
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave::begin();
+#endif
+#if USE_LCD
+  LSlave::begin();
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
@@ -151,10 +147,20 @@ void loop()
 #if USE_USB
   USlave::check();
 #endif
+#if USE_LCD
+  //LSlave::check();
+#endif
+
   
   // UNCHECK
 #if USE_ETH
   WSlave::uncheck();
+#endif
+#if USE_USB
+  USlave::uncheck();
+#endif
+#if USE_LCD
+  //LSlave::uncheck();
 #endif
 }
 
