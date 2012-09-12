@@ -57,11 +57,11 @@ namespace WSlave {
       } else {
         LOGLN("*");
       }
-      _nextHttpLine(); // ends first Header line
+      _lineLength(); // ends first Header line
       
       // sweep headers until CRLF CRLF
       _crlfcrlf:
-      while (_nextHttpLine() && --watchdog);
+      while (_lineLength() && --watchdog);
       if (!watchdog) {
         method = INVALID;
       }
@@ -221,6 +221,14 @@ namespace WSlave {
       goto _carriageReturn;
     }
     return watchdog != MAXLINESIZE;
+  }
+  
+  
+  const uint8_t _lineLength()
+  {
+    uint8_t watchdog = MAXLINESIZE;
+    while (_client.available() && _client.read() != LF && --watchdog);
+    return watchdog;
   }
   
   
