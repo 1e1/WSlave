@@ -143,9 +143,16 @@ void loop()
   digitalWrite(BUSYLED_PIN, LOW);
 #endif
   } // if (timer)
+  
+  // CHECK
 #if USE_ETH
   WSlave::check();
 #endif
+#if USE_USB
+  USlave::check();
+#endif
+  
+  // UNCHECK
 #if USE_ETH
   WSlave::uncheck();
 #endif
