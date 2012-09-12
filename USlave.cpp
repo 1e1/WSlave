@@ -18,12 +18,17 @@ namespace USlave {
       Core::setStream(&Serial);
       Core::processLine();
       _sendStatus();
-      _close:
-      // close the connection:
-      Serial.flush();
-      LOGLN("<<< USB");
     }
   }
+  
+  
+  void uncheck()
+  {
+    // close the connection:
+    Serial.flush();
+    LOGLN("<<< USB");
+  }
+  
   
   void _sendStatus()
   {
