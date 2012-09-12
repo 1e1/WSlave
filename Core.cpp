@@ -32,6 +32,7 @@ namespace Core {
       _readUint8(value);
       setDigitalAtPin(pin, value) || setPulseAtPin(pin, value);
       LOG("SET pin #"); LOG(pin); LOG(" <- "); LOG(value); LOGLN(';');
+      //_currentStream->flush();
     }
   }
   
