@@ -109,7 +109,7 @@ namespace Core {
   {
     uint8_t i = 0;
     while (pgm_read_byte(&data[i]) && i<MAXLINESIZE) {
-      _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
+      _buffer[_bufferSize++] = pgm_read_byte(&data[i]);
       _autoSendBuffer();
       i++;
     }
@@ -128,7 +128,7 @@ namespace Core {
   void _copyToBuffer_P(const prog_uchar data[], size_t size)
   {
     for (size_t i=0; i<size; i++) {
-      _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
+      _buffer[_bufferSize++] = pgm_read_byte(&data[i]);
       _autoSendBuffer();
     }
   }
@@ -176,7 +176,7 @@ namespace Core {
   const uint8_t _bufferEqualsLength_P(const prog_char* const str)
   {
     uint8_t i = 0;
-    while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
+    while (i<_bufferSize && ((char)pgm_read_byte(&str[i]))==_buffer[i]) {
       i++;
     }
     return i;
