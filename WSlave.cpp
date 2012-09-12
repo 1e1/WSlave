@@ -136,13 +136,13 @@ namespace WSlave {
     */
   void _sendHeaders_P(const prog_char *codeStatus, const prog_char *contentType)
   {
-    Core_unbuffer();/*
+    Core::_unbuffer();
     Core::_copyToBuffer_P(PSTR("HTTP/1.1 "));
     Core::_copyToBuffer_P(codeStatus);
     Core::_copyToBuffer_P(PSTR(CRLF "Content-Type: "));
     Core::_copyToBuffer_P(contentType);
     //Core::_copyToBuffer_P(PSTR(CRLF "Connection: close"));
-    Core::_copyToBuffer(CRLF);*/
+    Core::_copyToBuffer(CRLF);
     Core::_sendBuffer();
   }
   
@@ -150,7 +150,7 @@ namespace WSlave {
   void _sendDictionary()
   {
     uint8_t coma = Core::messages_len + Core::pulses_len + Core::digitals_len;
-    Core_unbuffer();
+    Core::_unbuffer();
     Core::_copyToBuffer('{');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
@@ -158,11 +158,11 @@ namespace WSlave {
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
-      _sendToJson(PULSE_PIN_AT(i), 'P', MESSAGE_LABEL_AT(i), --coma);
+      _sendToJson(PULSE_PIN_AT(i), 'P', PULSE_LABEL_AT(i), --coma);
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      _sendToJson(DIGITAL_PIN_AT(i), 'D', MESSAGE_LABEL_AT(i), --coma);
+      _sendToJson(DIGITAL_PIN_AT(i), 'D', DIGITAL_LABEL_AT(i), --coma);
     }
     Core::_copyToBuffer('}');
     Core::_sendBuffer();
@@ -171,7 +171,7 @@ namespace WSlave {
   
   void _sendService()
   {
-    Core_unbuffer();
+    Core::_unbuffer();
     Core::_copyToBuffer('[');
     // messages
     for (uint8_t i=0; i < Core::messages_len; i++) {
@@ -228,7 +228,7 @@ namespace WSlave {
   
   void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma)
   {
-    char pinChars[3] = { type, pin/10, pin%10 };
+    char pinChars[4] = { type, '0'+(pin/10), '0'+(pin%10), '\0' };
     Core::_copyJsonToBuffer(pinChars, label, coma);
   }
 

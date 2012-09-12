@@ -34,7 +34,7 @@ namespace Core {
   void readLine(Stream *inputStream, const char until)
   {
     _currentStream = inputStream;
-    Core_unbuffer();
+    Core::_unbuffer();
     _bufferSize = _currentStream->readBytesUntil(until, _buffer, READBUFFERSIZE);
   }
   
@@ -97,12 +97,13 @@ namespace Core {
   }
   
   
-  void _copyToBuffer_P(const prog_uchar* const data)
+  void _copyToBuffer_P(const prog_char* const data)
   {
     uint8_t i = 0;
-    while (pgm_read_byte(data) && i<MAXLINESIZE) {
+    while (pgm_read_byte(&data[i]) && i<MAXLINESIZE) {
       _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
       _autoSendBuffer();
+      i++;
     }
   }
   
@@ -141,7 +142,7 @@ namespace Core {
   {
     if (_bufferSize == WRITEBUFFERSIZE) {
       _currentStream->write((uint8_t *)_buffer, WRITEBUFFERSIZE);
-      Core_unbuffer();
+      Core::_unbuffer();
     }
   }
   
@@ -163,7 +164,7 @@ namespace Core {
   }
   
   
-  const uint8_t _bufferEqualsLength_P(const prog_char *str)
+  const uint8_t _bufferEqualsLength_P(const prog_char* const str)
   {
     uint8_t i = 0;
     while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
@@ -184,10 +185,10 @@ namespace Core {
     return _bufferEqualsLength_P(str) == strlen_P(str);
   }
   
-  /*
+  
   void _unbuffer()
   {
     _bufferSize = 0;
   }
-  */
+  
 }

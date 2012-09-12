@@ -26,7 +26,7 @@ namespace USlave {
   
   void _sendStatus()
   {
-    Core_unbuffer();
+    Core::_unbuffer();
     // digitals
     Core::_copyToBuffer(PSTR("\n=== DIGITALS ===\n"));
     for (uint8_t i=0; i < Core::digitals_len; i++) {
