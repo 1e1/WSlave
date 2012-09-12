@@ -20,7 +20,7 @@
 
 #define READBUFFERSIZE          8
 #define WRITEBUFFERSIZE         64
-#define MAXLINESIZE   255
+#define MAXLINESIZE             255
 
 
 
