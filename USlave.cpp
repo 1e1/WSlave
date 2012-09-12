@@ -15,7 +15,8 @@ namespace USlave {
   {
     if (Serial.available()) {
       LOGLN(">>> USB");
-      Core::readLine(&Serial);
+      Core::setStream(&Serial);
+      Core::readLine();
       _sendStatus();
       _close:
       // close the connection:

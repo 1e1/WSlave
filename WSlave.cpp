@@ -34,9 +34,11 @@ namespace WSlave {
       ActionType action = ROOT;
       uint8_t watchdog  = MAXHEADERS;
       
+      Core::setStream(&_client);
+      
       // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
       //_scanHttpLine(SP);
-      Core::readLine(&_client, SP);
+      Core::readLine(SP);
       if (Core::_bufferIsEqualTo_P(PSTR("GET"))) {
         LOG("GET ");
         method = GET;
@@ -45,7 +47,7 @@ namespace WSlave {
         method = PUT;
       } else goto _send;
       
-      Core::readLine(&_client, SP);
+      Core::readLine(SP);
       if (Core::_bufferIsPrefixOf_P(PSTR("/ws"))) {
         action = SERVICE;
         LOGLN("webservice");
@@ -72,7 +74,7 @@ namespace WSlave {
       if (method == PUT && action == SERVICE) {
         LOGLN("TODO: reading body");
         // [0-9]+=[0-9]+(&[0-9]+=[0-9]+)*
-        Core::readLine(&_client);
+        Core::readLine();
       }
       
       _send:

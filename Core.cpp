@@ -17,10 +17,15 @@ namespace Core {
   }
   
   
-  void readLine(Stream *inputStream)
+  void setStream(Stream *inputStream)
+  {
+    _currentStream = inputStream;
+  }
+  
+  
+  void readLine()
   {
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
-    _currentStream = inputStream;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
     while (_currentStream->available() && watchdog--) {
       _readUint8(pin);
@@ -31,9 +36,8 @@ namespace Core {
   }
   
   
-  void readLine(Stream *inputStream, const char until)
+  void readLine(const char until)
   {
-    _currentStream = inputStream;
     Core::_unbuffer();
     _bufferSize = _currentStream->readBytesUntil(until, _buffer, READBUFFERSIZE);
   }

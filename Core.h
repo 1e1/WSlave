@@ -102,8 +102,9 @@ namespace Core {
   static const uint8_t total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages);
   
   void setup();
-  void readLine(Stream *inputStream);
-  void readLine(Stream *inputStream, const char until);
+  /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
+  void readLine();
+  void readLine(const char until);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);
   
