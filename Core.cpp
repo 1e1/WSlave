@@ -23,7 +23,7 @@ namespace Core {
   }
   
   
-  void readLine()
+  void processLine()
   {
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)

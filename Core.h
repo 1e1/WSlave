@@ -103,7 +103,7 @@ namespace Core {
   
   void setup();
   /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
-  void readLine();
+  void processLine();
   void readUntil(char terminator);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);

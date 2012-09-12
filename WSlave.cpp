@@ -73,7 +73,7 @@ namespace WSlave {
       if (method == PUT && action == SERVICE) {
         LOGLN("TODO: reading body");
         // [0-9]+=[0-9]+(&[0-9]+=[0-9]+)*
-        Core::readLine();
+        Core::processLine();
       }
       
       _send:
