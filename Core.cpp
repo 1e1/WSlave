@@ -120,7 +120,7 @@ namespace Core {
   
   void _copyToBuffer_P(const prog_uchar data[], size_t size)
   {
-    for (uint8_t i=0; i<size; i++) {
+    for (size_t i=0; i<size; i++) {
       _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
       _autoSendBuffer();
     }

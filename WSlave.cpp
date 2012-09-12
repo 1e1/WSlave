@@ -203,13 +203,7 @@ namespace WSlave {
   void _sendDefault_P(const prog_uchar *data, size_t length)
   {
     Core::_copyToBuffer_P(data, length);
-    /*
-    Core_unbuffer();
-    while (length--) {
-      Core::_copyToBuffer_P(data++);
-    }
     Core::_sendBuffer();
-    */
   }
   
   
