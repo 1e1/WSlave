@@ -215,12 +215,11 @@ namespace WSlave {
     */
   const boolean _nextHttpLine()
   {
-    int c;
     uint8_t watchdog = MAXLINESIZE;
     _carriageReturn:
-    while (_client.connected() && _client.available() && _client.read() != CR && --watchdog);
+    while (_client.available() && _client.read() != CR && --watchdog);
     _lineFeed:
-    if (_client.connected() && _client.available() && _client.read() != LF && watchdog) {
+    if (watchdog && _client.available() && _client.read() != LF) {
       goto _carriageReturn;
     }
     return watchdog != MAXLINESIZE;
