@@ -170,7 +170,7 @@ namespace Core {
   }
   
   
-  void _readUntil(char terminator)
+  void readUntil(char terminator)
   {
     _bufferSize = _currentStream->readBytesUntil(terminator, _buffer, READBUFFERSIZE);
   }
