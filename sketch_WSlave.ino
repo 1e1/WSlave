@@ -123,17 +123,17 @@ void loop()
 #if BUSYLED_PIN
   digitalWrite(BUSYLED_PIN, HIGH);
 #endif
-#if USE_ETH
     // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
+#if USE_ETH
       WSlave::maintain();
+#endif
       // OR: software_reset();
     } else {
       LOGLN("*** new time section ***");
     }
     // DO SOMETHING NEW
-#endif
 #if BUSYLED_PIN
   WAIT(2000);
   digitalWrite(BUSYLED_PIN, LOW);
@@ -160,7 +160,7 @@ void loop()
   USlave::uncheck();
 #endif
 #if USE_LCD
-  //LSlave::uncheck();
+  LSlave::uncheck();
 #endif
 }
 
