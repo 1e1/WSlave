@@ -142,9 +142,12 @@ void loop()
   WAIT(2000);
   digitalWrite(BUSYLED_PIN, LOW);
 #endif
-  } // if (timer) 
+  } // if (timer)
 #if USE_ETH
   WSlave::check();
+#endif
+#if USE_ETH
+  WSlave::uncheck();
 #endif
 }
 

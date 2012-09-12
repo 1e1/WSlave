@@ -92,17 +92,17 @@ namespace WSlave {
           LOG("< webpage_len="); LOGLN(webpage_len);
           _sendHeaders_P(header_200, header_htZ);
           _sendDefault_P(webpage, webpage_len);
-        }
-      }
-      
-      // give the web browser time to receive the data
-      delay(1);
-      _close:
-      // close the connection:
-      _client.flush();
+        } // switch (action)
+      } // else (method == INVALID)
+    } // if (_client = _server.available())
+  }
+  
+  
+  void uncheck()
+  {
+      //_client.flush();
       _client.stop();
       LOGLN("<<< ETH0");
-    }
   }
   
   

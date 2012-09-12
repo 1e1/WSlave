@@ -63,6 +63,7 @@ namespace WSlave {
   
   void begin();
   void check();
+  void uncheck();
   void maintain();
   
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
