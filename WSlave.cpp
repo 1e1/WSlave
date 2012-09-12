@@ -57,21 +57,18 @@ namespace WSlave {
       } else {
         LOGLN("*");
       }
-      _nextHttpLine();
+      _nextHttpLine(); // ends first Header line
       
       // sweep headers until CRLF CRLF
-      //LOGLN("sweeping headers");
       _crlfcrlf:
       while (_nextHttpLine() && --watchdog);
-      //if (_nextHttpLine() && watchdog) goto _crlfcrlf;
       if (!watchdog) {
         method = INVALID;
       }
-      //LOGLN("ready to read body");
       
       // on body:
       if (method == PUT && action == SERVICE) {
-        LOGLN("TODO: reading body");
+        LOGLN("reading body");
         // [0-9]+=[0-9]+(&[0-9]+=[0-9]+)*
         Core::processLine();
       }
