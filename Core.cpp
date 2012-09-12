@@ -166,6 +166,13 @@ namespace Core {
     while ((c=_currentStream->read())/*!=-1*/ && '0'<=c && 'c'<='9') {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
+    // return (uint8_t) _currentStream->parseInt();
+  }
+  
+  
+  void _readUntil(char terminator)
+  {
+    _bufferSize = _currentStream->readBytesUntil(terminator, _buffer, READBUFFERSIZE);
   }
   
   
