@@ -104,7 +104,7 @@ namespace Core {
   void setup();
   /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
   void readLine();
-  void readLine(const char until);
+  void readUntil(char terminator);
   boolean setDigitalAtPin(uint8_t pin, boolean value);
   boolean setPulseAtPin(uint8_t pin, uint8_t value);
   
@@ -118,7 +118,6 @@ namespace Core {
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);
-  void readUntil(char terminator);
   const uint8_t _bufferEqualsLength_P(const prog_char* const str);
   /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo_P(const prog_char *str);
   /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf_P(const prog_char *str);

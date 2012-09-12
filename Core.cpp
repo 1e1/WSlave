@@ -36,10 +36,12 @@ namespace Core {
   }
   
   
-  void readLine(const char until)
+  void readUntil(char terminator)
   {
-    Core::_unbuffer();
-    _bufferSize = _currentStream->readBytesUntil(until, _buffer, READBUFFERSIZE);
+    _unbuffer();
+    while (_bufferSize < READBUFFERSIZE && _currentStream->available()) {
+      _buffer[_bufferSize++] = _currentStream->read();
+    }
   }
   
   
@@ -167,12 +169,6 @@ namespace Core {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
     // return (uint8_t) _currentStream->parseInt();
-  }
-  
-  
-  void readUntil(char terminator)
-  {
-    _bufferSize = _currentStream->readBytesUntil(terminator, _buffer, READBUFFERSIZE);
   }
   
   
