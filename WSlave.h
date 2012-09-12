@@ -50,8 +50,8 @@ namespace WSlave {
   void maintain();
   
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
-  enum MethodType     { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ };
-  enum ActionType     { ROOT, SERVICE, CACHE, DICTIONARY };
+  typedef enum { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ } MethodType;
+  typedef enum { ROOT, SERVICE, CACHE, DICTIONARY } ActionType;
   
   static EthernetServer _server(PORT);
   static EthernetClient _client;
