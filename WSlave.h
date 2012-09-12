@@ -42,23 +42,6 @@
 
 
 
-static byte mac[] = { MAC };
-static IPAddress ip(IP);
-/*
-static IPAddress gateway(GATEWAY);
-static IPAddress subnet(SUBNET);
-*/
-
-LONGSTRING(header_200)    = "200 OK";
-LONGSTRING(header_417)    = "417 Expectation failed";
-LONGSTRING(header_text)   = "text/plain";
-LONGSTRING(header_json)   = "application/json";
-LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
-LONGBYTES(webpage)        = WEBPAGE;
-static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
-
-
-
 namespace WSlave {
   
   void begin();
@@ -80,6 +63,21 @@ namespace WSlave {
   static const boolean _nextHttpLine();
   static const uint8_t _lineLength();
   static void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma);
+  
+  static byte mac[] = { MAC };
+  static IPAddress ip(IP);
+  /*
+  static IPAddress gateway(GATEWAY);
+  static IPAddress subnet(SUBNET);
+  */
+  
+  LONGSTRING(header_200)    = "200 OK";
+  LONGSTRING(header_417)    = "417 Expectation failed";
+  LONGSTRING(header_text)   = "text/plain";
+  LONGSTRING(header_json)   = "application/json";
+  LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
+  LONGBYTES(webpage)        = WEBPAGE;
+  static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
   
 };
 
