@@ -24,13 +24,14 @@
 #define MAC         0x40,0x6C,0x61,0x6E,0x23, 0x0C
 #define PORT        80
 #define ETH_BLPIN   53 /* power of W5100 chip */
-/*
+
 // LCD conf
 #define LCD_PINS    12, 11, 5, 4, 3, 2
 #define LCD_BLPIN   10
+#define LCD_ABTN    0 // analog pin of buttons
 #define LCD_WIDTH   16
 #define LCD_HEIGHT  2
-*/
+
 
 // VELOCITY (choose inside macros.h)
 //#define EMBEDTIME EMBEDTIME_65s_4h
