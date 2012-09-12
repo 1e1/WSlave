@@ -27,10 +27,6 @@
 
 
 
-LONGBYTES(lcd_keys) = { KEYPAD_VALUES };
-
-
-
 namespace LSlave {
   
   enum Key { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT };
@@ -41,6 +37,7 @@ namespace LSlave {
 //  void shutdown();
   const Key getKey();
   
+  LONGBYTES(lcd_keys) = { KEYPAD_VALUES };
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
