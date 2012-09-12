@@ -23,13 +23,23 @@
 #include "macros.h"
 
 
+#define KEYPAD_VALUES 30, 150, 360, 535, 760
+
+
+
+LONGBYTES(lcd_keys) = { KEYPAD_VALUES };
+
+
 
 namespace LSlave {
+  
+  enum Key { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT };
   
   void begin();
   void check();
   void uncheck();
 //  void shutdown();
+  const Key getKey();
   
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];

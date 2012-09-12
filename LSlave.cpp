@@ -27,5 +27,12 @@ namespace LSlave {
   {
     LOGLN("<<< LCD");
   }
+  
+  
+  const Key getKey()
+  {
+    //static const prog_uchar lcd_keys[] PROGMEM
+    return KEYPAD_NONE;
+  }
 
 }
