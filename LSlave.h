@@ -23,13 +23,16 @@
 #include "macros.h"
 
 
-#define KEYPAD_VALUES 30, 150, 360, 535, 760
+#define KEYPAD_VALUES       30, 150, 360, 535, 760
+#define KEYPAD_LATENCY1_MS  10    // detect press down
+#define KEYPAD_LATENCYX_MS  500   // switch mode from ONCE to MULTI
+#define KEYPAD_SPEED_MS     200   // considering new press down
 
 
 
 namespace LSlave {
   
-  enum Key { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT };
+  typedef enum { KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT, KEYPAD_NONE } Key; // end by KEYPAD_NONE
   
   void begin();
   void check();
@@ -38,8 +41,10 @@ namespace LSlave {
   const Key getKey();
   
   LONGBYTES(lcd_keys) = { KEYPAD_VALUES };
+  
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
+  static const uint8_t keys_len = ARRAYLEN(lcd_keys);
   
 };
 
