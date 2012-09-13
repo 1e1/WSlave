@@ -1,1 +1,11 @@
-LiquidCrystal_V1.2.1.zip        https://bitbucket.org/fmalpartida/new-liquidcrystal/
+LIBRARIES
+    - LiquidCrystal_V1.2.1.zip      https://bitbucket.org/fmalpartida/new-liquidcrystal/
+
+
+INSTALL
+Launch the Arduino IDE (tested with 1.0.1) and look the Preferences window. I read:
+%Sketchbook_location% = ~/Documents/Arduino/Sketchbooks
+
+Move [%git:sketch_SWlave%/libraries] to [%Sketchbook_location%/libraries], or link it. My files are:
+$ ls -al ~/Documents/Arduino/Sketchbooks/libraries
+lrwxr-xr-x  1 [myUser]  staff    67 13 sep 21:39 LiquidCrystal -> ~/Documents/Arduino/sketch_WSlave/libraries/LiquidCrystal
