@@ -174,9 +174,9 @@ namespace Core {
   
   void _readUint8(uint8_t &out)
   {
-    int c;
+    char c;
     out = 0;
-    while ((c=_currentStream->read())/*!=-1*/ && '0'<=c && 'c'<='9') {
+    while ((c=_currentStream->read())/*!=-1*/ && '0'<=c && c<='9') {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
     // return (uint8_t) _currentStream->parseInt();
