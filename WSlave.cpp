@@ -230,7 +230,7 @@ namespace WSlave {
   {
     uint8_t watchdog = MAXLINESIZE;
     while (_client.available() && _client.read() != LF && --watchdog);
-    LOG("header length: "); LOGLN(MAXLINESIZE - watchdog);
+    //LOG("header length: "); LOGLN(MAXLINESIZE - watchdog);
     return MAXLINESIZE - watchdog;
   }
   
