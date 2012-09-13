@@ -32,12 +32,14 @@
 #define LIGHTON HIGH
 #define LIGHTOFF LOW
 
+#define NUMBEROFMENU_HOME       1
+
 
 
 namespace LSlave {
   
   typedef enum { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT } Key;
-  static const uint8_t menu_len = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages) +1 /* ETH0 */;
+  static const uint8_t menu_len = NUMBEROFMENU_HOME + Core::digitals_len + Core::pulses_len + Core::messages_len;
   
   void begin();
   void check();
@@ -49,9 +51,10 @@ namespace LSlave {
   
   const boolean _hasNewPulsedKey();
   const Key _getKey();
+  void _set(const uint8_t menuItem, const uint8_t value);
   
   static Key _key = KEYPAD_NONE;
-  static uint8_t menuItem = 0;
+  static uint8_t _menuItem = 0;
   
 };
 

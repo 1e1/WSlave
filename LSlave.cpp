@@ -46,7 +46,7 @@ namespace LSlave {
   }
   
   
-  const Key _getKey()
+  const Key _getKey(const uint8_t menuItem, const uint8_t value)
   {
     int input = analogRead(LCD_ABTN);
     if (input > KEYPAD_MAXVALUE_SELECT) return KEYPAD_NONE  ;
@@ -63,6 +63,11 @@ namespace LSlave {
     if (input < KEYPAD_MAXVALUE_SELECT) return KEYPAD_SELECT;
     return KEYPAD_NONE;
     */
+  }
+  
+  
+  void _set()
+  {
   }
 
 }
