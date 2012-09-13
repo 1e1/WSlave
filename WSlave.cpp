@@ -61,7 +61,8 @@ namespace WSlave {
       
       // sweep headers until CRLF CRLF
       _crlfcrlf:
-      while (_lineLength() && --watchdog);
+//      while (_nextHttpLine() && --watchdog);
+      while (_lineLength()>1 && --watchdog);
       if (!watchdog) {
         LOGLN("INVALID");
         method = INVALID;
@@ -229,6 +230,7 @@ namespace WSlave {
   {
     uint8_t watchdog = MAXLINESIZE;
     while (_client.available() && _client.read() != LF && --watchdog);
+    LOG("header length: "); LOGLN(MAXLINESIZE - watchdog);
     return MAXLINESIZE - watchdog;
   }
   
