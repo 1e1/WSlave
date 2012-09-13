@@ -26,11 +26,14 @@
 #define ETH_BLPIN   53 /* power of W5100 chip */
 
 // LCD conf
-#define LCD_PINS    12, 11, 5, 4, 3, 2
-#define LCD_BLPIN   10
-#define LCD_ABTN    0 // analog pin of buttons
-#define LCD_WIDTH   16
-#define LCD_HEIGHT  2
+#define LCD_PINS            12, 11, 5, 4, 3, 2
+#define LCD_BLPIN           10
+#define LCD_ABTN            0 // analog pin of buttons
+#define LCD_WIDTH           16
+#define LCD_HEIGHT          2
+#define LCDPAD_LATENCY1_MS  10    // detect press down
+#define LCDPAD_LATENCYX_MS  500   // switch mode from ONCE to MULTI
+#define LCDPAD_SPEED_MS     200   // considering new press down
 
 
 // VELOCITY (choose inside macros.h)
