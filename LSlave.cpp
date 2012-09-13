@@ -18,7 +18,7 @@ namespace LSlave {
   void check()
   {
     _pressedKey = _getKey();
-    if (Serial.available()) {
+    if (_pressedKey != KEYPAD_NONE) {
       LOGLN(">>> LCD");
       LOGLN("<<< LCD");
     }
