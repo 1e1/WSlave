@@ -31,27 +31,13 @@ namespace LSlave {
   
   const Key getKey()
   {
-    return KEYPAD_NONE;
-    /*
-    static int NUM_KEYS=5; // keys_len
-    static int adc_key_val[5] ={  
-      30, 150, 360, 535, 760     };
-      
     int input = analogRead(LCD_ABTN);
-    //static const prog_uchar lcd_keys[] PROGMEM
-    // pgm_read_byte
-    //while (i 
-    for (uint8_t k=0; k<keys_len; k++)
-    {
-      if (input < pgm_read_byte(&lcd_keys[k]))
-      {
-        return k;
-      }
-    }
-    if (k >= keys_len)
-      k = -1;     // No valid key pressed
-    return k;
-    */
+    if (input < KEYPAD_MAXVALUE_RIGHT ) return KEYPAD_RIGHT ;
+    if (input < KEYPAD_MAXVALUE_UP    ) return KEYPAD_UP    ;
+    if (input < KEYPAD_MAXVALUE_DOWN  ) return KEYPAD_DOWN  ;
+    if (input < KEYPAD_MAXVALUE_LEFT  ) return KEYPAD_LEFT  ;
+    if (input < KEYPAD_MAXVALUE_SELECT) return KEYPAD_SELECT;
+    return KEYPAD_NONE;
   }
 
 }
