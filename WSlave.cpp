@@ -63,6 +63,7 @@ namespace WSlave {
       _crlfcrlf:
       while (_lineLength() && --watchdog);
       if (!watchdog) {
+        LOGLN("INVALID");
         method = INVALID;
       }
       
@@ -94,15 +95,15 @@ namespace WSlave {
           _sendDefault_P(webpage, webpage_len);
         } // switch (action)
       } // else (method == INVALID)
+      LOGLN("<<< ETH0");
     } // if (_client = _server.available())
   }
   
   
   void uncheck()
   {
-      //_client.flush();
-      _client.stop();
-      LOGLN("<<< ETH0");
+    //_client.flush();
+    _client.stop();
   }
   
   
@@ -228,7 +229,7 @@ namespace WSlave {
   {
     uint8_t watchdog = MAXLINESIZE;
     while (_client.available() && _client.read() != LF && --watchdog);
-    return watchdog;
+    return MAXLINESIZE - watchdog;
   }
   
   
