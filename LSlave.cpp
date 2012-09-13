@@ -30,6 +30,11 @@ namespace LSlave {
   }
   
   
+  void shutdown()
+  {
+  }
+  
+  
   const Key _getKey()
   {
     int input = analogRead(LCD_ABTN);

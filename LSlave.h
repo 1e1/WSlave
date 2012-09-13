@@ -38,7 +38,7 @@ namespace LSlave {
   void begin();
   void check();
   void uncheck();
-//  void shutdown();
+  void shutdown();
   
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
