@@ -29,6 +29,9 @@
 #define KEYPAD_MAXVALUE_LEFT    535
 #define KEYPAD_MAXVALUE_SELECT  760
 
+#define LIGHTON HIGH
+#define LIGHTOFF LOW
+
 
 
 namespace LSlave {
@@ -43,9 +46,10 @@ namespace LSlave {
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
+  const boolean _hasNewPulsedKey();
   const Key _getKey();
   
-  static Key _pressedKey = KEYPAD_NONE;
+  static Key _key = KEYPAD_NONE;
   
 };
 

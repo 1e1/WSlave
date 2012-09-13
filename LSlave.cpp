@@ -9,7 +9,7 @@ namespace LSlave {
     _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
   #if LCD_BLPIN
     pinMode(LCD_BLPIN, OUTPUT);
-    digitalWrite(LCD_BLPIN, HIGH);
+    digitalWrite(LCD_BLPIN, LIGHTON);
   #endif
     LOGLN("display LCD");
   }
@@ -17,9 +17,9 @@ namespace LSlave {
   
   void check()
   {
-    _pressedKey = _getKey();
-    if (_pressedKey != KEYPAD_NONE) {
+    if (_hasNewPulsedKey() && _key != KEYPAD_NONE) {
       LOGLN(">>> LCD");
+      digitalWrite(LCD_BLPIN, LIGHTON);
       LOGLN("<<< LCD");
     }
   }
@@ -32,6 +32,17 @@ namespace LSlave {
   
   void shutdown()
   {
+  }
+  
+  
+  const boolean _hasNewPulsedKey()
+  {
+    Key currentKey = _getKey();
+    if (_key != currentKey) {
+      _key = currentKey;
+      return true;
+    }
+    return false;
   }
   
   
