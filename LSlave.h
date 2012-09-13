@@ -29,9 +29,6 @@
 #define KEYPAD_MAXVALUE_LEFT    535
 #define KEYPAD_MAXVALUE_SELECT  760
 
-#define LIGHTON HIGH
-#define LIGHTOFF LOW
-
 #define NUMBEROFMENU_HOME       1
 
 
@@ -46,7 +43,7 @@ namespace LSlave {
   void uncheck();
   void shutdown();
   
-  static LiquidCrystal _lcd(LCD_PINS);
+  static LiquidCrystal _lcd(LCD_PINS, LCD_BLPIN);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
   const boolean _hasNewPulsedKey();
