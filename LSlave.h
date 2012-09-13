@@ -39,10 +39,13 @@ namespace LSlave {
   void check();
   void uncheck();
 //  void shutdown();
-  const Key getKey();
   
   static LiquidCrystal _lcd(LCD_PINS);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
+  
+  const Key _getKey();
+  
+  static Key _pressedKey = KEYPAD_NONE;
   
 };
 

@@ -17,6 +17,7 @@ namespace LSlave {
   
   void check()
   {
+    _pressedKey = _getKey();
     if (Serial.available()) {
       LOGLN(">>> LCD");
       LOGLN("<<< LCD");
@@ -29,15 +30,23 @@ namespace LSlave {
   }
   
   
-  const Key getKey()
+  const Key _getKey()
   {
     int input = analogRead(LCD_ABTN);
+    if (input > KEYPAD_MAXVALUE_SELECT) return KEYPAD_NONE  ;
+    if (input > KEYPAD_MAXVALUE_LEFT  ) return KEYPAD_SELECT;
+    if (input > KEYPAD_MAXVALUE_DOWN  ) return KEYPAD_LEFT  ;
+    if (input > KEYPAD_MAXVALUE_UP    ) return KEYPAD_DOWN  ;
+    if (input > KEYPAD_MAXVALUE_RIGHT ) return KEYPAD_UP    ;
+    return KEYPAD_RIGHT ;
+    /*
     if (input < KEYPAD_MAXVALUE_RIGHT ) return KEYPAD_RIGHT ;
     if (input < KEYPAD_MAXVALUE_UP    ) return KEYPAD_UP    ;
     if (input < KEYPAD_MAXVALUE_DOWN  ) return KEYPAD_DOWN  ;
     if (input < KEYPAD_MAXVALUE_LEFT  ) return KEYPAD_LEFT  ;
     if (input < KEYPAD_MAXVALUE_SELECT) return KEYPAD_SELECT;
     return KEYPAD_NONE;
+    */
   }
 
 }
