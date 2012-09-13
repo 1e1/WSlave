@@ -2,14 +2,14 @@
   * 
   *   01234567890ABCDEF
   *  +-----------------+
-  * 0|<NAME__10>  ##/PP|0
+  * 0|<NAME__9>  X##/PP|0
   * 1|<VALUE________16>|1
   *  +-----------------+
   *   01234567890ABCDEF
   * 
   * UP/DOWN: page select
   * LEFT/RIGHT: change value
-  * SELECT: ?
+  * SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
   * 
   */
 
@@ -37,6 +37,7 @@
 namespace LSlave {
   
   typedef enum { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT } Key;
+  static const uint8_t menu_len = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages) +1 /* ETH0 */;
   
   void begin();
   void check();
@@ -50,6 +51,7 @@ namespace LSlave {
   const Key _getKey();
   
   static Key _key = KEYPAD_NONE;
+  static uint8_t menuItem = 0;
   
 };
 
