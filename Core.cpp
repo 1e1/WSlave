@@ -25,6 +25,12 @@ namespace Core {
   
   void processLine()
   {
+    /*
+    LOG("body='");
+    while(_currentStream->available()) {LOG((char) _currentStream->read());}
+    LOGLN("'");
+    return;
+    */
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
     while (_currentStream->available() && watchdog--) {
@@ -169,6 +175,7 @@ namespace Core {
   void _readUint8(uint8_t &out)
   {
     int c;
+    out = 0;
     while ((c=_currentStream->read())/*!=-1*/ && '0'<=c && 'c'<='9') {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
