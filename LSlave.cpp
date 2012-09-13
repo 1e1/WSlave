@@ -19,13 +19,13 @@ namespace LSlave {
   {
     if (Serial.available()) {
       LOGLN(">>> LCD");
+      LOGLN("<<< LCD");
     }
   }
   
   
   void uncheck()
   {
-    LOGLN("<<< LCD");
   }
   
   

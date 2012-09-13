@@ -18,6 +18,7 @@ namespace USlave {
       Core::setStream(&Serial);
       Core::processLine();
       _sendStatus();
+      LOGLN("<<< USB");
     }
   }
   
@@ -26,7 +27,6 @@ namespace USlave {
   {
     // close the connection:
     Serial.flush();
-    LOGLN("<<< USB");
   }
   
   
