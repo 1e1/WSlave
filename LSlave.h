@@ -67,6 +67,7 @@
 #define LCDPOSITION_VALUE_LENGTH    3
 #define LCDPOSITION_ANALOG          1, ((  LCD_WIDTH - (1+LCDPOSITION_BAR_LENGTH+1 +LCDPOSITION_ANALOG_OFFSET+ LCDPOSITION_VALUE_LENGTH)  )/2)
 
+#define LCDCHAR_PAGESEPARATOR       '/'
 #define LCDCHAR_VOIDBAR             ((uint8_t) 0)
 #define LCDCHAR_HALFBAR             ((uint8_t) 1)
 #define LCDCHAR_FULLBAR             ((uint8_t) 2)
