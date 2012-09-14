@@ -40,42 +40,56 @@ namespace LSlave {
   {
     if (_hasNewPulsedKey() && _key != KEYPAD_NONE) {
       LOGLN(">>> LCD");
-      _lcd.on();
-      // UP/DOWN: page select
-      // LEFT/RIGHT: change value
-      // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
-      switch (_key) {
-        case KEYPAD_UP:
-        if (++_menuItem == menu_len) {
-          _menuItem = 0;
+      
+      // wakeup
+      if (_state != AWAKE) {
+        _state = AWAKE;
+        _lcd.on();
+        // write 3 chars on top right corner
+        _lcd.setCursor(LCDPOSITION_PAGE);
+        _lcd.print(LCDCHAR_PAGESEPARATOR);
+        _lcd.print(Core::total_len);
+      } else {
+        
+        // UP/DOWN: page select
+        // LEFT/RIGHT: change value
+        // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
+        switch (_key) {
+          case KEYPAD_UP:
+          if (++_menuItem == menu_len) {
+            _menuItem = 0;
+          }
+          break;
+          case KEYPAD_DOWN:
+          if (!_menuItem--) {
+            _menuItem+= menu_len;
+          }
+          break;
+          case KEYPAD_LEFT:
+          _add(+ANALOGSTEP);
+          break;
+          case KEYPAD_RIGHT:
+          _add(-ANALOGSTEP);
+          break;
+          case KEYPAD_SELECT:
+          // jump section
+          if (_menuItem < NUMBEROFMENU_HOME) {
+            _menuItem = NUMBEROFMENU_HOME;
+          } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len) {
+            _menuItem = NUMBEROFMENU_HOME + Core::messages_len;
+          } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len) {
+            _menuItem = NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len;
+          } else { // if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len + Core::digitals_len)
+            _menuItem = 0;
+          }
+          break;
         }
-        break;
-        case KEYPAD_DOWN:
-        if (!_menuItem--) {
-          _menuItem+= menu_len;
-        }
-        break;
-        case KEYPAD_LEFT:
-        _add(+15);
-        break;
-        case KEYPAD_RIGHT:
-        _add(-15);
-        break;
-        case KEYPAD_SELECT:
-        // jump section
-        if (_menuItem < NUMBEROFMENU_HOME) {
-          _menuItem = NUMBEROFMENU_HOME;
-        } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len) {
-          _menuItem = NUMBEROFMENU_HOME + Core::messages_len;
-        } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len) {
-          _menuItem = NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len;
-        } else { // if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len + Core::digitals_len)
-          _menuItem = 0;
-        }
-        break;
+        
       }
       // update display
       LOG("display menu #"); LOGLN(_menuItem);
+      
+      
       LOGLN("<<< LCD");
     }
   }
@@ -88,6 +102,19 @@ namespace LSlave {
   
   void shutdown()
   {
+    if (_state != SHUTDOWN) {
+      switch (_state) {
+        case AWAKE:
+        _lcd.setBacklight(LCD_BACKLIGHT_SLEEP);
+        _state = SLEEPING;
+        break;
+        case SLEEPING:
+        _lcd.off();
+        _state = SHUTDOWN;
+        //_menuItem = 0;
+        break;
+      }
+    }
   }
   
   
