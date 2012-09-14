@@ -45,10 +45,6 @@ namespace LSlave {
       if (_state != AWAKE) {
         _state = AWAKE;
         _lcd.on();
-        // write 3 chars on top right corner
-        _lcd.setCursor(LCDPOSITION_PAGE);
-        _lcd.print(LCDCHAR_PAGESEPARATOR);
-        _lcd.print(Core::total_len);
       } else {
         
         // UP/DOWN: page select
@@ -85,6 +81,20 @@ namespace LSlave {
           break;
         }
         
+        if (_menuItem < NUMBEROFMENU_HOME) {
+          // display info (_menuItem)
+          _printInfo();
+        } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len) {
+          // display info (_menuItem - NUMBEROFMENU_HOME)
+          _printMessage();
+        } else if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len) {
+          // display info (_menuItem - NUMBEROFMENU_HOME - Core::messages_len)
+          _printPulse();
+        } else { // if (_menuItem < NUMBEROFMENU_HOME + Core::messages_len + Core::pulses_len + Core::digitals_len)
+          // display info (_menuItem - NUMBEROFMENU_HOME - Core::messages_len - Core::pulses_len)
+          _printDigital();
+        }
+        
       }
       // update display
       LOG("display menu #"); LOGLN(_menuItem);
@@ -118,9 +128,28 @@ namespace LSlave {
   }
   
   
+  void _printTitle(const char *label, const char type)
+  {
+    uint8_t i = 0;
+    while (i<LCDPOSITION_TITLE_LENGTH && label[i]) {
+      _lcd.print(label[i]);
+      i++;
+    }
+    while (i++<LCDPOSITION_TITLE_LENGTH + LCDPOSITION_PAGE_OFFSET) {
+      _lcd.print(' ');
+    }
+    if (_menuItem<9) {
+      _lcd.print(' ');
+    }
+    _lcd.print(_menuItem+1);
+    _lcd.print(LCDCHAR_PAGESEPARATOR);
+    _lcd.print(Core::total_len);
+  }
+  
+  
   void _printInfo()
   {
-    
+    _printTitle("IP", 'I');
   }
   
   
