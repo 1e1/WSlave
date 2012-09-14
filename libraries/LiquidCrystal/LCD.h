@@ -379,7 +379,7 @@ public:
     (0 to 7)
     @param      charmap[in] the bitmap array representing each row of the character.
     */
-   void createChar(uint8_t location, uint8_t charmap[]);
+   void createChar(uint8_t location, const uint8_t charmap[]);
    
    /*!
     @function
