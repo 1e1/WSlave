@@ -6,6 +6,29 @@ namespace LSlave {
   
   void begin()
   {
+    {
+      const uint8_t symbol[8] = LCDCHAR_VOIDBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_VOIDBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_HALFBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_HALFBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_FULLBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_FULLBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_LEFTBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_LEFTBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_RIGHTBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_RIGHTBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_NOLEFTBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_NOLEFTBAR, symbol);
+    }{
+      const uint8_t symbol[8] = LCDCHAR_NORIGHTBAR_CONTENT;
+      _lcd.createChar(LCDCHAR_NORIGHTBAR, symbol);
+    }
+    // lcd.write(LCDCHAR_FULLBAR);
     _lcd.on();
     _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
     _lcd.home();
@@ -52,6 +75,7 @@ namespace LSlave {
         break;
       }
       // update display
+      LOG("display menu #"); LOGLN(_menuItem);
       LOGLN("<<< LCD");
     }
   }
