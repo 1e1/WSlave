@@ -157,11 +157,11 @@ namespace LSlave {
   static LiquidCrystal _lcd(LCD_PINS, LCD_BLPIN);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
-  void _printTitle(char *label);
-  void _printInfo();
-  void _printMessage();
-  void _printPulse();
-  void _printDigital();
+  void _sendTitle(const char *label);
+  void _sendInfo();
+  void _sendMessage();
+  void _sendPulse();
+  void _sendDigital();
   const boolean _hasNewPulsedKey();
   const Key _getKey();
   void _add(const int8_t value);
