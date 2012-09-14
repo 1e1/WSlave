@@ -25,15 +25,17 @@ namespace Core {
   
   void processLine()
   {
-    /*
+    
     LOG("body='");
-    while(_currentStream->available()) {LOG((char) _currentStream->read());}
+    char c;
+    while((c=_currentStream->read())!=-1) {LOG(c);}
     LOGLN("'");
     return;
-    */
+    
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
     while (_currentStream->available() && watchdog--) {
+      LOG('*');
       _readUint8(pin);
       _readUint8(value);
       setDigitalAtPin(pin, value) || setPulseAtPin(pin, value);
@@ -47,7 +49,7 @@ namespace Core {
   {
     char c;
     _unbuffer();
-    while (_bufferSize < READBUFFERSIZE && _currentStream->available() && (c=_currentStream->read())!=terminator) {
+    while (_bufferSize < READBUFFERSIZE && (c=_currentStream->read())!=terminator && c!=-1) {
       _buffer[_bufferSize++] = c;
     }
   }
@@ -176,9 +178,11 @@ namespace Core {
   {
     char c;
     out = 0;
-    while ((c=_currentStream->read())/*!=-1*/ && '0'<=c && c<='9') {
+    while ((c=_currentStream->read())!=-1 && '0'<=c && c<='9') {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
+    LOG("EOT="); LOGLN(c);
+    LOG("uint="); LOGLN(out);
     // return (uint8_t) _currentStream->parseInt();
   }
   

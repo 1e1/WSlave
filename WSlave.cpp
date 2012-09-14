@@ -216,10 +216,11 @@ namespace WSlave {
   const boolean _nextHttpLine()
   {
     uint8_t watchdog = MAXLINESIZE;
+    char c;
     _carriageReturn:
-    while (_client.available() && _client.read() != CR && --watchdog);
+    while ((c=_client.read())!=CR && --watchdog && c!=-1);
     _lineFeed:
-    if (watchdog && _client.available() && _client.read() != LF) {
+    if (watchdog && (c=_client.read())!=LF && c!=-1) {
       goto _carriageReturn;
     }
     return watchdog != MAXLINESIZE;
@@ -229,8 +230,9 @@ namespace WSlave {
   const uint8_t _lineLength()
   {
     uint8_t watchdog = MAXLINESIZE;
-    while (_client.available() && _client.read() != LF && --watchdog);
-    //LOG("header length: "); LOGLN(MAXLINESIZE - watchdog);
+    char c;
+    while ((c=_client.read())!=LF && --watchdog && c!=-1);
+    LOG("header length: "); LOGLN(MAXLINESIZE - watchdog);
     return MAXLINESIZE - watchdog;
   }
   
