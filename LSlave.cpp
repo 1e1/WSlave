@@ -6,6 +6,8 @@ namespace LSlave {
   
   void begin()
   {
+    // _lcd.on();
+    _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
     {
       const uint8_t symbol[8] = LCDCHAR_VOIDBAR_CONTENT;
       _lcd.createChar(LCDCHAR_VOIDBAR, symbol);
@@ -29,8 +31,6 @@ namespace LSlave {
       _lcd.createChar(LCDCHAR_NORIGHTBAR, symbol);
     }
     // lcd.write(LCDCHAR_FULLBAR);
-    // _lcd.on();
-    _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
     _lcd.home();
     LOGLN("display LCD");
   }
