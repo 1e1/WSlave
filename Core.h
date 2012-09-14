@@ -101,6 +101,8 @@ namespace Core {
   static const uint8_t messages_len = ARRAYLEN(messages);
   static const uint8_t total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages);
   
+  typedef enum { IDLE, PIN, VALUE } ReadingState;
+  
   void setup();
   /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
   void processLine();

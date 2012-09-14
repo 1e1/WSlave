@@ -71,6 +71,8 @@ namespace WSlave {
   static IPAddress subnet(SUBNET);
   */
   
+  static Core::ReadingState _state = Core::IDLE;
+  
   LONGSTRING(header_200)    = "200 OK";
   LONGSTRING(header_417)    = "417 Expectation failed";
   LONGSTRING(header_text)   = "text/plain" CRLF;
@@ -82,5 +84,5 @@ namespace WSlave {
 };
 
 
-#endif WSLAVE_H_
+#endif WSLAVE_H_q
 
