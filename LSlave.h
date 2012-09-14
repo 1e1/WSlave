@@ -124,9 +124,13 @@ namespace LSlave {
   static LiquidCrystal _lcd(LCD_PINS, LCD_BLPIN);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
+  void _printInfo();
+  void _printMessage();
+  void _printPulse();
+  void _printDigital();
   const boolean _hasNewPulsedKey();
   const Key _getKey();
-  void _set(const uint8_t menuItem, const uint8_t value);
+  void _add(const int8_t value);
   
   static Key _key = KEYPAD_NONE;
   static uint8_t _menuItem = 0;

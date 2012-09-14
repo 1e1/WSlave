@@ -29,7 +29,7 @@ namespace LSlave {
       _lcd.createChar(LCDCHAR_NORIGHTBAR, symbol);
     }
     // lcd.write(LCDCHAR_FULLBAR);
-    _lcd.on();
+    // _lcd.on();
     _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
     _lcd.home();
     LOGLN("display LCD");
@@ -56,10 +56,10 @@ namespace LSlave {
         }
         break;
         case KEYPAD_LEFT:
-        _set(_menuItem, +15);
+        _add(+15);
         break;
         case KEYPAD_RIGHT:
-        _set(_menuItem, -15);
+        _add(-15);
         break;
         case KEYPAD_SELECT:
         // jump section
@@ -88,6 +88,30 @@ namespace LSlave {
   
   void shutdown()
   {
+  }
+  
+  
+  void _printInfo()
+  {
+    
+  }
+  
+  
+  void _printMessage()
+  {
+    
+  }
+  
+  
+  void _printPulse()
+  {
+    
+  }
+  
+  
+  void _printDigital()
+  {
+    
   }
   
   
