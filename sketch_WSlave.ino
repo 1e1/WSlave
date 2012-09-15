@@ -132,6 +132,9 @@ void loop()
       // OR: software_reset();
     } else {
       LOGLN("*** new time section ***");
+#if USE_LCD
+      LSlave::shutdown();
+#endif
     }
     // DO SOMETHING NEW
 #if BUSYLED_PIN
@@ -148,7 +151,7 @@ void loop()
   USlave::check();
 #endif
 #if USE_LCD
-  //LSlave::check();
+  LSlave::check();
 #endif
 
   
