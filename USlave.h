@@ -22,8 +22,6 @@ namespace USlave {
   static void _sendStatus();
   static void _statusLine(uint8_t pin, uint8_t value, const char *label);
   
-  static Core::ReadingState _state = Core::IDLE;
-  
 };
 
 
