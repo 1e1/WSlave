@@ -6,7 +6,7 @@ namespace LSlave {
   
   void begin()
   {
-    // _lcd.on();
+    //_lcd.on();
     _lcd.begin(LCD_WIDTH, LCD_HEIGHT);
     {
       const uint8_t symbol[8] = LCDCHAR_VOIDBAR_CONTENT;
@@ -32,6 +32,7 @@ namespace LSlave {
     }
     // lcd.write(LCDCHAR_FULLBAR);
     _lcd.home();
+    _lcd.write('@');
     LOGLN("display LCD");
   }
   
@@ -44,7 +45,7 @@ namespace LSlave {
       // wakeup
       if (_state != AWAKE) {
         _state = AWAKE;
-        _lcd.on();
+        //_lcd.on();
       } else {
         
         // UP/DOWN: page select
@@ -52,20 +53,20 @@ namespace LSlave {
         // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
         switch (_key) {
           case KEYPAD_UP:
-          if (++_menuItem == menu_len) {
-            _menuItem = 0;
-          }
-          break;
-          case KEYPAD_DOWN:
           if (!_menuItem--) {
             _menuItem+= menu_len;
           }
           break;
+          case KEYPAD_DOWN:
+          if (++_menuItem == menu_len) {
+            _menuItem = 0;
+          }
+          break;
           case KEYPAD_LEFT:
-          _add(+ANALOGSTEP);
+          _add((int8_t)+ANALOGSTEP);
           break;
           case KEYPAD_RIGHT:
-          _add(-ANALOGSTEP);
+          _add((int8_t)-ANALOGSTEP);
           break;
           case KEYPAD_SELECT:
           // jump section
@@ -99,7 +100,6 @@ namespace LSlave {
       // update display
       LOG("display menu #"); LOGLN(_menuItem);
       
-      
       LOGLN("<<< LCD");
     }
   }
@@ -115,12 +115,11 @@ namespace LSlave {
     if (_state != SHUTDOWN) {
       switch (_state) {
         case AWAKE:
-        _lcd.setBacklight(LCD_BACKLIGHT_SLEEP);
+        //_lcd.setBacklight(LCD_BACKLIGHT_SLEEP);
         _state = SLEEPING;
         break;
         case SLEEPING:
-        _lcd.off();
-        _state = SHUTDOWN;
+        //_lcd.off();
         //_menuItem = 0;
         break;
       }
@@ -182,7 +181,7 @@ namespace LSlave {
   }
   
   
-  const Key _getKey(const uint8_t menuItem, const uint8_t value)
+  const Key _getKey()
   {
     int input = analogRead(LCD_ABTN);
     if (input > KEYPAD_MAXVALUE_SELECT) return KEYPAD_NONE  ;
@@ -202,7 +201,7 @@ namespace LSlave {
   }
   
   
-  void _set()
+  void _add(const int8_t delta)
   {
   }
 
