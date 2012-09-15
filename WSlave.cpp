@@ -96,8 +96,6 @@ namespace WSlave {
           _sendDefault_P(webpage, webpage_len);
         } // switch (action)
       } // else (method == INVALID)
-      delay(1);
-      _client.stop();
       LOGLN("<<< ETH0");
     } // if (_client = _server.available())
   }
@@ -106,6 +104,7 @@ namespace WSlave {
   void uncheck()
   {
     //_client.flush();
+    _client.stop();
   }
   
   
@@ -184,14 +183,14 @@ namespace WSlave {
     }
     // pulses
     for (uint8_t i=0; i < Core::pulses_len; i++) {
-      Core::_copyToBuffer(PULSE_VALUE_AT(i));
+      Core::_copyToBuffer(Core::getPulseValueAtIndex(i));
       if (--coma) {
         Core::_copyToBuffer(',');
       }
     }
     // digitals
     for (uint8_t i=0; i < Core::digitals_len; i++) {
-      Core::_copyToBuffer((uint8_t)DIGITAL_VALUE_AT(i));
+      Core::_copyToBuffer(Core::getDigitalValueAtIndex(i));
       if (--coma) {
         Core::_copyToBuffer(',');
       }
