@@ -33,17 +33,17 @@
 #include "macros.h"
 
 
-#define KEYPAD_MAXVALUE_RIGHT       30
-#define KEYPAD_MAXVALUE_UP          150
-#define KEYPAD_MAXVALUE_DOWN        360
-#define KEYPAD_MAXVALUE_LEFT        535
-#define KEYPAD_MAXVALUE_SELECT      760
+#define KEYPAD_MAXVALUE_RIGHT       /* 30  */ 50
+#define KEYPAD_MAXVALUE_UP          /* 150 */ 200
+#define KEYPAD_MAXVALUE_DOWN        /* 360 */ 400
+#define KEYPAD_MAXVALUE_LEFT        /* 535 */ 600
+#define KEYPAD_MAXVALUE_SELECT      /* 760 */ 800
 
 // 255 / 17 fragments <=> 1 step = 15
 // analog value: min=0, max=255, step=15
 #define ANALOGSTEP                  15
 
-#define LCD_BACKLIGHT_SLEEP         100
+#define LCD_BACKLIGHT_SLEEP         31
 
 #define LCDPOSITION_TITLE_XY        0, 0
 #define LCDPOSITION_PAGE_OFFSET     1
@@ -154,7 +154,7 @@ namespace LSlave {
   void uncheck();
   void shutdown();
   
-  static LiquidCrystal _lcd(LCD_PINS, LCD_BLPIN);
+  static LiquidCrystal _lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
   void _printTitle(const char *label, const char type);
@@ -164,7 +164,7 @@ namespace LSlave {
   void _printDigital();
   const boolean _hasNewPulsedKey();
   const Key _getKey();
-  void _add(const int8_t value);
+  void _add(const int8_t delta);
   
   static Key _key           = KEYPAD_NONE;
   static uint8_t _menuItem  = 0;
