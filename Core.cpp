@@ -25,23 +25,15 @@ namespace Core {
   
   void processLine()
   {
-    
-    LOG("body='");
-    char c;
-    while((c=_currentStream->read())!=-1) {LOG(c);}
-    LOGLN("'");
-    return;
-    
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
+      LOG("GET pin #13"); LOG(" -> "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
     while (_currentStream->available() && watchdog--) {
-      LOG('*');
       _readUint8(pin);
       _readUint8(value);
-      setDigitalAtPin(pin, value) || setPulseAtPin(pin, value);
-      LOG("SET pin #"); LOG(pin); LOG(" <- "); LOG(value); LOGLN(';');
-      //_currentStream->flush();
+      setDigitalValueAtPin(pin, value) || setPulseValueAtPin(pin, value);
     }
+      LOG("SET pin #13"); LOG(" <- "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
   }
   
   
@@ -55,10 +47,10 @@ namespace Core {
   }
   
   
-  boolean setDigitalAtPin(uint8_t pin, boolean value)
+  boolean setDigitalValueAtPin(uint8_t pin, boolean value)
   {
     for (uint8_t i=0; i<digitals_len; i++) {
-      if (MASK_PIN(digitals[i].vPin) == pin) {
+      if (DIGITAL_PIN_AT(i) == pin) {
         // value = value > 0; // if value >1 occurs issue
         bitWrite(digitals[i].vPin, DIGITAL_BITVALUE, value);
         digitalWrite(pin, value);
@@ -68,17 +60,27 @@ namespace Core {
     return false;
   }
   
+  boolean getDigitalValueAtIndex(uint8_t index)
+  {
+    return DIGITAL_VALUE_AT(index);
+  }
   
-  boolean setPulseAtPin(uint8_t pin, uint8_t value)
+  
+  boolean setPulseValueAtPin(uint8_t pin, uint8_t value)
   {
     for (uint8_t i=0; i<pulses_len; i++) {
-      if (pulses[i].pin == pin) {
+      if (PULSE_PIN_AT(i) == pin) {
         pulses[i].value = value;
         analogWrite(pin, value);
         return true;
       }
     }
     return false;
+  }
+  
+  uint8_t getPulseValueAtIndex(uint8_t index)
+  {
+    return PULSE_VALUE_AT(index);
   }
   
   
@@ -177,12 +179,18 @@ namespace Core {
   void _readUint8(uint8_t &out)
   {
     char c;
+    uint8_t watchdog = MAXLINESIZE;
     out = 0;
-    while ((c=_currentStream->read())!=-1 && '0'<=c && c<='9') {
-      out = (out *10) + ((uint8_t) (c -'0'));
+    _read:
+    if (_currentStream->available()) {
+      while ((c=_currentStream->read()) && '0'<=c && c<='9' && --watchdog) {
+        out = (out *10) + ((uint8_t) (c -'0'));
+      }
+      if (c==-1) {
+        delay(READCHAR_TIMEOUT);
+        goto _read;
+      }
     }
-    LOG("EOT="); LOGLN(c);
-    LOG("uint="); LOGLN(out);
     // return (uint8_t) _currentStream->parseInt();
   }
   

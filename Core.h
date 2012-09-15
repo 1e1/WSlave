@@ -22,6 +22,8 @@
 #define WRITEBUFFERSIZE         64
 #define MAXLINESIZE             255
 
+#define READCHAR_TIMEOUT        4
+
 
 
 
@@ -92,7 +94,7 @@ namespace Core {
     WSDIGITAL("relay1.8", 36)
   };
   static intfPulse pulses[] = {
-    WSPULSE("Pulse", 24)
+    WSPULSE("Pulse", 13)
   };
   static intfMessage messages[] = {};
   
@@ -105,8 +107,10 @@ namespace Core {
   /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
   void processLine();
   void readUntil(char terminator);
-  boolean setDigitalAtPin(uint8_t pin, boolean value);
-  boolean setPulseAtPin(uint8_t pin, uint8_t value);
+  boolean setDigitalValueAtPin(uint8_t pin, boolean value);
+  boolean getDigitalValueAtIndex(uint8_t index);
+  boolean setPulseValueAtPin(uint8_t pin, uint8_t value);
+  uint8_t getPulseValueAtIndex(uint8_t index);
   
   void _copyToBuffer(uint8_t x);
   /*inline */void _copyToBuffer(char c);
