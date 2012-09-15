@@ -26,8 +26,9 @@
 #define ETH_BLPIN   53 /* power of W5100 chip */
 
 // LCD conf
-#define LCD_PINS            12, 11, 5, 4, 3, 2
+#define LCD_PINS            8, 13, 9, 4, 5, 6, 7
 #define LCD_BLPIN           10
+#define LCD_BLPOLARITY      POSITIVE // or POSITIVE, see ./library/LCD.h tpol, t_backlighPol
 #define LCD_ABTN            0 // analog pin of buttons
 #define LCD_WIDTH           16
 #define LCD_HEIGHT          2
