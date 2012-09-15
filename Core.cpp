@@ -17,23 +17,17 @@ namespace Core {
   }
   
   
-  void setStream(Stream *inputStream)
-  {
-    _currentStream = inputStream;
-  }
-  
-  
   void processLine()
   {
     uint8_t pin, value, watchdog = digitals_len + pulses_len;
     // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
-      LOG("GET pin #13"); LOG(" -> "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
+    //  LOG("GET pin #13"); LOG(" -> "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
     while (_currentStream->available() && watchdog--) {
       _readUint8(pin);
       _readUint8(value);
       setDigitalValueAtPin(pin, value) || setPulseValueAtPin(pin, value);
     }
-      LOG("SET pin #13"); LOG(" <- "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
+    //  LOG("SET pin #13"); LOG(" <- "); LOG(PULSE_VALUE_AT(0)); LOGLN(';');
   }
   
   
@@ -60,11 +54,6 @@ namespace Core {
     return false;
   }
   
-  boolean getDigitalValueAtIndex(uint8_t index)
-  {
-    return DIGITAL_VALUE_AT(index);
-  }
-  
   
   boolean setPulseValueAtPin(uint8_t pin, uint8_t value)
   {
@@ -76,11 +65,6 @@ namespace Core {
       }
     }
     return false;
-  }
-  
-  uint8_t getPulseValueAtIndex(uint8_t index)
-  {
-    return PULSE_VALUE_AT(index);
   }
   
   
@@ -202,24 +186,6 @@ namespace Core {
       i++;
     }
     return i;
-  }
-  
-  
-  const boolean _bufferIsEqualTo_P(const prog_char *str)
-  {
-    return _bufferSize == strlen_P(str) && strlen_P(str) == _bufferEqualsLength_P(str);
-  }
-  
-  
-  const uint8_t _bufferIsPrefixOf_P(const prog_char *str)
-  {
-    return _bufferEqualsLength_P(str) == strlen_P(str);
-  }
-  
-  
-  void _unbuffer()
-  {
-    _bufferSize = 0;
   }
   
 }
