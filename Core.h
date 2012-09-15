@@ -104,13 +104,10 @@ namespace Core {
   static const uint8_t total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages);
   
   void setup();
-  /*__attribute__((always_inline)) inline */void setStream(Stream *inputStream);
   void processLine();
   void readUntil(char terminator);
   boolean setDigitalValueAtPin(uint8_t pin, boolean value);
-  boolean getDigitalValueAtIndex(uint8_t index);
   boolean setPulseValueAtPin(uint8_t pin, uint8_t value);
-  uint8_t getPulseValueAtIndex(uint8_t index);
   
   void _copyToBuffer(uint8_t x);
   /*inline */void _copyToBuffer(char c);
@@ -123,14 +120,17 @@ namespace Core {
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);
   const uint8_t _bufferEqualsLength_P(const prog_char* const str);
-  /*__attribute__((always_inline)) inline */const boolean _bufferIsEqualTo_P(const prog_char *str);
-  /*__attribute__((always_inline)) inline */const uint8_t _bufferIsPrefixOf_P(const prog_char *str);
-  /*__attribute__((always_inline)) inline */void _unbuffer();
     
   static Stream *_currentStream;
   static char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
   static uint8_t _bufferSize;
   
+  __attribute__((always_inline)) inline void setStream(Stream *inputStream)                       { _currentStream = inputStream; };
+  __attribute__((always_inline)) inline boolean getDigitalValueAtIndex(uint8_t index)             { return DIGITAL_VALUE_AT(index); };
+  __attribute__((always_inline)) inline uint8_t getPulseValueAtIndex(uint8_t index)               { PULSE_VALUE_AT(index); };
+  __attribute__((always_inline)) inline const boolean _bufferIsEqualTo_P(const prog_char *str)    { return _bufferSize == strlen_P(str) && strlen_P(str) == _bufferEqualsLength_P(str); };
+  __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf_P(const prog_char *str)   { return _bufferEqualsLength_P(str) == strlen_P(str); };
+  __attribute__((always_inline)) inline void _unbuffer()                                          { _bufferSize = 0; };
   
 };
 
