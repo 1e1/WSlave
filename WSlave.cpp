@@ -237,7 +237,7 @@ namespace WSlave {
   }
   
   
-  void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma)
+  void _sendToJson(const uint8_t pin, const char type, const prog_char* const label, const uint8_t coma)
   {
     char pinChars[4] = { type, '0'+(pin/10), '0'+(pin%10), '\0' };
     Core::_copyJsonToBuffer(pinChars, label, coma);

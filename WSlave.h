@@ -62,7 +62,7 @@ namespace WSlave {
   static void _sendDefault_P(const prog_uchar data[], size_t length);
   static const boolean _nextHttpLine();
   static const uint8_t _lineLength();
-  static void _sendToJson(const uint8_t pin, const char type, const char *label, const uint8_t coma);
+  static void _sendToJson(const uint8_t pin, const char type, const prog_char* const label, const uint8_t coma);
   
   static byte mac[] = { MAC };
   static IPAddress ip(IP);
