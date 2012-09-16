@@ -126,8 +126,10 @@ namespace Core {
   static uint8_t _bufferSize;
   
   __attribute__((always_inline)) inline void setStream(Stream *inputStream)                       { _currentStream = inputStream; };
+  __attribute__((always_inline)) inline const prog_char* getDigitalLabelAtIndex(uint8_t index)    { return DIGITAL_LABEL_AT(index); };
   __attribute__((always_inline)) inline boolean getDigitalValueAtIndex(uint8_t index)             { return DIGITAL_VALUE_AT(index); };
-  __attribute__((always_inline)) inline uint8_t getPulseValueAtIndex(uint8_t index)               { PULSE_VALUE_AT(index); };
+  __attribute__((always_inline)) inline const prog_char* getPulseLabelAtIndex(uint8_t index)      { return PULSE_LABEL_AT(index); };
+  __attribute__((always_inline)) inline uint8_t getPulseValueAtIndex(uint8_t index)               { return PULSE_VALUE_AT(index); };
   __attribute__((always_inline)) inline const boolean _bufferIsEqualTo_P(const prog_char *str)    { return _bufferSize == strlen_P(str) && strlen_P(str) == _bufferEqualsLength_P(str); };
   __attribute__((always_inline)) inline const uint8_t _bufferIsPrefixOf_P(const prog_char *str)   { return _bufferEqualsLength_P(str) == strlen_P(str); };
   __attribute__((always_inline)) inline void _unbuffer()                                          { _bufferSize = 0; };
