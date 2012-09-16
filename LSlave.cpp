@@ -144,7 +144,6 @@ namespace LSlave {
     while (i++<LCDPOSITION_TITLE_LENGTH + LCDPOSITION_PAGE_OFFSET) {
       _lcd.print(' ');
     }
-    _lcd.print(type);
     if (_menuItem<9) {
       _lcd.print(' ');
     }
