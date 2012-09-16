@@ -41,7 +41,7 @@ struct intfDigital
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
   byte vPin;
-  const char* const label PROGMEM;
+  const prog_char *label PROGMEM;
 };
 // { 13+0b10000000 , 0, "Light" }
 // { 13+128 , 0, "Light" }
@@ -59,7 +59,7 @@ struct intfPulse
   // digitalPinHasPWM(p)
   const byte pin;
   uint8_t value;
-  const char* const label PROGMEM;
+  const prog_char *label PROGMEM;
 };
 // { 13, 0, "Light" }
 
@@ -72,7 +72,7 @@ struct intfMessage
   /*const*/ char (*observe) (const byte *pins);
   char value;
   const byte* const pins;
-  const char* const label PROGMEM;
+  const prog_char *label PROGMEM;
 };
 // test[i].value = test[i].observe(test[i].pins)
 // { obsTemperature, "##", { 13 }, "Outdoor" }
@@ -116,6 +116,7 @@ namespace Core {
   void _copyToBuffer(const char chars[], uint8_t size);
   void _copyToBuffer_P(const prog_uchar data[], size_t size);
   void _copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement=false);
+  void _copyJsonToBuffer_P(const char *label, const prog_char* const value, boolean hasMoreElement=false);
   /*inline */void _autoSendBuffer();
   /*inline */void _sendBuffer();
   void _readUint8(uint8_t &out);
