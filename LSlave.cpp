@@ -127,7 +127,7 @@ namespace LSlave {
   }
   
   
-  void _printTitle(const prog_char* const label, const char type)
+  void _printTitle(const prog_char* const label)
   {
     uint8_t i = 0;
     _lcd.setCursor(LCDPOSITION_TITLE_XY);
@@ -158,7 +158,7 @@ namespace LSlave {
   void _printInfo()
   {
     LOG("item I"); LOGLN(_menuItem);
-    _printTitle(/*PSTR(*/"IP"/*)*/, 'I');
+    _printTitle(/*PSTR(*/"IP"/*)*/);
     _lcd.setCursor(0, 1);
     //#if USE_ETH
     _lcd.print(Ethernet.localIP());
@@ -174,7 +174,7 @@ namespace LSlave {
   {
     uint8_t index = _menuItem-NUMBEROFMENU_HOME;
     LOG("item M"); LOGLN(index);
-    _printTitle(Core::messages[index].label, 'M');
+    _printTitle(Core::messages[index].label);
     _lcd.setCursor(0, 1);
     _lcd.write("TODO"); // TODO
   }
@@ -184,7 +184,7 @@ namespace LSlave {
   {
     uint8_t index = _menuItem-NUMBEROFMENU_HOME-Core::messages_len;
     LOG("item P"); LOGLN(index);
-    _printTitle(Core::getPulseLabelAtIndex(index), 'P');
+    _printTitle(Core::getPulseLabelAtIndex(index));
     _lcd.setCursor(LCDPOSITION_ANALOG_X, 1);
     _lcd.write(LCDCHAR_LEFTBAR);
     uint8_t valueLeft = Core::getPulseValueAtIndex(index);
@@ -212,7 +212,7 @@ namespace LSlave {
     uint8_t index = _menuItem-NUMBEROFMENU_HOME-Core::messages_len-Core::pulses_len;
     char on, off;
     LOG("item D"); LOGLN(index);
-    _printTitle(Core::getDigitalLabelAtIndex(index), 'D');
+    _printTitle(Core::getDigitalLabelAtIndex(index));
     _lcd.setCursor(LCDPOSITION_DIGITAL_X, 1);
     if (Core::getDigitalValueAtIndex(index)) {
       on = '*';

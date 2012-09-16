@@ -158,7 +158,7 @@ namespace LSlave {
   static LiquidCrystal _lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
-  void _printTitle(const prog_char* const label, const char type);
+  void _printTitle(const prog_char* const label);
   void _printInfo();
   void _printMessage();
   void _printPulse();
