@@ -143,6 +143,20 @@ namespace Core {
   }
   
   
+  void _copyJsonToBuffer_P(const char *label, const prog_char* const value, boolean hasMoreElement)
+  {
+    _copyToBuffer('"');
+    _copyToBuffer(label);
+    _copyToBuffer("\":\"");
+    _copyToBuffer_P(value);
+    if (hasMoreElement) {
+      _copyToBuffer("\",");
+    } else {
+      _copyToBuffer('"');
+    }
+  }
+  
+  
   void _autoSendBuffer()
   {
     if (_bufferSize == WRITEBUFFERSIZE) {
