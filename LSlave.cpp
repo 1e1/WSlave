@@ -53,7 +53,7 @@ namespace LSlave {
         // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
         switch (_key) {
           case KEYPAD_UP:
-          if (!_menuItem--) {
+          if (_menuItem--) {
             _menuItem+= menu_len;
           }
           break;
@@ -82,6 +82,8 @@ namespace LSlave {
           break;
         }
         
+        //_lcd.home();
+        _lcd.clear();
         if (_menuItem < NUMBEROFMENU_HOME) {
           // display info (_menuItem)
           _printInfo();
@@ -97,8 +99,6 @@ namespace LSlave {
         }
         
       }
-      // update display
-      LOG("display menu #"); LOGLN(_menuItem);
       
       LOGLN("<<< LCD");
     }
@@ -127,9 +127,16 @@ namespace LSlave {
   }
   
   
-  void _printTitle(const char *label, const char type)
+  void _printTitle(const prog_char* const label, const char type)
   {
     uint8_t i = 0;
+    _lcd.setCursor(LCDPOSITION_TITLE_XY);
+    /*
+    while (i<LCDPOSITION_TITLE_LENGTH && pgm_read_byte_near(&label[i])) {
+      _lcd.print((char)pgm_read_byte_near(&label[i]));
+      i++;
+    }
+    */
     while (i<LCDPOSITION_TITLE_LENGTH && label[i]) {
       _lcd.print(label[i]);
       i++;
@@ -137,36 +144,92 @@ namespace LSlave {
     while (i++<LCDPOSITION_TITLE_LENGTH + LCDPOSITION_PAGE_OFFSET) {
       _lcd.print(' ');
     }
+    _lcd.print(type);
     if (_menuItem<9) {
       _lcd.print(' ');
     }
+    LOG("page #"); LOG(_menuItem+1); LOG('/'); LOGLN(menu_len);
     _lcd.print(_menuItem+1);
     _lcd.print(LCDCHAR_PAGESEPARATOR);
-    _lcd.print(Core::total_len);
+    _lcd.print(menu_len);
   }
   
   
   void _printInfo()
   {
-    _printTitle("IP", 'I');
+    LOG("item I"); LOGLN(_menuItem);
+    _printTitle(/*PSTR(*/"IP"/*)*/, 'I');
+    _lcd.setCursor(0, 1);
+    //#if USE_ETH
+    _lcd.print(Ethernet.localIP());
+    /*
+    #else
+    _lcd.print("--:--:--");
+    #endif USE_ETH
+    */
   }
   
   
   void _printMessage()
   {
-    
+    uint8_t index = _menuItem-NUMBEROFMENU_HOME;
+    LOG("item M"); LOGLN(index);
+    _printTitle(Core::messages[index].label, 'M');
+    _lcd.setCursor(0, 1);
+    _lcd.write("TODO"); // TODO
   }
   
   
   void _printPulse()
   {
-    
+    uint8_t index = _menuItem-NUMBEROFMENU_HOME-Core::messages_len;
+    LOG("item P"); LOGLN(index);
+    _printTitle(Core::getPulseLabelAtIndex(index), 'P');
+    _lcd.setCursor(LCDPOSITION_ANALOG_X, 1);
+    _lcd.write(LCDCHAR_LEFTBAR);
+    uint8_t valueLeft = Core::getPulseValueAtIndex(index);
+    for (uint8_t i=0; i<LCDPOSITION_BAR_LENGTH; i++) {
+      if (valueLeft > 2* ANALOGSTEP) {
+        valueLeft-= 2* ANALOGSTEP;
+        _lcd.write(LCDCHAR_FULLBAR);
+      } else if (valueLeft < ANALOGSTEP) {
+        _lcd.write(LCDCHAR_VOIDBAR);
+      } else {
+        valueLeft = 0;
+        _lcd.write(LCDCHAR_HALFBAR);
+      }
+    }
+    _lcd.write(LCDCHAR_RIGHTBAR);
+    for (uint8_t i=0; i<LCDPOSITION_ANALOG_OFFSET; i++) {
+      _lcd.print(' ');
+    }
+    _lcd.print(Core::getPulseValueAtIndex(index));
   }
   
   
   void _printDigital()
   {
-    
+    uint8_t index = _menuItem-NUMBEROFMENU_HOME-Core::messages_len-Core::pulses_len;
+    char on, off;
+    LOG("item D"); LOGLN(index);
+    _printTitle(Core::getDigitalLabelAtIndex(index), 'D');
+    _lcd.setCursor(LCDPOSITION_DIGITAL_X, 1);
+    if (Core::getDigitalValueAtIndex(index)) {
+      on = '*';
+      off = ' ';
+    } else {
+      on = ' ';
+      off = '*';
+    }
+    _lcd.write(on);
+    _lcd.write("ON");
+    _lcd.write(on);
+    for (uint8_t i=0; i<LCDPOSITION_DIGITAL_INSET; i++) {
+      _lcd.print(' ');
+    }
+    _lcd.write(off);
+    _lcd.write("OFF");
+    _lcd.write(off);
   }
   
   

@@ -28,16 +28,17 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal.h>
+#include <Ethernet.h>
 #include "Core.h"
 #include "config.h"
 #include "macros.h"
 
 
-#define KEYPAD_MAXVALUE_RIGHT       /* 30  */ 50
-#define KEYPAD_MAXVALUE_UP          /* 150 */ 200
-#define KEYPAD_MAXVALUE_DOWN        /* 360 */ 400
-#define KEYPAD_MAXVALUE_LEFT        /* 535 */ 600
-#define KEYPAD_MAXVALUE_SELECT      /* 760 */ 800
+#define KEYPAD_MAXVALUE_RIGHT       /* */ 30  /* * / 50  /* */
+#define KEYPAD_MAXVALUE_UP          /* */ 150 /* * / 200 /* */
+#define KEYPAD_MAXVALUE_DOWN        /* */ 360 /* * / 400 /* */
+#define KEYPAD_MAXVALUE_LEFT        /* */ 535 /* * / 600 /* */
+#define KEYPAD_MAXVALUE_SELECT      /* */ 760 /* * / 800 /* */
 
 // 255 / 17 fragments <=> 1 step = 15
 // analog value: min=0, max=255, step=15
@@ -56,8 +57,8 @@
 // space between <ON> and <OFF>
 #define LCDPOSITION_DIGITAL_INSET   2
 // "<ON>  <OFF>" = 1+ STRLEN(ON) +1 +LCDPOSITION_DIGITAL_INSET+ 1+ STRLEN(OFF) +1
-#define LCDPOSITION_DIGITAL_X       ((  LCD_WIDTH - (1+ strlen("ON") +1 +LCDPOSITION_DIGITAL_INSET+ 1+ strlen("OFF") +1)  )/2)
-#define LCDPOSITION_ANALOG_OFFSET   1
+#define LCDPOSITION_DIGITAL_X       ((  LCD_WIDTH - (1+ 1+strlen("ON") +1 +LCDPOSITION_DIGITAL_INSET+ 1+ strlen("OFF") +1)  )/2)
+#define LCDPOSITION_ANALOG_OFFSET   2
 // max(uint8_t): 255
 // custom chars for 2 half-step by one char
 // = ceil( 255 / (2* ANALOGSTEP) )
@@ -157,7 +158,7 @@ namespace LSlave {
   static LiquidCrystal _lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
   static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
-  void _printTitle(const char *label, const char type);
+  void _printTitle(const prog_char* const label, const char type);
   void _printInfo();
   void _printMessage();
   void _printPulse();
