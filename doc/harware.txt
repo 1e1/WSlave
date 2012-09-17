@@ -1,0 +1,5 @@
+If you use the LCD1602 shield and the Ethernet W5100 Shield, 
+both are using the PIN #10.
+
+See this link: 
+http://arduino.cc/forum/index.php/topic,122934.msg925188.html#msg925188
