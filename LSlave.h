@@ -95,32 +95,32 @@
   B00001, \
   B00001 }
 #define LCDCHAR_VOIDBAR_CONTENT     { \
-  B11111, \
+  B11011, \
   B00000, \
   B00000, \
   B00000, \
   B00000, \
   B00000, \
   B00000, \
-  B11111 }
+  B11011 }
 #define LCDCHAR_HALFBAR_CONTENT     { \
-  B11111, \
+  B11011, \
   B11000, \
   B11000, \
   B11000, \
   B11000, \
   B11000, \
   B11000, \
-  B11111 }
+  B11011 }
 #define LCDCHAR_FULLBAR_CONTENT     { \
-  B11111, \
   B11011, \
   B11011, \
   B11011, \
   B11011, \
   B11011, \
   B11011, \
-  B11111 }
+  B11011, \
+  B11011 }
 #define LCDCHAR_RIGHTBAR_CONTENT    { \
   B10000, \
   B01000, \
