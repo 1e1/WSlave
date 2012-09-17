@@ -31,6 +31,12 @@ namespace Core {
   }
   
   
+  void setStream(Stream *inputStream)
+  {
+    _currentStream = inputStream;
+  }
+  
+  
   void readUntil(char terminator)
   {
     char c;
@@ -54,6 +60,11 @@ namespace Core {
     return false;
   }
   
+  boolean getDigitalValueAtIndex(uint8_t index)
+  {
+    return DIGITAL_VALUE_AT(index);
+  }
+  
   
   boolean setPulseValueAtPin(uint8_t pin, uint8_t value)
   {
@@ -65,6 +76,11 @@ namespace Core {
       }
     }
     return false;
+  }
+  
+  uint8_t getPulseValueAtIndex(uint8_t index)
+  {
+    return PULSE_VALUE_AT(index);
   }
   
   
