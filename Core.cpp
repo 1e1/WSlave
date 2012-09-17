@@ -7,9 +7,9 @@ namespace Core {
   void setup()
   {
     for (uint8_t i=0; i<digitals_len; i++) {
-      //pinMode(MASK_PIN(digitals[i].vPin), OUTPUT);
+      //pinMode(MASK_PIN(digitals[i].vnPin), OUTPUT);
       // because value is 0 at startup
-      pinMode(digitals[i].vPin, OUTPUT);
+      pinMode(digitals[i].vnPin, OUTPUT);
     }
     for (uint8_t i=0; i<pulses_len; i++) {
       pinMode(pulses[i].pin, OUTPUT);
@@ -51,8 +51,8 @@ namespace Core {
   {
     for (uint8_t i=0; i<digitals_len; i++) {
       if (DIGITAL_PIN_AT(i) == pin) {
-        // value = value > 0; // if value >1 occurs issue
-        bitWrite(digitals[i].vPin, DIGITAL_BITVALUE, value);
+        value^= DIGITAL_ISNC_AT(i);
+        bitWrite(digitals[i].vnPin, DIGITAL_BITVALUE, value);
         digitalWrite(pin, value);
         return true;
       }
@@ -62,7 +62,7 @@ namespace Core {
   
   boolean getDigitalValueAtIndex(uint8_t index)
   {
-    return DIGITAL_VALUE_AT(index);
+    return DIGITAL_VALUE_AT(index) ^ DIGITAL_ISNC_AT(index);
   }
   
   
