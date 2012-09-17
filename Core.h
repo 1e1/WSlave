@@ -10,7 +10,7 @@
 #define MASK_PIN(pin)           (pin & B00111111)
 
 #define DIGITAL_BITVALUE        7
-#define DIGITAL_BITNC           6 // Normaly Open
+#define DIGITAL_BITNC           6 // Normaly Close
 #define DIGITAL_LABEL_AT(i)     (Core::digitals[i].label)
 #define DIGITAL_PIN_AT(i)       (MASK_PIN(Core::digitals[i].vnPin))
 #define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vnPin, DIGITAL_BITVALUE))
