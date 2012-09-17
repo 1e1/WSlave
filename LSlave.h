@@ -55,9 +55,9 @@
 
 #define LCDPOSITION_DESCRIPTION_XY  1, 0
 // space between <ON> and <OFF>
-#define LCDPOSITION_DIGITAL_INSET   2
+#define LCDPOSITION_DIGITAL_INSET   3
 // "<ON>  <OFF>" = 1+ STRLEN(ON) +1 +LCDPOSITION_DIGITAL_INSET+ 1+ STRLEN(OFF) +1
-#define LCDPOSITION_DIGITAL_X       ((  LCD_WIDTH - (1+ 1+strlen("ON") +1 +LCDPOSITION_DIGITAL_INSET+ 1+ strlen("OFF") +1)  )/2)
+#define LCDPOSITION_DIGITAL_X       ((  LCD_WIDTH - (1+ strlen("ON") +1 +LCDPOSITION_DIGITAL_INSET+ 1+ strlen("OFF") +1)  )/2)
 #define LCDPOSITION_ANALOG_OFFSET   2
 // max(uint8_t): 255
 // custom chars for 2 half-step by one char
