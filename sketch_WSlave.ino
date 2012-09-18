@@ -19,6 +19,7 @@
 #include "Core.h"
 #include "config.h"
 #include "macros.h"
+#include "dictionary.h"
 #include "FastTimer.h"
 #include <SPI.h>
 
@@ -55,11 +56,19 @@ void software_reset()
 
 
 
-#if defined(USB_SPEED) && !DEBUG
+#if defined(USB_SPEED) //&& !DEBUG
 #include "USlave.h"
 #define USE_USB 1
 #else
 #define USE_USB 0
+#endif
+
+#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) && defined(ETH_BLPIN)
+#include <Ethernet.h>
+#include "WSlave.h"
+#define USE_ETH 1
+#else
+#define USE_ETH 0
 #endif
 
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
@@ -68,14 +77,6 @@ void software_reset()
 #define USE_LCD 1
 #else
 #define USE_LCD 0
-#endif
-
-#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
-#include <Ethernet.h>
-#include "WSlave.h"
-#define USE_ETH 1
-#else
-#define USE_ETH 0
 #endif
 
 
