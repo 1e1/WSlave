@@ -39,7 +39,7 @@ void Core2::readUntil(char terminator)
 /** 
   * value from 0 to 999
   */
-void Core2::_copyToBuffer(uint8_t x)
+void Core2::copyToBuffer(uint8_t x)
 {
   char buf[4];
   uint8_t i = 3;
@@ -47,14 +47,14 @@ void Core2::_copyToBuffer(uint8_t x)
   do {
     buf[--i] = '0'+ (x %10);
   } while (x && i>0 && (x/=10));
-  _copyToBuffer(buf+i);
+  copyToBuffer(buf+i);
 }
 
 
 void Core2::copyToBuffer(const char c)
 {
   _buffer[_bufferSize++] = c;
-  _autoSendBuffer();
+  autoSendBuffer();
 }
 
 
@@ -63,7 +63,7 @@ void Core2::copyToBuffer(const char* const str)
   uint8_t i = 0;
   while (str[i] && i<MAXLINESIZE) {
     _buffer[_bufferSize++] = str[i++];
-    _autoSendBuffer();
+    autoSendBuffer();
   }
 }
 
@@ -73,7 +73,7 @@ void Core2::copyToBuffer_P(const prog_char* const data)
   uint8_t i = 0;
   while (pgm_read_byte_near(&data[i]) && i<MAXLINESIZE) {
     _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
-    _autoSendBuffer();
+    autoSendBuffer();
     i++;
   }
 }
@@ -83,7 +83,7 @@ void Core2::copyToBuffer(const char chars[], uint8_t size)
 {
   for (uint8_t i=0; i<size; i++) {
     _buffer[_bufferSize++] = chars[i];
-    _autoSendBuffer();
+    autoSendBuffer();
   }
 }
 
@@ -92,12 +92,12 @@ void Core2::copyToBuffer_P(const prog_uchar data[], size_t size)
 {
   for (size_t i=0; i<size; i++) {
     _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
-    _autoSendBuffer();
+    autoSendBuffer();
   }
 }
 
 
-void Core2::_sendBuffer()
+void Core2::sendBuffer()
 {
   if (_bufferSize) {
     _currentStream->write((uint8_t *)_buffer, _bufferSize);
@@ -114,7 +114,7 @@ void Core2::_sendBuffer()
 
 
 
-static void Core2::autoSendBuffer()
+void Core2::autoSendBuffer()
 {
   if (_bufferSize == WRITEBUFFERSIZE) {
     _currentStream->write((uint8_t *)_buffer, WRITEBUFFERSIZE);
@@ -123,7 +123,7 @@ static void Core2::autoSendBuffer()
 }
 
 
-static void Core2::readUint8(uint8_t &out)
+void Core2::readUint8(uint8_t &out)
 {
   char c;
   uint8_t watchdog = MAXLINESIZE;
@@ -142,7 +142,7 @@ static void Core2::readUint8(uint8_t &out)
 }
 
 
-static const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
+const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
 {
   uint8_t i = 0;
   while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
@@ -152,41 +152,41 @@ static const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
 }
 
 
-static uint8_t Core2::getConnectorIndexOfPin(uint8_t pin, const Connector connectors[], const uint8_t size)
+uint8_t Core2::getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size)
 {
   for (uint8_t index=0; index<size; index++) {
-    if (connectors[index].pin == pin) {
+    if (connectors[index].getPin() == pin) {
       return index;
     }
   }
   return -1;
 }
 
-
-static void Core2::_copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement)
+/*
+void Core2::copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement)
 {
-  _copyToBuffer('"');
-  _copyToBuffer(label);
-  _copyToBuffer("\":\"");
-  _copyToBuffer(value);
+  copyToBuffer('"');
+  copyToBuffer(label);
+  copyToBuffer("\":\"");
+  copyToBuffer(value);
   if (hasMoreElement) {
-    _copyToBuffer("\",");
+    copyToBuffer("\",");
   } else {
-    _copyToBuffer('"');
+    copyToBuffer('"');
   }
 }
 
 
-static void Core2::_copyJsonToBuffer_P(const char *label, const prog_char* const value, boolean hasMoreElement)
+void Core2::copyJsonToBuffer_P(const char *label, const prog_char* const value, boolean hasMoreElement)
 {
-  _copyToBuffer('"');
-  _copyToBuffer(label);
-  _copyToBuffer("\":\"");
-  _copyToBuffer_P(value);
+  copyToBuffer('"');
+  copyToBuffer(label);
+  copyToBuffer("\":\"");
+  copyToBuffer_P(value);
   if (hasMoreElement) {
-    _copyToBuffer("\",");
+    copyToBuffer("\",");
   } else {
-    _copyToBuffer('"');
+    copyToBuffer('"');
   }
 }
-
+*/

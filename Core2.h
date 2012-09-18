@@ -31,14 +31,14 @@
 /**      connections      **/
 /** ===================== **/
 
-static const ConnectorDigital STATIC_DIGITALS[] = {/*
+static ConnectorDigital STATIC_DIGITALS[] = {/*
   NEWDIGITAL(22, relay11, true) ,
   NEWDIGITAL(24, relay12, false),
   NEWDIGITAL(26, relay13, false),
   NEWDIGITAL(28, relay14, false)*/
 };
 
-static const ConnectorPulse STATIC_PULSES[] = {
+static ConnectorPulse STATIC_PULSES[] = {
   ConnectorPulse(13, Dictionary::led)
 //  NEWPULSE(13, led)
 };
@@ -72,14 +72,14 @@ class Core2 {
   static void copyToBuffer_P(const prog_uchar data[], size_t size);
   static /*inline */void sendBuffer();
   
-  __attribute__((always_inline)) inline void setStream(Stream *inputStream)                       { _currentStream = inputStream; };
-  __attribute__((always_inline)) inline void unbuffer()                                           { _bufferSize = 0; };
+  __attribute__((always_inline)) static inline void setStream(Stream *inputStream)                { _currentStream = inputStream; };
+  __attribute__((always_inline)) static inline void unbuffer()                                    { _bufferSize = 0; };
   
   protected:
   static /*inline */void autoSendBuffer();
   static void readUint8(uint8_t &out);
   static const uint8_t bufferEqualsLength_P(const prog_char* const str);
-  static uint8_t getConnectorIndexOfPin(uint8_t pin, const Connector connectors[], const uint8_t size);
+  static uint8_t getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size);
   
   static const ConnectorDigital *_digitals;
   static const ConnectorPulse *_pulses;
