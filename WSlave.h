@@ -82,5 +82,5 @@ namespace WSlave {
 };
 
 
-#endif WSLAVE_H_q
+#endif WSLAVE_H_
 
