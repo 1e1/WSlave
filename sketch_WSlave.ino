@@ -21,8 +21,7 @@
 #include "config.h"
 #include "macros.h"
 #include "FastTimer.h"
-#include "ConnectorDigital.h"
-#include "ConnectorPulse.h"
+#include "Connector.h"
 #include <SPI.h>
 
 
@@ -49,7 +48,7 @@ void software_reset()
 
 
 #if defined(USB_SPEED) //&& !DEBUG
-#include "USlave.h"
+#include "USlave2.h"
 #define USE_USB 1
 #else
 #define USE_USB 0
@@ -57,7 +56,7 @@ void software_reset()
 
 #if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) && defined(ETH_BLPIN)
 #include <Ethernet.h>
-#include "WSlave.h"
+#include "WSlave2.h"
 #define USE_ETH 1
 #else
 #define USE_ETH 0
@@ -65,7 +64,7 @@ void software_reset()
 
 #if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
 #include <LiquidCrystal.h>
-#include "LSlave.h"
+#include "LSlave2.h"
 #define USE_LCD 1
 #else
 #define USE_LCD 0
@@ -82,7 +81,7 @@ void software_reset()
 void setup()
 {
 #if USE_USB
-  USlave::begin();
+  USlave2::begin();
 #elif DEBUG
   Serial.begin(9600);
 #endif
@@ -99,11 +98,11 @@ void setup()
   // reduce number of client sockets to only one master (break loops)
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
-  WSlave::begin();
+  WSlave2::begin();
   delay(1000);
 #endif
 #if USE_LCD
-  LSlave::begin();
+  LSlave2::begin();
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
@@ -121,7 +120,7 @@ void loop()
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
 #if USE_ETH
-      WSlave::maintain();
+      WSlave2::maintain();
 #endif
       // OR: software_reset();
       
@@ -140,7 +139,7 @@ void loop()
     } else {
       LOGLN("*** new time section ***");
 #if USE_LCD
-      LSlave::shutdown();
+      LSlave2::shutdown();
 #endif
     }
     // DO SOMETHING NEW
@@ -152,25 +151,25 @@ void loop()
   
   // CHECK
 #if USE_ETH
-  WSlave::check();
+  WSlave2::check();
 #endif
 #if USE_USB
-  USlave::check();
+  USlave2::check();
 #endif
 #if USE_LCD
-  LSlave::check();
+  LSlave2::check();
 #endif
 
   
   // UNCHECK
 #if USE_ETH
-  WSlave::uncheck();
+  WSlave2::uncheck();
 #endif
 #if USE_USB
-  USlave::uncheck();
+  USlave2::uncheck();
 #endif
 #if USE_LCD
-  LSlave::uncheck();
+  LSlave2::uncheck();
 #endif
 }
 
