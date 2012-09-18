@@ -17,54 +17,15 @@
 
 
 #include "Core.h"
+#include "Core2.h"
 #include "config.h"
 #include "macros.h"
-#include "dictionary.h"
 #include "FastTimer.h"
 #include "ConnectorDigital.h"
 #include "ConnectorPulse.h"
 #include <SPI.h>
 
 
-
-/** ===================== **/
-/**      dictionary       **/
-/** ===================== **/
-
-namespace Dictionary {
-  LONGSTRING(relay11) = "relay1.1";
-  LONGSTRING(relay12) = "relay1.2";
-  LONGSTRING(relay13) = "relay1.3";
-  LONGSTRING(relay14) = "relay1.4";
-  LONGSTRING(led) = "pulse";
-}
-
-
-/** ===================== **/
-/**      connections      **/
-/** ===================== **/
-
-static const ConnectorDigital digitals[] = {
-  ConnectorDigital(22, Dictionary::relay11, true) ,
-  ConnectorDigital(24, Dictionary::relay12, false),
-  ConnectorDigital(26, Dictionary::relay13, false),
-  ConnectorDigital(28, Dictionary::relay14, false)
-};
-
-static const ConnectorPulse pulses[] = {
-  ConnectorPulse(13, Dictionary::led)
-};
-
-// DRAFT
-static const byte temperaturePins[] = { 13 };
-const intfMessage messages[] = {
-  { obsTemperature, 'x', temperaturePins, "Indoor" }
-};
-
-static const uint8_t digitals_len = ARRAYLEN(digitals);
-static const uint8_t pulses_len   = ARRAYLEN(pulses);
-static const uint8_t messages_len = ARRAYLEN(messages);
-static const uint8_t total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses) + ARRAYLEN(messages);
 
 /** ===================== **/
 /**       observers       **/
