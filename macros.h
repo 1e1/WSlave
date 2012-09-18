@@ -3,7 +3,7 @@
 
 
 /** SETUP ALIAS **/
-#define WSDIGITAL(NAME, PIN) { PIN, NAME }
+#define WSDIGITAL(NAME, PIN, NC) { (NC?((1<<DIGITAL_BITNC)|PIN):PIN), NAME }
 #define WSPULSE(NAME, PIN) { PIN, 0, NAME }
 #define WSMESSAGE(NAME, FUNCTION, PINS...) { FUNCTION, '#', {PINS}, NAME }
 #define LONGBYTES(b) static const prog_uchar b[] PROGMEM

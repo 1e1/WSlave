@@ -7,12 +7,14 @@
 #include "macros.h"
 
 
-#define MASK_PIN(pin)           (pin & B01111111)
+#define MASK_PIN(pin)           (pin & B00111111)
 
 #define DIGITAL_BITVALUE        7
+#define DIGITAL_BITNC           6 // Normaly Close
 #define DIGITAL_LABEL_AT(i)     (Core::digitals[i].label)
-#define DIGITAL_PIN_AT(i)       (MASK_PIN(Core::digitals[i].vPin))
-#define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vPin, DIGITAL_BITVALUE))
+#define DIGITAL_PIN_AT(i)       (MASK_PIN(Core::digitals[i].vnPin))
+#define DIGITAL_VALUE_AT(i)     (bitRead(Core::digitals[i].vnPin, DIGITAL_BITVALUE))
+#define DIGITAL_ISNC_AT(i)      (bitRead(Core::digitals[i].vnPin, DIGITAL_BITNC))
 #define PULSE_LABEL_AT(i)       (Core::pulses[i].label)
 #define PULSE_PIN_AT(i)         (Core::pulses[i].pin)
 #define PULSE_VALUE_AT(i)       (Core::pulses[i].value)
@@ -34,13 +36,13 @@ struct intfDigital
   // mega has 0..69 pin
   // byte [0..255]
   // digital values: 0..1
-  // first left byte is writeAccess
-  // second left byte is the value
+  // first left byte is the value
+  // second left byte is NC
   // bitRead(value, bit)
   // bitSet(value, bit)
   // bitClear(value, bit)
   // bitWrite(value, bit, bitvalue)
-  byte vPin;
+  byte vnPin;
   const prog_char *label PROGMEM;
 };
 // { 13+0b10000000 , 0, "Light" }
@@ -84,14 +86,14 @@ namespace Core {
   /**      connections      **/
   /** ===================== **/
   static intfDigital digitals[] = {
-    WSDIGITAL("relay1.1", 22),
-    WSDIGITAL("relay1.2", 24),
-    WSDIGITAL("relay1.3", 26),
-    WSDIGITAL("relay1.4", 28),
-    WSDIGITAL("relay1.5", 30),
-    WSDIGITAL("relay1.6", 32),
-    WSDIGITAL("relay1.7", 34),
-    WSDIGITAL("relay1.8", 36)
+    WSDIGITAL("NC", 22, 1),
+    WSDIGITAL("NO", 24, 0),
+    WSDIGITAL("relay1.3", 26, 0),
+    WSDIGITAL("relay1.4", 28, 0),
+    WSDIGITAL("relay1.5", 30, 0),
+    WSDIGITAL("relay1.6", 32, 0),
+    WSDIGITAL("relay1.7", 34, 0),
+    WSDIGITAL("relay1.8", 36, 0)
   };
   static intfPulse pulses[] = {
     WSPULSE("Pulse", 13)
