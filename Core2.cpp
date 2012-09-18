@@ -4,6 +4,25 @@
 
 
 /***********************************************************
+ *                       PROPERTIES                        *
+ **********************************************************/
+
+
+
+
+Stream *Core2::_currentStream;
+char Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
+uint8_t Core2::_bufferSize;
+
+
+const ConnectorDigital *Core2::_digitals;
+const ConnectorPulse *Core2::_pulses;
+//const ConnectorMessage *Core2::_messages;
+
+
+
+
+/***********************************************************
  *                         PUBLIC                          *
  **********************************************************/
 

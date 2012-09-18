@@ -9,8 +9,6 @@
 #include "macros.h"
 #include "dictionary.h"
 #include "Connector.h"
-#include "ConnectorDigital.h"
-#include "ConnectorPulse.h"
 
 #define READBUFFERSIZE          8
 #define WRITEBUFFERSIZE         64
@@ -31,7 +29,11 @@
 /**      connections      **/
 /** ===================== **/
 
-static ConnectorDigital STATIC_DIGITALS[] = {/*
+static ConnectorDigital STATIC_DIGITALS[] = {
+  ConnectorDigital(22, Dictionary::relay11, true) ,
+  ConnectorDigital(24, Dictionary::relay12, false),
+  ConnectorDigital(26, Dictionary::relay13, false),
+  ConnectorDigital(28, Dictionary::relay14, false)/*
   NEWDIGITAL(22, relay11, true) ,
   NEWDIGITAL(24, relay12, false),
   NEWDIGITAL(26, relay13, false),
@@ -72,8 +74,9 @@ class Core2 {
   static void copyToBuffer_P(const prog_uchar data[], size_t size);
   static /*inline */void sendBuffer();
   
-  __attribute__((always_inline)) static inline void setStream(Stream *inputStream)                { _currentStream = inputStream; };
-  __attribute__((always_inline)) static inline void unbuffer()                                    { _bufferSize = 0; };
+  // inline
+  static void setStream(Stream *inputStream);
+  static void unbuffer();
   
   protected:
   static /*inline */void autoSendBuffer();
@@ -81,20 +84,70 @@ class Core2 {
   static const uint8_t bufferEqualsLength_P(const prog_char* const str);
   static uint8_t getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size);
   
-  static const ConnectorDigital *_digitals;
-  static const ConnectorPulse *_pulses;
-  //static const ConnectorMessage *_messages;
-    
   static Stream *_currentStream;
   static char _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
   static uint8_t _bufferSize;
   
-  __attribute__((always_inline)) inline const ConnectorDigital getDigitalAtIndex(uint8_t index)  { return STATIC_DIGITALS[index]; };
-  __attribute__((always_inline)) inline const ConnectorPulse getPulseAtIndex(uint8_t index)      { return STATIC_PULSES[index]; };
-  //__attribute__((always_inline)) inline const ConnectorMessage* getPulseAtIndex(uint8_t index)    { return STATIC_MESSAGES[index]; };
-  __attribute__((always_inline)) inline const boolean bufferIsEqualTo_P(const prog_char *str)    { return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str); };
-  __attribute__((always_inline)) inline const uint8_t bufferIsPrefixOf_P(const prog_char *str)   { return bufferEqualsLength_P(str) == strlen_P(str); };
+  static const ConnectorDigital *_digitals;
+  static const ConnectorPulse *_pulses;
+  //static const ConnectorMessage *_messages;
   
+  // inline
+  static const ConnectorDigital getDigitalAtIndex(uint8_t index);
+  static const ConnectorPulse getPulseAtIndex(uint8_t index);
+  //static const ConnectorMessage* getPulseAtIndex(uint8_t index);
+  static const boolean bufferIsEqualTo_P(const prog_char *str);
+  static const uint8_t bufferIsPrefixOf_P(const prog_char *str);
+  
+};
+
+
+
+
+/***********************************************************
+ *                         INLINE                          *
+ **********************************************************/
+
+
+__attribute__((always_inline)) inline void Core2::setStream(Stream *inputStream)
+{
+  _currentStream = inputStream;
+}
+
+
+__attribute__((always_inline)) inline void Core2::unbuffer()
+{
+  _bufferSize = 0;
+}
+
+
+__attribute__((always_inline)) inline const ConnectorDigital Core2::getDigitalAtIndex(uint8_t index)
+{
+  return STATIC_DIGITALS[index];
+};
+
+
+__attribute__((always_inline)) inline const ConnectorPulse Core2::getPulseAtIndex(uint8_t index)
+{
+  return STATIC_PULSES[index];
+};
+
+/*
+__attribute__((always_inline) inline const ConnectorMessage* Core2::getPulseAtIndex(uint8_t index)
+{
+  return STATIC_MESSAGES[index];
+};
+*/
+
+__attribute__((always_inline)) inline const boolean Core2::bufferIsEqualTo_P(const prog_char *str)
+{
+  return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str);
+};
+
+
+__attribute__((always_inline)) inline const uint8_t Core2::bufferIsPrefixOf_P(const prog_char *str)
+{
+  return bufferEqualsLength_P(str) == strlen_P(str);
 };
 
 
