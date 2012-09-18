@@ -4,6 +4,15 @@
 
 #define DEBUG 1
 
+// CONNECTORS
+#define DIGITALS = { \
+  NEWDIGITAL(22, relay11, true) , \
+  NEWDIGITAL(24, relay12, false), \
+  NEWDIGITAL(26, relay13, false), \
+  NEWDIGITAL(28, relay14, false)}
+#define PULSES = { \
+  NEWPULSE(13, led)}
+
 // LED
 #define BUSYLED_PIN 13
 
