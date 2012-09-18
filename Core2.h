@@ -72,16 +72,18 @@ class Core2 {
   static void copyToBuffer_P(const prog_char* const data);
   static void copyToBuffer(const char chars[], uint8_t size);
   static void copyToBuffer_P(const prog_uchar data[], size_t size);
+  static const uint8_t bufferEqualsLength_P(const prog_char* const str);
   static /*inline */void sendBuffer();
   
   // inline
   static void setStream(Stream *inputStream);
   static void unbuffer();
+  static const boolean bufferIsEqualTo_P(const prog_char *str);
+  static const uint8_t bufferIsPrefixOf_P(const prog_char *str);
   
   protected:
   static /*inline */void autoSendBuffer();
   static void readUint8(uint8_t &out);
-  static const uint8_t bufferEqualsLength_P(const prog_char* const str);
   static uint8_t getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size);
   
   static Stream *_currentStream;
@@ -96,8 +98,6 @@ class Core2 {
   static const ConnectorDigital getDigitalAtIndex(uint8_t index);
   static const ConnectorPulse getPulseAtIndex(uint8_t index);
   //static const ConnectorMessage* getPulseAtIndex(uint8_t index);
-  static const boolean bufferIsEqualTo_P(const prog_char *str);
-  static const uint8_t bufferIsPrefixOf_P(const prog_char *str);
   
 };
 
@@ -121,6 +121,18 @@ __attribute__((always_inline)) inline void Core2::unbuffer()
 }
 
 
+__attribute__((always_inline)) inline const boolean Core2::bufferIsEqualTo_P(const prog_char *str)
+{
+  return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str);
+};
+
+
+__attribute__((always_inline)) inline const uint8_t Core2::bufferIsPrefixOf_P(const prog_char *str)
+{
+  return bufferEqualsLength_P(str) == strlen_P(str);
+};
+
+
 __attribute__((always_inline)) inline const ConnectorDigital Core2::getDigitalAtIndex(uint8_t index)
 {
   return STATIC_DIGITALS[index];
@@ -138,18 +150,6 @@ __attribute__((always_inline) inline const ConnectorMessage* Core2::getPulseAtIn
   return STATIC_MESSAGES[index];
 };
 */
-
-__attribute__((always_inline)) inline const boolean Core2::bufferIsEqualTo_P(const prog_char *str)
-{
-  return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str);
-};
-
-
-__attribute__((always_inline)) inline const uint8_t Core2::bufferIsPrefixOf_P(const prog_char *str)
-{
-  return bufferEqualsLength_P(str) == strlen_P(str);
-};
-
 
 
 #endif CORE2_H_

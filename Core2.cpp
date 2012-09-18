@@ -116,6 +116,16 @@ void Core2::copyToBuffer_P(const prog_uchar data[], size_t size)
 }
 
 
+const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
+{
+  uint8_t i = 0;
+  while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
+    i++;
+  }
+  return i;
+}
+
+
 void Core2::sendBuffer()
 {
   if (_bufferSize) {
@@ -158,16 +168,6 @@ void Core2::readUint8(uint8_t &out)
     }
   }
   // return (uint8_t) _currentStream->parseInt();
-}
-
-
-const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
-{
-  uint8_t i = 0;
-  while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
-    i++;
-  }
-  return i;
 }
 
 
