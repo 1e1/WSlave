@@ -25,5 +25,9 @@ class Connector {
 };
 
 
+#include "ConnectorDigital.h"
+#include "ConnectorPulse.h"
+
+
 
 #endif CONNECTOR_H_
