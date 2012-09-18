@@ -15,11 +15,6 @@ char Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
 uint8_t Core2::_bufferSize;
 
 
-const ConnectorDigital *Core2::_digitals;
-const ConnectorPulse *Core2::_pulses;
-//const ConnectorMessage *Core2::_messages;
-
-
 
 
 /***********************************************************
@@ -180,32 +175,3 @@ uint8_t Core2::getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const
   }
   return -1;
 }
-
-/*
-void Core2::copyJsonToBuffer(const char *label, const char *value, boolean hasMoreElement)
-{
-  copyToBuffer('"');
-  copyToBuffer(label);
-  copyToBuffer("\":\"");
-  copyToBuffer(value);
-  if (hasMoreElement) {
-    copyToBuffer("\",");
-  } else {
-    copyToBuffer('"');
-  }
-}
-
-
-void Core2::copyJsonToBuffer_P(const char *label, const prog_char* const value, boolean hasMoreElement)
-{
-  copyToBuffer('"');
-  copyToBuffer(label);
-  copyToBuffer("\":\"");
-  copyToBuffer_P(value);
-  if (hasMoreElement) {
-    copyToBuffer("\",");
-  } else {
-    copyToBuffer('"');
-  }
-}
-*/
