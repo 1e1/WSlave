@@ -14,8 +14,8 @@ class ConnectorDigital : public Connector {
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC);
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC, boolean value);
   
-  __attribute__((always_inline)) inline virtual const byte getPin()             { return _pin & B00111111; };
-  __attribute__((always_inline)) inline virtual const boolean getValue()        { return (_pin & B10000000) ^ isNormalyClose(); };
+  __attribute__((always_inline)) inline virtual const byte getPin()             { return (const byte) (_pin & B00111111); };
+  __attribute__((always_inline)) inline virtual const boolean getValue()        { return (const boolean) ((_pin & B10000000) ^ isNormalyClose()); };
   __attribute__((always_inline)) inline virtual void setValue(const boolean v)  { boolean value = v^isNormalyClose(); bitWrite(_pin, 7, value); digitalWrite(_pin, value); };
   
   protected:
