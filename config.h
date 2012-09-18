@@ -36,6 +36,12 @@
 #define LCDPAD_LATENCYX_MS  500   // switch mode from ONCE to MULTI
 #define LCDPAD_SPEED_MS     200   // considering new press down
 
+#define KEYPAD_MAXVALUE_RIGHT       /* */ 30  /* * / 50  /* */
+#define KEYPAD_MAXVALUE_UP          /* */ 150 /* * / 200 /* */
+#define KEYPAD_MAXVALUE_DOWN        /* */ 360 /* * / 400 /* */
+#define KEYPAD_MAXVALUE_LEFT        /* */ 535 /* * / 600 /* */
+#define KEYPAD_MAXVALUE_SELECT      /* */ 760 /* * / 800 /* */
+
 
 // VELOCITY (choose inside macros.h)
 //#define EMBEDTIME EMBEDTIME_65s_4h

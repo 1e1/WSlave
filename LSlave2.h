@@ -34,12 +34,6 @@
 #include "macros.h"
 
 
-#define KEYPAD_MAXVALUE_RIGHT       /* */ 30  /* * / 50  /* */
-#define KEYPAD_MAXVALUE_UP          /* */ 150 /* * / 200 /* */
-#define KEYPAD_MAXVALUE_DOWN        /* */ 360 /* * / 400 /* */
-#define KEYPAD_MAXVALUE_LEFT        /* */ 535 /* * / 600 /* */
-#define KEYPAD_MAXVALUE_SELECT      /* */ 760 /* * / 800 /* */
-
 // 255 / 17 fragments <=> 1 step = 15
 // analog value: min=0, max=255, step=15
 #define ANALOGSTEP                  15
