@@ -136,12 +136,18 @@
 
 #define NUMBEROFMENU_HOME       1
 
+#define LCDMENU_INFO    0
+#define LCDMENU_MESSAGE 1
+#define LCDMENU_PULSE   2
+#define LCDMENU_DIGITAL 3
+#define LCDMENU_LEN     4
+
 
 
 class LSlave2 {
   
   public:
-  static const uint8_t menu_len = NUMBEROFMENU_HOME + STATIC_TOTAL_LEN;
+  static const uint8_t menu_len;
   
   typedef enum { SHUTDOWN, SLEEPING, AWAKE } State;
   typedef enum { KEYPAD_NONE, KEYPAD_RIGHT, KEYPAD_UP, KEYPAD_DOWN, KEYPAD_LEFT, KEYPAD_SELECT } Key;
@@ -149,25 +155,30 @@ class LSlave2 {
   static void begin();
   static void check();
   static void shutdown();
+  static void printInfo();
   
   // inline
   static void uncheck();
   
   protected:
   static LiquidCrystal _lcd;
-  //static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
   static void printTitle_P(const prog_char* const label);
-  static void printInfo();
   static void printMessage();
   static void printPulse();
   static void printDigital();
   static const boolean hasNewPulsedKey();
   static const Key getKey();
   static void add(const int8_t delta);
+  static void switchMenu();
+  
+  // inline
+  static void jump(const uint8_t inc);
   
   static Key _key;
-  static uint8_t _menuItem;
+  static uint8_t _menuType;
+  static uint8_t _menuIndex;
+  static uint8_t _menuMax;
   static State _state;
   
 };
@@ -183,6 +194,12 @@ class LSlave2 {
 __attribute__((always_inline)) inline void LSlave2::uncheck()
 {
   
+}
+
+
+__attribute__((always_inline)) inline void LSlave2::jump(const uint8_t inc)
+{
+  _menuIndex = (_menuIndex+inc) % _menuMax;
 }
 
 

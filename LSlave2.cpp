@@ -10,12 +10,14 @@
 
 
 
+const uint8_t LSlave2::menu_len = NUMBEROFMENU_HOME + STATIC_TOTAL_LEN;
 LiquidCrystal LSlave2::_lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
-//char LSlave2::_lcdLines[LCD_HEIGHT][LCD_WIDTH];
 
 LSlave2::Key LSlave2::_key      = KEYPAD_NONE;
 LSlave2::State LSlave2::_state  = SLEEPING;
-uint8_t LSlave2::_menuItem      = 0;
+uint8_t LSlave2::_menuType      = LCDMENU_INFO;
+uint8_t LSlave2::_menuIndex     = 0;
+uint8_t LSlave2::_menuMax       = NUMBEROFMENU_HOME;
 
 
 
@@ -55,7 +57,6 @@ void LSlave2::begin()
   }
   // lcd.write(LCDCHAR_FULLBAR);
   _lcd.home();
-  _lcd.write('@');
   LOGLN("display LCD");
 }
 
@@ -76,14 +77,10 @@ void LSlave2::check()
       // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
       switch (_key) {
         case KEYPAD_UP:
-        if (_menuItem--) {
-          _menuItem+= menu_len;
-        }
+        jump(-1);
         break;
         case KEYPAD_DOWN:
-        if (++_menuItem == menu_len) {
-          _menuItem = 0;
-        }
+        jump(+1);
         break;
         case KEYPAD_LEFT:
         add((int8_t)+ANALOGSTEP);
@@ -93,32 +90,28 @@ void LSlave2::check()
         break;
         case KEYPAD_SELECT:
         // jump section
-        if (_menuItem < NUMBEROFMENU_HOME) {
-          _menuItem = NUMBEROFMENU_HOME;
-        } else if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN) {
-          _menuItem = NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN;
-        } else if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN + STATIC_PULSES_LEN) {
-          _menuItem = NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN + STATIC_PULSES_LEN;
-        } else { // if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN + STATIC_PULSES_LEN + STATIC_DIGITALS_LEN)
-          _menuItem = 0;
-        }
+        switchMenu();
         break;
       }
       
       //_lcd.home();
       _lcd.clear();
-      if (_menuItem < NUMBEROFMENU_HOME) {
-        // display info (_menuItem)
-        printInfo();
-      } else if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN) {
-        // display info (_menuItem - NUMBEROFMENU_HOME)
+      switch (_menuType) {
+        /*
+        case LCDMENU_INFO:
+        break;
+        */
+        case LCDMENU_MESSAGE:
         printMessage();
-      } else if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN + STATIC_PULSES_LEN) {
-        // display info (_menuItem - NUMBEROFMENU_HOME - STATIC_MESSAGES_LEN)
+        break;
+        case LCDMENU_PULSE:
         printPulse();
-      } else { // if (_menuItem < NUMBEROFMENU_HOME + STATIC_MESSAGES_LEN + STATIC_PULSES_LEN + STATIC_DIGITALS_LEN)
-        // display info (_menuItem - NUMBEROFMENU_HOME - STATIC_MESSAGES_LEN - STATIC_PULSES_LEN)
+        break;
+        case LCDMENU_DIGITAL:
         printDigital();
+        break;
+        default:
+        printInfo();
       }
       
     }
@@ -136,12 +129,31 @@ void LSlave2::shutdown()
       //_lcd.setBacklight(LCD_BACKLIGHT_SLEEP);
       _state = SLEEPING;
       break;
-      case SLEEPING:
+      default:
+      //case SLEEPING:
       //_lcd.off();
-      //_menuItem = 0;
-      break;
+      //_menuType = 0;
+      _menuType      = LCDMENU_INFO;
+      _menuIndex     = 0;
+      _menuMax       = NUMBEROFMENU_HOME;
+      //break;
     }
   }
+}
+
+
+void LSlave2::printInfo()
+{
+  LOG("item I"); LOGLN(_menuType);
+  printTitle_P(PSTR("IP"));
+  _lcd.setCursor(0, 1);
+  //#if USE_ETH
+  _lcd.print(Ethernet.localIP());
+  /*
+  #else
+  _lcd.print("--:--:--");
+  #endif USE_ETH
+  */
 }
 
 
@@ -165,36 +177,20 @@ void LSlave2::printTitle_P(const prog_char* const label)
   while (i++<LCDPOSITION_TITLE_LENGTH + LCDPOSITION_PAGE_OFFSET) {
     _lcd.moveCursorRight();
   }
-  if (_menuItem<9) {
+  if (_menuType<9) {
     _lcd.moveCursorRight();
   }
-  LOG("page #"); LOG(_menuItem+1); LOG('/'); LOGLN(menu_len);
-  _lcd.print(_menuItem+1);
+  LOG("page #"); LOG(_menuType+1); LOG('/'); LOGLN(menu_len);
+  _lcd.print(_menuType+1);
   _lcd.print(LCDCHAR_PAGESEPARATOR);
   _lcd.print(menu_len);
 }
 
 
-void LSlave2::printInfo()
-{
-  LOG("item I"); LOGLN(_menuItem);
-  printTitle_P(PSTR("IP"));
-  _lcd.setCursor(0, 1);
-  //#if USE_ETH
-  _lcd.print(Ethernet.localIP());
-  /*
-  #else
-  _lcd.print("--:--:--");
-  #endif USE_ETH
-  */
-}
-
-
 void LSlave2::printMessage()
 {
-  uint8_t index = _menuItem-NUMBEROFMENU_HOME;
-  LOG("item M"); LOGLN(index);
-  //printTitle_P(STATIC_MESSAGES[index].getLabel());
+  LOG("item M"); LOGLN(_menuIndex);
+  //printTitle_P(STATIC_MESSAGES[_menuIndex].getLabel());
   _lcd.setCursor(0, 1);
   _lcd.write("TODO"); // TODO
 }
@@ -202,12 +198,11 @@ void LSlave2::printMessage()
 
 void LSlave2::printPulse()
 {
-  uint8_t index = _menuItem - NUMBEROFMENU_HOME - STATIC_MESSAGES_LEN;
-  LOG("item P"); LOGLN(index);
-  printTitle_P(STATIC_PULSES[index].getLabel());
+  LOG("item P"); LOGLN(_menuIndex);
+  printTitle_P(STATIC_PULSES[_menuIndex].getLabel());
   _lcd.setCursor(LCDPOSITION_ANALOG_X, 1);
   _lcd.write(LCDCHAR_LEFTBAR);
-  uint8_t valueLeft = STATIC_PULSES[index].getValue();
+  uint8_t valueLeft = STATIC_PULSES[_menuIndex].getValue();
   for (uint8_t i=0; i<LCDPOSITION_BAR_LENGTH; i++) {
     if (valueLeft > 2* ANALOGSTEP) {
       valueLeft-= 2* ANALOGSTEP;
@@ -223,18 +218,17 @@ void LSlave2::printPulse()
   for (uint8_t i=0; i<LCDPOSITION_ANALOG_OFFSET; i++) {
     _lcd.moveCursorRight();
   }
-  _lcd.print(STATIC_PULSES[index].getValue());
+  _lcd.print(STATIC_PULSES[_menuIndex].getValue());
 }
 
 
 void LSlave2::printDigital()
 {
-  uint8_t index = _menuItem - NUMBEROFMENU_HOME - STATIC_MESSAGES_LEN - STATIC_PULSES_LEN;
   char on, off;
-  LOG("item D"); LOGLN(index);
-  printTitle_P(STATIC_DIGITALS[index].getLabel());
+  LOG("item D"); LOGLN(_menuIndex);
+  printTitle_P(STATIC_DIGITALS[_menuIndex].getLabel());
   _lcd.setCursor(LCDPOSITION_DIGITAL_X, 1);
-  if (STATIC_DIGITALS[index].getValue()) {
+  if (STATIC_DIGITALS[_menuIndex].getValue()) {
     on = '*';
     off = ' ';
   } else {
@@ -286,4 +280,29 @@ const LSlave2::Key LSlave2::getKey()
 
 void LSlave2::add(const int8_t delta)
 {
+}
+
+
+void LSlave2::switchMenu()
+{
+  _menuType = (_menuType+1) % LCDMENU_LEN;
+  _menuIndex = 0;
+  switch (_menuType) {
+    /*
+    case LCDMENU_INFO:
+    _menuMax = NUMBEROFMENU_HOME;
+    break;
+    */
+    case LCDMENU_MESSAGE:
+    _menuMax = STATIC_MESSAGES_LEN;
+    break;
+    case LCDMENU_PULSE:
+    _menuMax = STATIC_PULSES_LEN;
+    break;
+    case LCDMENU_DIGITAL:
+    _menuMax = STATIC_DIGITALS_LEN;
+    break;
+    default:
+    _menuMax = NUMBEROFMENU_HOME;
+  }
 }
