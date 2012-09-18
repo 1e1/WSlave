@@ -163,10 +163,10 @@ void LSlave2::printTitle_P(const prog_char* const label)
     i++;
   }
   while (i++<LCDPOSITION_TITLE_LENGTH + LCDPOSITION_PAGE_OFFSET) {
-    _lcd.print(' ');
+    _lcd.moveCursorRight();
   }
   if (_menuItem<9) {
-    _lcd.print(' ');
+    _lcd.moveCursorRight();
   }
   LOG("page #"); LOG(_menuItem+1); LOG('/'); LOGLN(menu_len);
   _lcd.print(_menuItem+1);
@@ -221,7 +221,7 @@ void LSlave2::printPulse()
   }
   _lcd.write(LCDCHAR_RIGHTBAR);
   for (uint8_t i=0; i<LCDPOSITION_ANALOG_OFFSET; i++) {
-    _lcd.print(' ');
+    _lcd.moveCursorRight();
   }
   _lcd.print(STATIC_PULSES[index].getValue());
 }
@@ -245,7 +245,7 @@ void LSlave2::printDigital()
   _lcd.write("ON");
   _lcd.write(on);
   for (uint8_t i=0; i<LCDPOSITION_DIGITAL_INSET; i++) {
-    _lcd.print(' ');
+    _lcd.moveCursorRight();
   }
   _lcd.write(off);
   _lcd.write("OFF");
