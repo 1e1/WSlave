@@ -103,6 +103,7 @@ void setup()
 #endif
 #if USE_LCD
   LSlave2::begin();
+  LSlave2::printInfo();
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
