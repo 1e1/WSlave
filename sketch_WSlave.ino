@@ -47,14 +47,14 @@ void software_reset()
 
 
 
-#if defined(USB_SPEED) //&& !DEBUG
+#if USB_SPEED && !DEBUG
 #include "USlave2.h"
 #define USE_USB 1
 #else
 #define USE_USB 0
 #endif
 
-#if defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET) && defined(ETH_BLPIN)
+#if ETH_BLPIN && defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
 #include "WSlave2.h"
 #define USE_ETH 1
@@ -62,7 +62,7 @@ void software_reset()
 #define USE_ETH 0
 #endif
 
-#if defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT) && defined(LCD_BLPIN)
+#if LCD_BLPIN && defined(LCD_PINS) && defined(LCD_WIDTH) && defined(LCD_HEIGHT)
 #include <LiquidCrystal.h>
 #include "LSlave2.h"
 #define USE_LCD 1
