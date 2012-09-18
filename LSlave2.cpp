@@ -11,7 +11,7 @@
 
 
 LiquidCrystal LSlave2::_lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
-char LSlave2::_lcdLines[LCD_HEIGHT][LCD_WIDTH];
+//char LSlave2::_lcdLines[LCD_HEIGHT][LCD_WIDTH];
 
 LSlave2::Key LSlave2::_key      = KEYPAD_NONE;
 LSlave2::State LSlave2::_state  = SLEEPING;

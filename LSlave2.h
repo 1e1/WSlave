@@ -161,7 +161,7 @@ class LSlave2 {
   
   protected:
   static LiquidCrystal _lcd;
-  static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
+  //static char _lcdLines[LCD_HEIGHT][LCD_WIDTH];
   
   static void printTitle_P(const prog_char* const label);
   static void printInfo();
