@@ -64,6 +64,12 @@
 // wikipedia "foreach_loop"
 #define FOREACH(idxtype, idxpvar, col, colsiz ) idxtype* idxpvar; for( idxpvar=col ; idxpvar < (col + (colsiz)) ; idxpvar++)
 #define ARRAYLEN( ary ) ( sizeof(ary)/sizeof(*ary) )
+#define FAST_STRCMP(x, y)  (*(x) != *(y) ? \
+    ((unsigned char) *(x) - (unsigned char) *(y)) : \
+    strcmp((x), (y)))
+#define FAST_STRCMP_P(x, y)  (*(x) != *(y) ? \
+    ((unsigned char) *(x) - (unsigned char) *(y)) : \
+    strcmp_P((x), (y)))
 /*
 FOREACH (char, p1, c1, strlen(c1) ) {
   printf("loop 1 : %c\n",*p1);
