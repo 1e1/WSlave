@@ -15,10 +15,10 @@ class ConnectorPulse : public Connector {
   ConnectorPulse(const byte pin, const prog_char *label);
   ConnectorPulse(const byte pin, const prog_char *label, uint8_t value);
   
-  virtual void addValue(const uint8_t d);
+  void addValue(const uint8_t d);
   
   __attribute__((always_inline)) inline const uint8_t getValue()        { return _value; };
-  __attribute__((always_inline)) inline void setValue(const uint8_t v)  { _value = v; analogWrite(_pin, v); };
+  __attribute__((always_inline)) inline void setValue(const uint8_t v)  { _value = v; analogWrite(_pin, _value); };
   
   protected:
   uint8_t _value;

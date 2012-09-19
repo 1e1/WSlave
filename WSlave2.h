@@ -53,6 +53,7 @@ class WSlave2 {
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
   typedef enum { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ } MethodType;
   typedef enum { ROOT, SERVICE, CACHE, DICTIONARY } ActionType;
+  // http://en.wikipedia.org/wiki/Basic_access_authentication
   
   protected:
   static EthernetServer _server;
@@ -64,7 +65,7 @@ class WSlave2 {
   static void sendDefault_P(const prog_uchar data[], size_t length);
   static const boolean nextHttpLine();
   static const uint8_t lineLength();
-  static void sendToJson(const char type, Connector connector, const uint8_t coma);
+  static void sendToJson(const char type, Connector connector, const boolean coma);
   /*
   LONGSTRING(header_200)    = "200 OK";
   LONGSTRING(header_417)    = "417 Expectation failed";

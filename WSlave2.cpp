@@ -14,12 +14,19 @@ EthernetServer WSlave2::_server(PORT);
 EthernetClient WSlave2::_client;
 
 LONGSTRING(header_200)    = "200 OK";
+LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME "\"";
 LONGSTRING(header_417)    = "417 Expectation failed";
 LONGSTRING(header_text)   = "text/plain" CRLF;
 LONGSTRING(header_json)   = "application/json" CRLF;
 LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
 LONGBYTES(webpage)        = WEBPAGE;
 static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
+
+LONGSTRING(crlf)          = CRLF;
+LONGSTRING(json_qcolon)   = "\":\"";
+LONGSTRING(json_qcomma)   = "\",\"";
+LONGSTRING(json_qbrace1)  = "{\"";
+LONGSTRING(json_qbrace2)  = "\"}";
 
 
 
@@ -87,14 +94,28 @@ void WSlave2::check()
     } else if (Core2::bufferIsPrefixOf_P(PSTR("/dict"))) {
       action = DICTIONARY;
       LOGLN("dictionary");
-    } else {
-      LOGLN("*");
     }
     lineLength(); // ends first Header line
     
+    // check credentials = Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+    //header_401
+    do {
+      Core2::readUntil(SP);
+      if (Core2::bufferIsEqualTo_P(PSTR("Authorization:"))) {
+        Core2::readUntil(SP);
+        if (Core2::bufferIsEqualTo_P(PSTR("Basic"))) {
+          Core2::readUntil(CR);
+          if (Core2::bufferIsEqualTo_P(PSTR(HTTP_AUTH64))) {
+            // JUMP
+          }
+        }
+      }
+      goto _crlfcrlf;
+    } while(lineLength()>1 && --watchdog);
+    
     // sweep headers until CRLF CRLF
     _crlfcrlf:
-//      while (_nextHttpLine() && --watchdog);
+//    while (_nextHttpLine() && --watchdog);
     while (lineLength()>1 && --watchdog);
     if (!watchdog) {
       LOGLN("INVALID");
@@ -168,45 +189,45 @@ void WSlave2::sendHeaders_P(const prog_char *codeStatus, const prog_char *conten
   Core2::copyToBuffer_P(PSTR(CRLF "Content-Type: "));
   Core2::copyToBuffer_P(contentType);
   //Core2::copyToBuffer_P(PSTR(CRLF "Connection: close"));
-  Core2::copyToBuffer(CRLF);
+  Core2::copyToBuffer_P(crlf);
   Core2::sendBuffer();
 }
 
 
 void WSlave2::sendDictionary()
 {
-  uint8_t coma = STATIC_TOTAL_LEN;
+  uint8_t comma = STATIC_TOTAL_LEN;
   Core2::unbuffer();
-  Core2::copyToBuffer('{');
+  Core2::copyToBuffer_P(json_qbrace1);
   /*
   // messages
   for (uint8_t i=0; i < STATIC_MESSAGES_LEN; i++) {
-    sendToJson('M', STATIC_MESSAGES[i], --coma);
+    sendToJson('M', STATIC_MESSAGES[i], --comma);
   }
   */
   // pulses
   for (uint8_t i=0; i < STATIC_PULSES_LEN; i++) {
-    sendToJson('P', STATIC_PULSES[i], --coma);
+    sendToJson('P', STATIC_PULSES[i], --comma);
   }
   // digitals
   for (uint8_t i=0; i < STATIC_DIGITALS_LEN; i++) {
-    sendToJson('D', STATIC_DIGITALS[i], --coma);
+    sendToJson('D', STATIC_DIGITALS[i], --comma);
   }
-  Core2::copyToBuffer('}');
+  Core2::copyToBuffer_P(json_qbrace2);
   Core2::sendBuffer();
 }
 
 
 void WSlave2::sendService()
 {
-  uint8_t coma = STATIC_TOTAL_LEN;
+  uint8_t comma = STATIC_TOTAL_LEN;
   Core2::unbuffer();
   Core2::copyToBuffer('[');
   /*
   // messages
   for (uint8_t i=0; i < STATIC_MESSAGES_LEN; i++) {
     Core2::copyToBuffer(STATIC_MESSAGES[i].value);
-    if (--coma) {
+    if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
@@ -214,14 +235,14 @@ void WSlave2::sendService()
   // pulses
   for (uint8_t i=0; i < STATIC_PULSES_LEN; i++) {
     Core2::copyToBuffer(STATIC_PULSES[i].getValue());
-    if (--coma) {
+    if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
   // digitals
   for (uint8_t i=0; i < STATIC_DIGITALS_LEN; i++) {
     Core2::copyToBuffer(STATIC_DIGITALS[i].getValue());
-    if (--coma) {
+    if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
@@ -267,16 +288,13 @@ const uint8_t WSlave2::lineLength()
 }
 
 
-void WSlave2::sendToJson(const char type, Connector connector, const uint8_t coma)
+void WSlave2::sendToJson(const char type, Connector connector, const boolean comma)
 {
   char pinChars[4] = { type, '0'+(connector.getPin()/10), '0'+(connector.getPin()%10), '\0' };
-  Core2::copyToBuffer('"');
-  Core2::copyToBuffer(pinChars);
-  Core2::copyToBuffer("\":\"");
+  Core2::copyToBuffer(pinChars, 4);
+  Core2::copyToBuffer_P(json_qcolon);
   Core2::copyToBuffer_P(connector.getLabel());
-  if (coma) {
-    Core2::copyToBuffer("\",");
-  } else {
-    Core2::copyToBuffer('"');
+  if (comma) {
+    Core2::copyToBuffer_P(json_qcomma);
   }
 }

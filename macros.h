@@ -64,6 +64,12 @@
 // wikipedia "foreach_loop"
 #define FOREACH(idxtype, idxpvar, col, colsiz ) idxtype* idxpvar; for( idxpvar=col ; idxpvar < (col + (colsiz)) ; idxpvar++)
 #define ARRAYLEN( ary ) ( sizeof(ary)/sizeof(*ary) )
+#define FAST_STRCMP(x, y)  (*(x) != *(y) ? \
+    ((unsigned char) *(x) - (unsigned char) *(y)) : \
+    strcmp((x), (y)))
+#define FAST_STRCMP_P(x, y)  (*(x) != *(y) ? \
+    ((unsigned char) *(x) - (unsigned char) *(y)) : \
+    strcmp_P((x), (y)))
 /*
 FOREACH (char, p1, c1, strlen(c1) ) {
   printf("loop 1 : %c\n",*p1);
@@ -72,6 +78,20 @@ FOREACH (int, p2, c2, ARRAYLEN(c2) ){
   printf("loop 2 : %d\n",*p2);
 }
 */
+/** === **/
+
+
+
+/** BIT **/
+#define bitRead_uint8_t(value, bit)             (((value) >> (bit)) & 0x01)
+#define bitSet_uint8_t(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
+#define bitClear_uint8_t(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitWrite_uint8_t(value, bit, bitvalue)  (bitvalue ? bitSet_uint8_t(value, bit) : bitClear_uint8_t(value, bit))
+
+#define bitRead_boolean(value, bit)             (((value) >> (bit)) & 0x01)
+#define bitSet_boolean(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
+#define bitClear_boolean(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitWrite_boolean(value, bit, bitvalue)  (bitvalue ? bitSet_boolean(value, bit) : bitClear_boolean(value, bit))
 /** === **/
 
 

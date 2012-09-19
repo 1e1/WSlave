@@ -29,8 +29,8 @@ void Core2::processLine()
   uint8_t pin, value, index, watchdog = STATIC_DIGITALS_LEN + STATIC_PULSES_LEN;
   // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
   while (_currentStream->available() && watchdog--) {
-    readUint8(pin);
-    readUint8(value);
+    pin = readUint8();
+    value = readUint8();
     LOG("SET #"); LOG(pin); LOG(" <- "); LOG(value);
     if ((index=getConnectorIndexOfPin(pin, STATIC_DIGITALS, STATIC_DIGITALS_LEN))!=((uint8_t)-1)) {
         LOG(" D: "); LOGLN(index);
@@ -58,13 +58,20 @@ void Core2::readUntil(char terminator)
   */
 void Core2::copyToBuffer(uint8_t x)
 {
-  char buf[4];
+  char buf[3];
+  char *p = buf+3;
+  do {
+    *(--p) = '0'+ (x %10);
+  } while((x/=10) && p!=buf);
+  copyToBuffer(p, p-buf);
+  /*
+  char buf[3];
   uint8_t i = 3;
-  buf[3] = '\0';
   do {
     buf[--i] = '0'+ (x %10);
   } while (x && i>0 && (x/=10));
-  copyToBuffer(buf+i);
+  copyToBuffer(buf+i, 3-i);
+  */
 }
 
 
@@ -72,16 +79,6 @@ void Core2::copyToBuffer(const char c)
 {
   _buffer[_bufferSize++] = c;
   autoSendBuffer();
-}
-
-
-void Core2::copyToBuffer(const char* const str)
-{
-  uint8_t i = 0;
-  while (str[i] && i<MAXLINESIZE) {
-    _buffer[_bufferSize++] = str[i++];
-    autoSendBuffer();
-  }
 }
 
 
@@ -98,8 +95,8 @@ void Core2::copyToBuffer_P(const prog_char* const data)
 
 void Core2::copyToBuffer(const char chars[], uint8_t size)
 {
-  for (uint8_t i=0; i<size; i++) {
-    _buffer[_bufferSize++] = chars[i];
+  while(size--) {
+    _buffer[_bufferSize++] = *chars++;
     autoSendBuffer();
   }
 }
@@ -114,12 +111,10 @@ void Core2::copyToBuffer_P(const prog_uchar data[], size_t size)
 }
 
 
-const uint8_t Core2::bufferEqualsLength_P(const prog_char* const str)
+const uint8_t Core2::bufferEqualsLength_P(const prog_char* str)
 {
   uint8_t i = 0;
-  while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i]) {
-    i++;
-  }
+  while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i++]);
   return i;
 }
 
@@ -129,6 +124,7 @@ void Core2::sendBuffer()
   if (_bufferSize) {
     _currentStream->write((uint8_t *)_buffer, _bufferSize);
   }
+  unbuffer();
 }
 
 
@@ -144,17 +140,15 @@ void Core2::sendBuffer()
 void Core2::autoSendBuffer()
 {
   if (_bufferSize == WRITEBUFFERSIZE) {
-    _currentStream->write((uint8_t *)_buffer, WRITEBUFFERSIZE);
-    unbuffer();
+    sendBuffer();
   }
 }
 
 
-void Core2::readUint8(uint8_t &out)
+uint8_t Core2::readUint8()
 {
   char c;
-  uint8_t watchdog = MAXLINESIZE;
-  out = 0;
+  uint8_t watchdog = MAXLINESIZE, out = 0;
   _read:
   if (_currentStream->available()) {
     while ((c=_currentStream->read()) && '0'<=c && c<='9' && --watchdog) {
@@ -165,6 +159,7 @@ void Core2::readUint8(uint8_t &out)
       goto _read;
     }
   }
+  return out;
   // return (uint8_t) _currentStream->parseInt();
 }
 

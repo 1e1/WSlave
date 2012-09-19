@@ -13,7 +13,7 @@ class Connector {
   Connector();
   Connector(byte pin, const prog_char *label);
   
-  __attribute__((always_inline)) inline const byte getPin()         { return (const byte) (_pin & B00111111); };
+  __attribute__((always_inline)) inline const byte getPin() { return _pin >> 2; };
   __attribute__((always_inline)) inline const prog_char* getLabel() { return _label;  };
   
   protected:
