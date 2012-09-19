@@ -75,4 +75,18 @@ FOREACH (int, p2, c2, ARRAYLEN(c2) ){
 /** === **/
 
 
+
+/** BIT **/
+#define bitRead_uint8_t(value, bit)             (((value) >> (bit)) & 0x01)
+#define bitSet_uint8_t(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
+#define bitClear_uint8_t(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitWrite_uint8_t(value, bit, bitvalue)  (bitvalue ? bitSet_uint8_t(value, bit) : bitClear_uint8_t(value, bit))
+
+#define bitRead_boolean(value, bit)             (((value) >> (bit)) & 0x01)
+#define bitSet_boolean(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
+#define bitClear_boolean(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitWrite_boolean(value, bit, bitvalue)  (bitvalue ? bitSet_boolean(value, bit) : bitClear_boolean(value, bit))
+/** === **/
+
+
 #endif // MACROS_H_
