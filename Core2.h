@@ -10,7 +10,7 @@
 #include "dictionary.h"
 #include "Connector.h"
 
-#define READBUFFERSIZE          8
+#define READBUFFERSIZE          16
 #define WRITEBUFFERSIZE         64
 #define MAXLINESIZE             255
 
@@ -112,8 +112,7 @@ __attribute__((always_inline)) inline void Core2::unbuffer()
 
 __attribute__((always_inline)) inline const boolean Core2::bufferIsEqualTo_P(const prog_char *str)
 {
-  size_t size = strlen_P(str);
-  return _bufferSize == size && size == bufferEqualsLength_P(str);
+  return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str);
 };
 
 
