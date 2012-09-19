@@ -30,23 +30,18 @@
 /** ===================== **/
 
 static ConnectorDigital STATIC_DIGITALS[] = {
-  ConnectorDigital(22, Dictionary::relay11, true) ,
-  ConnectorDigital(24, Dictionary::relay12, false),
-  ConnectorDigital(26, Dictionary::relay13, false),
-  ConnectorDigital(28, Dictionary::relay14, false),
-  ConnectorDigital(30, Dictionary::relay15, true),
-  ConnectorDigital(32, Dictionary::relay16, false),
-  ConnectorDigital(34, Dictionary::relay17, false),
-  ConnectorDigital(36, Dictionary::relay18, false)/*
-  NEWDIGITAL(22, relay11, true) ,
-  NEWDIGITAL(24, relay12, false),
-  NEWDIGITAL(26, relay13, false),
-  NEWDIGITAL(28, relay14, false)*/
+  NEWDIGITAL_NC(22, relay11) ,
+  NEWDIGITAL_NO(24, relay12),
+  NEWDIGITAL_NO(26, relay13),
+  NEWDIGITAL_NO(28, relay14),
+  NEWDIGITAL_NC(30, relay15),
+  NEWDIGITAL_NO(32, relay16),
+  NEWDIGITAL_NO(34, relay17),
+  NEWDIGITAL_NO(36, relay18)
 };
 
 static ConnectorPulse STATIC_PULSES[] = {
-  ConnectorPulse(13, Dictionary::led)
-//  NEWPULSE(13, led)
+  NEWPULSE(13, led)
 };
 
 /*
