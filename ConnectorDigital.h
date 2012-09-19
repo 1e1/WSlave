@@ -14,12 +14,12 @@ class ConnectorDigital : public Connector {
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC);
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC, boolean value);
   
-  __attribute__((always_inline)) inline virtual const byte getPin()             { return (const byte) (_pin & B00111111); };
-  __attribute__((always_inline)) inline virtual const boolean getValue()        { return (const boolean) ((_pin & B10000000) ^ isNormalyClose()); };
-  __attribute__((always_inline)) inline virtual void setValue(const boolean v)  { boolean value = v^isNormalyClose(); bitWrite(_pin, 7, value); digitalWrite(_pin, value); };
+  //__attribute__((always_inline)) inline const byte getPin()             { return (const byte) (_pin & B00111111); };
+  __attribute__((always_inline)) inline const boolean getValue()        { return (const boolean) (bitRead(_pin, 7) ^ isNormalyClose()); };
+  __attribute__((always_inline)) inline void setValue(const boolean v)  { boolean value = v^isNormalyClose(); bitWrite(_pin, 7, value); digitalWrite(_pin, value); };
   
   protected:
-  __attribute__((always_inline)) inline const boolean isNormalyClose()          { return _pin & B01000000; };
+  __attribute__((always_inline)) inline const boolean isNormalyClose()          { return bitRead(_pin, 6); };
   
 };
 
