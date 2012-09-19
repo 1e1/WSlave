@@ -31,9 +31,12 @@ void Core2::processLine()
   while (_currentStream->available() && watchdog--) {
     readUint8(pin);
     readUint8(value);
-    if ((index=getConnectorIndexOfPin(pin, STATIC_DIGITALS, STATIC_DIGITALS_LEN))!=-1) {
+    LOG("SET #"); LOG(pin); LOG(" <- "); LOG(value);
+    if ((index=getConnectorIndexOfPin(pin, STATIC_DIGITALS, STATIC_DIGITALS_LEN))!=((uint8_t)-1)) {
+        LOG(" D: "); LOGLN(index);
       STATIC_DIGITALS[index].setValue(value);
-    } else if ((index=getConnectorIndexOfPin(pin, STATIC_PULSES, STATIC_PULSES_LEN))!=-1) {
+    } else if ((index=getConnectorIndexOfPin(pin, STATIC_PULSES, STATIC_PULSES_LEN))!=((uint8_t)-1)) {
+        LOG(" P: "); LOGLN(index);
       STATIC_PULSES[index].setValue(value);
     }
   }
