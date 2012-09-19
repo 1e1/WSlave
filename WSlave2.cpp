@@ -14,6 +14,7 @@ EthernetServer WSlave2::_server(PORT);
 EthernetClient WSlave2::_client;
 
 LONGSTRING(header_200)    = "200 OK";
+LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME "\"";
 LONGSTRING(header_417)    = "417 Expectation failed";
 LONGSTRING(header_text)   = "text/plain" CRLF;
 LONGSTRING(header_json)   = "application/json" CRLF;
@@ -95,6 +96,22 @@ void WSlave2::check()
       LOGLN("dictionary");
     }
     lineLength(); // ends first Header line
+    
+    // check credentials = Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+    //header_401
+    do {
+      Core2::readUntil(SP);
+      if (Core2::bufferIsEqualTo_P(PSTR("Authorization:"))) {
+        Core2::readUntil(SP);
+        if (Core2::bufferIsEqualTo_P(PSTR("Basic"))) {
+          Core2::readUntil(CR);
+          if (Core2::bufferIsEqualTo_P(PSTR(HTTP_AUTH64))) {
+            // JUMP
+          }
+        }
+      }
+      goto _crlfcrlf;
+    } while(lineLength()>1 && --watchdog);
     
     // sweep headers until CRLF CRLF
     _crlfcrlf:
