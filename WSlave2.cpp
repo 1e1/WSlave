@@ -186,11 +186,11 @@ void WSlave2::sendDictionary()
   */
   // pulses
   for (uint8_t i=0; i < STATIC_PULSES_LEN; i++) {
-    sendToJson('M', STATIC_PULSES[i], --coma);
+    sendToJson('P', STATIC_PULSES[i], --coma);
   }
   // digitals
   for (uint8_t i=0; i < STATIC_DIGITALS_LEN; i++) {
-    sendToJson('M', STATIC_DIGITALS[i], --coma);
+    sendToJson('D', STATIC_DIGITALS[i], --coma);
   }
   Core2::copyToBuffer('}');
   Core2::sendBuffer();
@@ -271,7 +271,7 @@ void WSlave2::sendToJson(const char type, Connector connector, const uint8_t com
 {
   char pinChars[4] = { type, '0'+(connector.getPin()/10), '0'+(connector.getPin()%10), '\0' };
   Core2::copyToBuffer('"');
-  Core2::copyToBuffer(connector.getPin());
+  Core2::copyToBuffer(pinChars);
   Core2::copyToBuffer("\":\"");
   Core2::copyToBuffer_P(connector.getLabel());
   if (coma) {
