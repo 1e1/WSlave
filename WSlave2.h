@@ -53,6 +53,7 @@ class WSlave2 {
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
   typedef enum { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ } MethodType;
   typedef enum { ROOT, SERVICE, CACHE, DICTIONARY } ActionType;
+  // http://en.wikipedia.org/wiki/Basic_access_authentication
   
   protected:
   static EthernetServer _server;
