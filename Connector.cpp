@@ -5,6 +5,14 @@
 
 
 
+
+/***********************************************************
+ *                         PUBLIC                          *
+ **********************************************************/
+
+
+
+
 Connector::Connector()
 {
 }
@@ -12,14 +20,14 @@ Connector::Connector()
 
 Connector::Connector(byte pin, const prog_char *label)
 {
-  init(pin, label);
+  this->init(pin, label);
 }
 
 
 void Connector::init(byte pin, const prog_char *label)
 {
-  _pin = pin << 2;
-  _label = label;
-  pinMode(_pin, OUTPUT);
+  this->_pin = pin << 2;
+  this->_label = label;
+  pinMode(this->_pin, OUTPUT);
 }
 
