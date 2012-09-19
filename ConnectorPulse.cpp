@@ -12,7 +12,7 @@ ConnectorPulse::ConnectorPulse(const byte pin, const prog_char *label)
 }
 
 
-ConnectorPulse::ConnectorPulse(const byte pin, const prog_char *label, boolean value)
+ConnectorPulse::ConnectorPulse(const byte pin, const prog_char *label, uint8_t value)
 {
   init(pin, label);
   _value = value;
