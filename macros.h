@@ -6,6 +6,10 @@
 #define WSDIGITAL(NAME, PIN, NC) { (NC?((1<<DIGITAL_BITNC)|PIN):PIN), NAME }
 #define WSPULSE(NAME, PIN) { PIN, 0, NAME }
 #define WSMESSAGE(NAME, FUNCTION, PINS...) { FUNCTION, '#', {PINS}, NAME }
+#define NEWDIGITAL_NO(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, false)
+#define NEWDIGITAL_NC(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWDIGITAL(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWPULSE(PIN, NAME) ConnectorPulse(PIN, Dictionary::NAME)
 #define LONGBYTES(b) static const prog_uchar b[] PROGMEM
 #define LONGSTRING(str) static const prog_char str[] PROGMEM
 /** === **/
