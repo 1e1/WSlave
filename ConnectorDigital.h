@@ -15,7 +15,8 @@ class ConnectorDigital : public Connector {
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC);
   ConnectorDigital(byte pin, const prog_char *label, const boolean isNC, boolean value);
   
-  __attribute__((always_inline)) inline const boolean getValue()        { return this->convertValue( bitRead_boolean(this->_pin, 1) ); };
+  // inline
+  const boolean getValue();
   void setValue(const boolean v);
   
   protected:
@@ -32,6 +33,12 @@ class ConnectorDigital : public Connector {
 /***********************************************************
  *                         INLINE                          *
  **********************************************************/
+
+
+__attribute__((always_inline)) inline const boolean ConnectorDigital::getValue()
+{
+  return this->convertValue( bitRead_boolean(this->_pin, 1) );
+}
 
 
 __attribute__((always_inline)) inline void ConnectorDigital::setValue(const boolean v)
