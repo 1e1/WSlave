@@ -10,14 +10,18 @@
 
 
 
-const uint8_t LSlave2::menu_len = NUMBEROFMENU_HOME + STATIC_TOTAL_LEN;
+const uint8_t LSlave2::index_info     = 0;
+const uint8_t LSlave2::index_message  = index_info      + (true && STATIC_MESSAGES_LEN);
+const uint8_t LSlave2::index_pulse    = index_message   + (true && STATIC_PULSES_LEN);
+const uint8_t LSlave2::index_digital  = index_pulse     + (true && STATIC_DIGITALS_LEN);
+const uint8_t LSlave2::menu_len       = index_digital   + 1;
 LiquidCrystal LSlave2::_lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
 
 LSlave2::Key LSlave2::_key      = KEYPAD_NONE;
 LSlave2::State LSlave2::_state  = SLEEPING;
-uint8_t LSlave2::_menuType      = LCDMENU_INFO;
+uint8_t LSlave2::_menuType      = index_info;
 uint8_t LSlave2::_menuIndex     = 0;
-uint8_t LSlave2::_menuMax       = NUMBEROFMENU_HOME;
+uint8_t LSlave2::_menuMax       = menu_len;
 
 
 
@@ -72,6 +76,8 @@ void LSlave2::check()
       //_lcd.on();
     } else {
       
+      uint8_t deltaValue = 0;
+      
       // UP/DOWN: page select
       // LEFT/RIGHT: change value
       // SELECT: switch between INFO, MESSAGES, PULSES, DIGITALS
@@ -83,10 +89,10 @@ void LSlave2::check()
         jump(+1);
         break;
         case KEYPAD_LEFT:
-        add((int8_t)+ANALOGSTEP);
+        deltaValue = +ANALOGSTEP;
         break;
         case KEYPAD_RIGHT:
-        add((int8_t)-ANALOGSTEP);
+        deltaValue = -ANALOGSTEP;
         break;
         case KEYPAD_SELECT:
         // jump section
@@ -96,24 +102,30 @@ void LSlave2::check()
       
       //_lcd.home();
       _lcd.clear();
-      switch (_menuType) {
-        /*
-        case LCDMENU_INFO:
-        break;
-        */
-        case LCDMENU_MESSAGE:
-        printMessage();
-        break;
-        case LCDMENU_PULSE:
-        printPulse();
-        break;
-        case LCDMENU_DIGITAL:
-        printDigital();
-        break;
-        default:
+      if (_menuType==index_info) {
         printInfo();
+        goto _switchEnd;
       }
-      
+      if (_menuType==index_message) {
+        printMessage();
+        goto _switchEnd;
+      }
+      if (_menuType==index_pulse) {
+        if (deltaValue) {
+          STATIC_PULSES[_menuIndex].addValue(deltaValue);
+        }
+        printPulse();
+        goto _switchEnd;
+      }
+      if (_menuType==index_digital) {
+        if (deltaValue) {
+          STATIC_DIGITALS[_menuIndex].setValue(deltaValue>0);
+        }
+        printDigital();
+        goto _switchEnd;
+      }
+      _switchEnd:
+      ;
     }
     
     LOGLN("<<< LCD");
@@ -133,7 +145,7 @@ void LSlave2::shutdown()
       //case SLEEPING:
       //_lcd.off();
       //_menuType = 0;
-      _menuType      = LCDMENU_INFO;
+      _menuType      = index_info;
       _menuIndex     = 0;
       _menuMax       = NUMBEROFMENU_HOME;
       //break;
@@ -180,10 +192,10 @@ void LSlave2::printTitle_P(const prog_char* const label)
   if (_menuType<9) {
     _lcd.moveCursorRight();
   }
-  LOG("page #"); LOG(_menuType+1); LOG('/'); LOGLN(menu_len);
+  LOG("page #"); LOG(_menuType+1); LOG('/'); LOGLN(_menuMax);
   _lcd.print(_menuType+1);
   _lcd.print(LCDCHAR_PAGESEPARATOR);
-  _lcd.print(menu_len);
+  _lcd.print(_menuMax);
 }
 
 
@@ -278,31 +290,26 @@ const LSlave2::Key LSlave2::getKey()
 }
 
 
-void LSlave2::add(const int8_t delta)
-{
-}
-
-
 void LSlave2::switchMenu()
 {
-  _menuType = (_menuType+1) % LCDMENU_LEN;
   _menuIndex = 0;
-  switch (_menuType) {
-    /*
-    case LCDMENU_INFO:
+  _menuType = (_menuType+1) % menu_len;
+  if (_menuType==index_info) {
     _menuMax = NUMBEROFMENU_HOME;
-    break;
-    */
-    case LCDMENU_MESSAGE:
-    _menuMax = STATIC_MESSAGES_LEN;
-    break;
-    case LCDMENU_PULSE:
-    _menuMax = STATIC_PULSES_LEN;
-    break;
-    case LCDMENU_DIGITAL:
-    _menuMax = STATIC_DIGITALS_LEN;
-    break;
-    default:
-    _menuMax = NUMBEROFMENU_HOME;
+    goto _switchEnd;
   }
+  if (_menuType==index_message) {
+    _menuMax = STATIC_MESSAGES_LEN;
+    goto _switchEnd;
+  }
+  if (_menuType==index_pulse) {
+    _menuMax = STATIC_PULSES_LEN;
+    goto _switchEnd;
+  }
+  if (_menuType==index_digital) {
+    _menuMax = STATIC_DIGITALS_LEN;
+    goto _switchEnd;
+  }
+  _switchEnd:
+  ;
 }

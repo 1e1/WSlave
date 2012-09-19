@@ -135,18 +135,22 @@
   B10000 }
 
 #define NUMBEROFMENU_HOME       1
-
-#define LCDMENU_INFO    0
-#define LCDMENU_MESSAGE 1
-#define LCDMENU_PULSE   2
-#define LCDMENU_DIGITAL 3
-#define LCDMENU_LEN     4
-
+/*
+#define LCDMENU_INFO    ( 0 )
+#define LCDMENU_MESSAGE ( LCDMENU_INFO      + (true && STATIC_MESSAGES_LEN) )
+#define LCDMENU_PULSE   ( LCDMENU_MESSAGE   + (true && STATIC_PULSES_LEN) )
+#define LCDMENU_DIGITAL ( LCDMENU_PULSE     + (true && STATIC_DIGITALS_LEN) )
+#define LCDMENU_LEN     ( LCDMENU_DIGITAL   + 1 )
+*/
 
 
 class LSlave2 {
   
   public:
+  static const uint8_t index_info;
+  static const uint8_t index_message;
+  static const uint8_t index_pulse;
+  static const uint8_t index_digital;
   static const uint8_t menu_len;
   
   typedef enum { SHUTDOWN, SLEEPING, AWAKE } State;
@@ -169,7 +173,6 @@ class LSlave2 {
   static void printDigital();
   static const boolean hasNewPulsedKey();
   static const Key getKey();
-  static void add(const int8_t delta);
   static void switchMenu();
   
   // inline
