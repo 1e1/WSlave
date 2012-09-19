@@ -18,8 +18,8 @@ Connector::Connector(byte pin, const prog_char *label)
 
 void Connector::init(byte pin, const prog_char *label)
 {
-  _pin = pin;
+  _pin = pin << 2;
   _label = label;
-  pinMode(pin, OUTPUT);
+  pinMode(_pin, OUTPUT);
 }
 
