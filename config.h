@@ -2,6 +2,7 @@
 #define CONFIG_H_
 
 
+#define DEVICE_NAME "@lan#12"
 #define DEBUG 1
 
 // LED
