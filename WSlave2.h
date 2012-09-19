@@ -64,7 +64,7 @@ class WSlave2 {
   static void sendDefault_P(const prog_uchar data[], size_t length);
   static const boolean nextHttpLine();
   static const uint8_t lineLength();
-  static void sendToJson(const char type, Connector connector, const uint8_t coma);
+  static void sendToJson(const char type, Connector connector, const boolean coma);
   /*
   LONGSTRING(header_200)    = "200 OK";
   LONGSTRING(header_417)    = "417 Expectation failed";
