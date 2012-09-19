@@ -67,11 +67,10 @@ class Core2 {
   static void readUntil(char terminator);
   static void copyToBuffer(uint8_t x);
   static /*inline */void copyToBuffer(char c);
-  static void copyToBuffer(const char* const str);
   static void copyToBuffer_P(const prog_char* const data);
   static void copyToBuffer(const char chars[], uint8_t size);
   static void copyToBuffer_P(const prog_uchar data[], size_t size);
-  static const uint8_t bufferEqualsLength_P(const prog_char* const str);
+  static const uint8_t bufferEqualsLength_P(const prog_char* str);
   static /*inline */void sendBuffer();
   
   // inline
@@ -82,7 +81,7 @@ class Core2 {
   
   protected:
   static /*inline */void autoSendBuffer();
-  static void readUint8(uint8_t &out);
+  static uint8_t readUint8();
   static uint8_t getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size);
   
   static Stream *_currentStream;
@@ -113,7 +112,8 @@ __attribute__((always_inline)) inline void Core2::unbuffer()
 
 __attribute__((always_inline)) inline const boolean Core2::bufferIsEqualTo_P(const prog_char *str)
 {
-  return _bufferSize == strlen_P(str) && strlen_P(str) == bufferEqualsLength_P(str);
+  size_t size = strlen_P(str);
+  return _bufferSize == size && size == bufferEqualsLength_P(str);
 };
 
 
