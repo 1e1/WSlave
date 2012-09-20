@@ -30,8 +30,8 @@ const uint8_t Core2::pulses_len   = ARRAYLEN(pulses);
 const uint8_t Core2::messages_len = 0;//ARRAYLEN(messages);
 const uint8_t Core2::total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses);// + ARRAYLEN(messages);
 
-Stream *Core2::_currentStream;
-char Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
+Stream* Core2::_currentStream;
+char    Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
 uint8_t Core2::_bufferSize;
 
 
@@ -47,22 +47,20 @@ uint8_t Core2::_bufferSize;
 
 void Core2::processLine()
 {
-  uint8_t pin, value, index, watchdog = digitals_len + pulses_len;
+  uint8_t pin, value, index, watchdog = Core2::digitals_len + Core2::pulses_len;
   // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
-  while (_currentStream->available() && watchdog--) {
-    pin = readUint8();
-    value = readUint8();
-    LOG("SET #"); LOG(pin); LOG(" <- "); LOG(value);
-    if ((index=getConnectorIndexOfPin(pin, digitals, digitals_len))!=((uint8_t)-1)) {
-        LOG(" D: "); LOGLN(index);
-      LOG(">GET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
-      digitals[index].setValue(value);
-      LOG("<GET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
-    } else if ((index=getConnectorIndexOfPin(pin, pulses, pulses_len))!=((uint8_t)-1)) {
-        LOG(" P: "); LOGLN(index);
-      LOG(">GET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
-      pulses[index].setValue(value);
-      LOG("<GET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
+  while (Core2::_currentStream->available() && watchdog--) {
+    pin   = Core2::readUint8();
+    value = Core2::readUint8();
+    LOG("SET #"); LOG(pin); LOG(" <- "); LOGLN(value);
+    if ((index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+      LOG(">DGET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
+      Core2::digitals[index].setValue(value);
+      LOG("<DGET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
+    } else if ((index=Core2::getConnectorIndexOfPin(pin, Core2::pulses, Core2::pulses_len))!=uint8_t(-1)) {
+      LOG(">PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
+      Core2::pulses[index].setValue(value);
+      LOG("<PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
     }
   }
 }
@@ -71,9 +69,9 @@ void Core2::processLine()
 void Core2::readUntil(char terminator)
 {
   char c;
-  unbuffer();
-  while (_bufferSize < READBUFFERSIZE && (c=_currentStream->read())!=terminator && c!=-1) {
-    _buffer[_bufferSize++] = c;
+  Core2::unbuffer();
+  while (Core2::_bufferSize < READBUFFERSIZE && (c=Core2::_currentStream->read())!=terminator && c!=-1) {
+    Core2::_buffer[Core2::_bufferSize++] = c;
   }
 }
 
@@ -103,8 +101,8 @@ void Core2::copyToBuffer(uint8_t x)
 
 void Core2::copyToBuffer(const char c)
 {
-  _buffer[_bufferSize++] = c;
-  autoSendBuffer();
+  Core2::_buffer[Core2::_bufferSize++] = c;
+  Core2::autoSendBuffer();
 }
 
 
@@ -112,8 +110,8 @@ void Core2::copyToBuffer_P(const prog_char* const data)
 {
   uint8_t i = 0;
   while (pgm_read_byte_near(&data[i]) && i<MAXLINESIZE) {
-    _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
-    autoSendBuffer();
+    Core2::_buffer[Core2::_bufferSize++] = pgm_read_byte_near(&data[i]);
+    Core2::autoSendBuffer();
     i++;
   }
 }
@@ -122,8 +120,8 @@ void Core2::copyToBuffer_P(const prog_char* const data)
 void Core2::copyToBuffer(const char chars[], uint8_t size)
 {
   while(size--) {
-    _buffer[_bufferSize++] = *chars++;
-    autoSendBuffer();
+    Core2::_buffer[Core2::_bufferSize++] = *chars++;
+    Core2::autoSendBuffer();
   }
 }
 
@@ -131,8 +129,8 @@ void Core2::copyToBuffer(const char chars[], uint8_t size)
 void Core2::copyToBuffer_P(const prog_uchar data[], size_t size)
 {
   for (size_t i=0; i<size; i++) {
-    _buffer[_bufferSize++] = pgm_read_byte_near(&data[i]);
-    autoSendBuffer();
+    Core2::_buffer[Core2::_bufferSize++] = pgm_read_byte_near(&data[i]);
+    Core2::autoSendBuffer();
   }
 }
 
@@ -140,17 +138,17 @@ void Core2::copyToBuffer_P(const prog_uchar data[], size_t size)
 const uint8_t Core2::bufferEqualsLength_P(const prog_char* str)
 {
   uint8_t i = 0;
-  while (i<_bufferSize && ((char)pgm_read_byte_near(&str[i]))==_buffer[i++]);
+  while (i<Core2::_bufferSize && ((char)pgm_read_byte_near(&str[i]))==Core2::_buffer[i++]);
   return i;
 }
 
 
 void Core2::sendBuffer()
 {
-  if (_bufferSize) {
-    _currentStream->write((uint8_t *)_buffer, _bufferSize);
+  if (Core2::_bufferSize) {
+    Core2::_currentStream->write((uint8_t *)Core2::_buffer, Core2::_bufferSize);
   }
-  unbuffer();
+  Core2::unbuffer();
 }
 
 
@@ -165,8 +163,8 @@ void Core2::sendBuffer()
 
 void Core2::autoSendBuffer()
 {
-  if (_bufferSize == WRITEBUFFERSIZE) {
-    sendBuffer();
+  if (Core2::_bufferSize == WRITEBUFFERSIZE) {
+    Core2::sendBuffer();
   }
 }
 
@@ -176,8 +174,8 @@ uint8_t Core2::readUint8()
   char c;
   uint8_t watchdog = MAXLINESIZE, out = 0;
   _read:
-  if (_currentStream->available()) {
-    while ((c=_currentStream->read()) && '0'<=c && c<='9' && --watchdog) {
+  if (Core2::_currentStream->available()) {
+    while ((c=Core2::_currentStream->read()) && '0'<=c && c<='9' && --watchdog) {
       out = (out *10) + ((uint8_t) (c -'0'));
     }
     if (c==-1) {
@@ -197,5 +195,5 @@ uint8_t Core2::getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const
       return index;
     }
   }
-  return -1;
+  return uint8_t(-1);
 }
