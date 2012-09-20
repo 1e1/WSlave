@@ -18,13 +18,13 @@ Connector::Connector()
 }
 
 
-Connector::Connector(byte pin, const prog_char *label)
+Connector::Connector(byte pin, const prog_char* label)
 {
   this->init(pin, label);
 }
 
 
-void Connector::init(byte pin, const prog_char *label)
+void Connector::init(byte pin, const prog_char* label)
 {
   this->_pin    = pin << 2;
   this->_label  = label;

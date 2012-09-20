@@ -13,14 +13,14 @@
 
 
 
-ConnectorPulse::ConnectorPulse(const byte pin, const prog_char *label)
+ConnectorPulse::ConnectorPulse(const byte pin, const prog_char* label)
 {
   this->init(pin, label);
   this->_value = 0;
 }
 
 
-ConnectorPulse::ConnectorPulse(const byte pin, const prog_char *label, uint8_t value)
+ConnectorPulse::ConnectorPulse(const byte pin, const prog_char* label, uint8_t value)
 {
   this->init(pin, label);
   this->_value = value;

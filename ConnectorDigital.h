@@ -12,8 +12,8 @@
 class ConnectorDigital : public Connector {
   
   public:
-  ConnectorDigital(byte pin, const prog_char *label, const boolean isNC);
-  ConnectorDigital(byte pin, const prog_char *label, const boolean isNC, boolean value);
+  ConnectorDigital(byte pin, const prog_char* label, const boolean isNC);
+  ConnectorDigital(byte pin, const prog_char* label, const boolean isNC, boolean value);
   
   // inline
   const boolean getValue();

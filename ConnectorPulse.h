@@ -12,8 +12,8 @@
 class ConnectorPulse : public Connector {
   
   public:
-  ConnectorPulse(const byte pin, const prog_char *label);
-  ConnectorPulse(const byte pin, const prog_char *label, uint8_t value);
+  ConnectorPulse(const byte pin, const prog_char* label);
+  ConnectorPulse(const byte pin, const prog_char* label, uint8_t value);
   
   void addValue(const uint8_t d);
   
