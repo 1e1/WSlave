@@ -16,7 +16,6 @@
 
 
 
-#include "Core.h"
 #include "Core2.h"
 #include "config.h"
 #include "macros.h"
@@ -90,7 +89,6 @@ void setup()
 #if BUSYLED_PIN
   pinMode(BUSYLED_PIN, OUTPUT);
 #endif
-  Core::setup();
 #if USE_ETH
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
