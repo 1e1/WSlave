@@ -63,13 +63,13 @@
 #define LCDPOSITION_ANALOG_X        ((  LCD_WIDTH - (1+LCDPOSITION_BAR_LENGTH+1 +LCDPOSITION_ANALOG_OFFSET+ LCDPOSITION_VALUE_LENGTH)  )/2)
 
 #define LCDCHAR_PAGESEPARATOR       '/'
-#define LCDCHAR_VOIDBAR             ((uint8_t) 0)
-#define LCDCHAR_HALFBAR             ((uint8_t) 1)
-#define LCDCHAR_FULLBAR             ((uint8_t) 2)
-#define LCDCHAR_LEFTBAR             ((uint8_t) 3)
-#define LCDCHAR_RIGHTBAR            ((uint8_t) 4)
-#define LCDCHAR_NOLEFTBAR           ((uint8_t) 5)
-#define LCDCHAR_NORIGHTBAR          ((uint8_t) 6)
+#define LCDCHAR_VOIDBAR             uint8_t(0)
+#define LCDCHAR_HALFBAR             uint8_t(1)
+#define LCDCHAR_FULLBAR             uint8_t(2)
+#define LCDCHAR_LEFTBAR             uint8_t(3)
+#define LCDCHAR_RIGHTBAR            uint8_t(4)
+#define LCDCHAR_NOLEFTBAR           uint8_t(5)
+#define LCDCHAR_NORIGHTBAR          uint8_t(6)
 #define LCDCHAR_LEFTBAR_CONTENT     { \
   B00001, \
   B00011, \
@@ -178,11 +178,11 @@ class LSlave2 {
   // inline
   static void jump(const uint8_t inc);
   
-  static Key _key;
-  static uint8_t _menuType;
-  static uint8_t _menuIndex;
-  static uint8_t _menuMax;
-  static State _state;
+  static Key      _key;
+  static uint8_t  _menuType;
+  static uint8_t  _menuIndex;
+  static uint8_t  _menuMax;
+  static State    _state;
   
 };
 
@@ -202,7 +202,7 @@ __attribute__((always_inline)) inline void LSlave2::uncheck()
 
 __attribute__((always_inline)) inline void LSlave2::jump(const uint8_t inc)
 {
-  _menuIndex = (_menuIndex+inc) % _menuMax;
+  LSlave2::_menuIndex = (_menuIndex+inc) % LSlave2::_menuMax;
 }
 
 
