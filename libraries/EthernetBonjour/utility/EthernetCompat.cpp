@@ -26,9 +26,9 @@
 
 #include <utility/socket.h>
 #include <utility/w5100.h>
-extern "C" {
-   #include "wiring.h"
-}
+//extern "C" {
+   #include "Arduino.h"
+//}
 
 #define TXBUF_BASE      0x4000
 #define SMASK           0x07FF
