@@ -307,8 +307,11 @@ void LCD::createChar_P(uint8_t location, const prog_uchar charmap[])
 {
   location &= 0x7;
   command(LCD_SETCGRAMADDR | (location << 3));
+  delayMicroseconds(30);
+  
   for (uint8_t i = 0; i<8; i++) {
-    write(pgm_read_byte_near(charmap++));
+    write(pgm_read_byte_near(&charmap[i]));
+    delayMicroseconds(40);
   }
 }
 
