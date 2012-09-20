@@ -18,7 +18,7 @@ LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate:
 LONGSTRING(header_417)    = "417 Expectation failed";
 LONGSTRING(header_text)   = "text/plain" CRLF;
 LONGSTRING(header_json)   = "application/json" CRLF;
-LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
+LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip" CRLF;
 LONGBYTES(webpage)        = WEBPAGE;
 static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
 
@@ -96,7 +96,7 @@ void WSlave2::check()
       LOGLN("dictionary");
     }
     lineLength(); // ends first Header line
-    
+    /*
     // check credentials = Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
     //header_401
     do {
@@ -112,7 +112,7 @@ void WSlave2::check()
       }
       goto _crlfcrlf;
     } while(lineLength()>1 && --watchdog);
-    
+    */
     // sweep headers until CRLF CRLF
     _crlfcrlf:
 //    while (_nextHttpLine() && --watchdog);
@@ -290,8 +290,8 @@ const uint8_t WSlave2::lineLength()
 
 void WSlave2::sendToJson(const char type, Connector connector, const boolean comma)
 {
-  char pinChars[4] = { type, '0'+(connector.getPin()/10), '0'+(connector.getPin()%10), '\0' };
-  Core2::copyToBuffer(pinChars, 4);
+  char pinChars[3] = { type, '0'+(connector.getPin()/10), '0'+(connector.getPin()%10) };
+  Core2::copyToBuffer(pinChars, 3);
   Core2::copyToBuffer_P(json_qcolon);
   Core2::copyToBuffer_P(connector.getLabel());
   if (comma) {
