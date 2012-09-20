@@ -10,6 +10,14 @@
 
 
 
+LCDCHAR(lcdchar_voidBar)    = LCDCHAR_VOIDBAR_CONTENT;
+LCDCHAR(lcdchar_halfBar)    = LCDCHAR_HALFBAR_CONTENT;
+LCDCHAR(lcdchar_fullBar)    = LCDCHAR_FULLBAR_CONTENT;
+LCDCHAR(lcdchar_leftBar)    = LCDCHAR_LEFTBAR_CONTENT;
+LCDCHAR(lcdchar_rightBar)   = LCDCHAR_RIGHTBAR_CONTENT;
+LCDCHAR(lcdchar_noLeftBar)  = LCDCHAR_NOLEFTBAR_CONTENT;
+LCDCHAR(lcdchar_noRightBar) = LCDCHAR_NORIGHTBAR_CONTENT;
+
 const uint8_t LSlave2::index_info     = 0;
 const uint8_t LSlave2::index_message  = LSlave2::index_info      + (true && Core2::messages_len);
 const uint8_t LSlave2::index_pulse    = LSlave2::index_message   + (true && Core2::pulses_len);
@@ -37,29 +45,13 @@ void LSlave2::begin()
 {
   //LSlave2::_lcd.on();
   LSlave2::_lcd.begin(LCD_WIDTH, LCD_HEIGHT);
-  {
-    const uint8_t symbol[8] = LCDCHAR_VOIDBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_VOIDBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_HALFBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_HALFBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_FULLBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_FULLBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_LEFTBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_LEFTBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_RIGHTBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_RIGHTBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_NOLEFTBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_NOLEFTBAR, symbol);
-  }{
-    const uint8_t symbol[8] = LCDCHAR_NORIGHTBAR_CONTENT;
-    LSlave2::_lcd.createChar(LCDCHAR_NORIGHTBAR, symbol);
-  }
-  // lcd.write(LCDCHAR_FULLBAR);
+  LSlave2::_lcd.createChar_P(LCDCHAR_VOIDBAR    , lcdchar_voidBar     );
+  LSlave2::_lcd.createChar_P(LCDCHAR_HALFBAR    , lcdchar_halfBar     );
+  LSlave2::_lcd.createChar_P(LCDCHAR_FULLBAR    , lcdchar_fullBar     );
+  LSlave2::_lcd.createChar_P(LCDCHAR_LEFTBAR    , lcdchar_leftBar     );
+  LSlave2::_lcd.createChar_P(LCDCHAR_RIGHTBAR   , lcdchar_rightBar    );
+  LSlave2::_lcd.createChar_P(LCDCHAR_NOLEFTBAR  , lcdchar_noLeftBar   );
+  LSlave2::_lcd.createChar_P(LCDCHAR_NORIGHTBAR , lcdchar_noRightBar  );
   LSlave2::_lcd.home();
   LOGLN("display LCD");
 }
