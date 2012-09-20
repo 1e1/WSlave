@@ -81,21 +81,15 @@ void Core2::readUntil(char terminator)
   */
 void Core2::copyToBuffer(uint8_t x)
 {
-  /* * /
-  char buf[3];
-  char *p = buf+3;
-  do {
-    *(--p) = '0'+ (x %10);
-  } while((x/=10) && p!=buf);
-  copyToBuffer(p, p-buf+1);
-  /* */
-  char buf[3];
-  uint8_t i = 3;
-  do {
-    buf[--i] = '0'+ (x %10);
-  } while (x && i>0 && (x/=10));
-  copyToBuffer(buf+i, 3-i);
-  /* */
+  if (x>=10) {
+    if (x>=100) {
+      Core2::copyToBuffer(char('0'+(x/100)));
+      x%=100;
+    }
+    Core2::copyToBuffer(char('0'+(x/10)));
+    x%=10;
+  }
+  Core2::copyToBuffer(char('0'+x));
 }
 
 
