@@ -26,7 +26,6 @@ void USlave2::check()
     }
     // pulses
     Core2::copyToBuffer_P(PSTR("\n=== PULSES ===\n"));
-    LOG("track2: ");LOGLN(Core2::pulses[0].getValue());
     for (uint8_t i=0; i < Core2::pulses_len; i++) {
       USlave2::statusLine(Core2::pulses[i], Core2::pulses[i].getValue());
     }
