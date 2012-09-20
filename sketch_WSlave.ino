@@ -56,6 +56,9 @@ void software_reset()
 #if ETH_BLPIN && defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
 #include "WSlave2.h"
+#if USE_BONJOUR
+#include <EthernetBonjour.h>
+#endif USE_BONJOUR
 #define USE_ETH 1
 #else
 #define USE_ETH 0
@@ -98,6 +101,9 @@ void setup()
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave2::begin();
   delay(1000);
+#if USE_BONJOUR
+  EthernetBonjour.begin(/*DEVICE_NAME*/);
+#endif USE_BONJOUR
 #endif
 #if USE_LCD
   LSlave2::begin();
@@ -137,10 +143,13 @@ void loop()
       
     } else {
       LOGLN("*** new time section ***");
-#if USE_LCD
-      LSlave2::shutdown();
-#endif
     }
+#if USE_LCD
+    LSlave2::shutdown();
+#endif
+#if USE_BONJOUR
+    EthernetBonjour.run();
+#endif USE_BONJOUR
     // DO SOMETHING NEW
 #if BUSYLED_PIN
   WAIT(2000);
@@ -158,7 +167,7 @@ void loop()
 #if USE_LCD
   LSlave2::check();
 #endif
-
+  
   
   // UNCHECK
 #if USE_ETH
@@ -170,5 +179,6 @@ void loop()
 #if USE_LCD
   LSlave2::uncheck();
 #endif
+  
 }
 

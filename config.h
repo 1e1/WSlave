@@ -3,7 +3,7 @@
 
 
 #define DEVICE_NAME "@lan#12"
-#define DEBUG 1
+#define DEBUG 0
 
 // LED
 #define BUSYLED_PIN 13
@@ -12,7 +12,8 @@
 #define USB_SPEED   115200
 
 // ETH conf
-#define USE_DHCP    0
+#define USE_BONJOUR 1
+#define USE_DHCP    1
 #define IP          10,240,170, 12
 #define SUBNET      255,255,255,0
 #define GATEWAY     0,0,0,0
