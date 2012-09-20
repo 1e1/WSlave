@@ -10,9 +10,30 @@
 
 
 
+ConnectorDigital Core2::digitals[] = {
+  NEWDIGITAL_NC(22, relay11) ,
+  NEWDIGITAL_NO(24, relay12),
+  NEWDIGITAL_NO(26, relay13),
+  NEWDIGITAL_NO(28, relay14),
+  NEWDIGITAL_NC(30, relay15),
+  NEWDIGITAL_NO(32, relay16),
+  NEWDIGITAL_NO(34, relay17),
+  NEWDIGITAL_NO(36, relay18)
+};
+
+ConnectorPulse Core2::pulses[] = {
+  NEWPULSE(13, led)
+};
+
+const uint8_t Core2::digitals_len = ARRAYLEN(digitals);
+const uint8_t Core2::pulses_len   = ARRAYLEN(pulses);
+const uint8_t Core2::messages_len = 0;//ARRAYLEN(messages);
+const uint8_t Core2::total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses);// + ARRAYLEN(messages);
+
 Stream *Core2::_currentStream;
 char Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
 uint8_t Core2::_bufferSize;
+
 
 
 
@@ -26,18 +47,22 @@ uint8_t Core2::_bufferSize;
 
 void Core2::processLine()
 {
-  uint8_t pin, value, index, watchdog = STATIC_DIGITALS_LEN + STATIC_PULSES_LEN;
+  uint8_t pin, value, index, watchdog = digitals_len + pulses_len;
   // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
   while (_currentStream->available() && watchdog--) {
     pin = readUint8();
     value = readUint8();
     LOG("SET #"); LOG(pin); LOG(" <- "); LOG(value);
-    if ((index=getConnectorIndexOfPin(pin, STATIC_DIGITALS, STATIC_DIGITALS_LEN))!=((uint8_t)-1)) {
+    if ((index=getConnectorIndexOfPin(pin, digitals, digitals_len))!=((uint8_t)-1)) {
         LOG(" D: "); LOGLN(index);
-      STATIC_DIGITALS[index].setValue(value);
-    } else if ((index=getConnectorIndexOfPin(pin, STATIC_PULSES, STATIC_PULSES_LEN))!=((uint8_t)-1)) {
+      LOG(">GET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
+      digitals[index].setValue(value);
+      LOG("<GET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
+    } else if ((index=getConnectorIndexOfPin(pin, pulses, pulses_len))!=((uint8_t)-1)) {
         LOG(" P: "); LOGLN(index);
-      STATIC_PULSES[index].setValue(value);
+      LOG(">GET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
+      pulses[index].setValue(value);
+      LOG("<GET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
     }
   }
 }
@@ -58,20 +83,21 @@ void Core2::readUntil(char terminator)
   */
 void Core2::copyToBuffer(uint8_t x)
 {
+  /* * /
   char buf[3];
   char *p = buf+3;
   do {
     *(--p) = '0'+ (x %10);
   } while((x/=10) && p!=buf);
-  copyToBuffer(p, p-buf);
-  /*
+  copyToBuffer(p, p-buf+1);
+  /* */
   char buf[3];
   uint8_t i = 3;
   do {
     buf[--i] = '0'+ (x %10);
   } while (x && i>0 && (x/=10));
   copyToBuffer(buf+i, 3-i);
-  */
+  /* */
 }
 
 

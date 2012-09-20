@@ -11,9 +11,9 @@
 
 
 const uint8_t LSlave2::index_info     = 0;
-const uint8_t LSlave2::index_message  = index_info      + (true && STATIC_MESSAGES_LEN);
-const uint8_t LSlave2::index_pulse    = index_message   + (true && STATIC_PULSES_LEN);
-const uint8_t LSlave2::index_digital  = index_pulse     + (true && STATIC_DIGITALS_LEN);
+const uint8_t LSlave2::index_message  = index_info      + (true && Core2::messages_len);
+const uint8_t LSlave2::index_pulse    = index_message   + (true && Core2::pulses_len);
+const uint8_t LSlave2::index_digital  = index_pulse     + (true && Core2::digitals_len);
 const uint8_t LSlave2::menu_len       = index_digital   + 1;
 LiquidCrystal LSlave2::_lcd(LCD_PINS/*, LCD_BLPIN, LCD_BLPOLARITY*/);
 
@@ -112,14 +112,14 @@ void LSlave2::check()
       }
       if (_menuType==index_pulse) {
         if (deltaValue) {
-          STATIC_PULSES[_menuIndex].addValue(deltaValue);
+          Core2::pulses[_menuIndex].addValue(deltaValue);
         }
         printPulse();
         goto _switchEnd;
       }
       if (_menuType==index_digital) {
         if (deltaValue) {
-          STATIC_DIGITALS[_menuIndex].setValue(deltaValue>0);
+          Core2::digitals[_menuIndex].setValue(deltaValue>0);
         }
         printDigital();
         goto _switchEnd;
@@ -202,7 +202,7 @@ void LSlave2::printTitle_P(const prog_char* const label)
 void LSlave2::printMessage()
 {
   LOG("item M"); LOGLN(_menuIndex);
-  //printTitle_P(STATIC_MESSAGES[_menuIndex].getLabel());
+  //printTitle_P(Core2::messages[_menuIndex].getLabel());
   _lcd.setCursor(0, 1);
   _lcd.write("TODO"); // TODO
 }
@@ -211,10 +211,10 @@ void LSlave2::printMessage()
 void LSlave2::printPulse()
 {
   LOG("item P"); LOGLN(_menuIndex);
-  printTitle_P(STATIC_PULSES[_menuIndex].getLabel());
+  printTitle_P(Core2::pulses[_menuIndex].getLabel());
   _lcd.setCursor(LCDPOSITION_ANALOG_X, 1);
   _lcd.write(LCDCHAR_LEFTBAR);
-  uint8_t valueLeft = STATIC_PULSES[_menuIndex].getValue();
+  uint8_t valueLeft = Core2::pulses[_menuIndex].getValue();
   for (uint8_t i=0; i<LCDPOSITION_BAR_LENGTH; i++) {
     if (valueLeft > 2* ANALOGSTEP) {
       valueLeft-= 2* ANALOGSTEP;
@@ -230,7 +230,7 @@ void LSlave2::printPulse()
   for (uint8_t i=0; i<LCDPOSITION_ANALOG_OFFSET; i++) {
     _lcd.moveCursorRight();
   }
-  _lcd.print(STATIC_PULSES[_menuIndex].getValue());
+  _lcd.print(Core2::pulses[_menuIndex].getValue());
 }
 
 
@@ -238,9 +238,9 @@ void LSlave2::printDigital()
 {
   char on, off;
   LOG("item D"); LOGLN(_menuIndex);
-  printTitle_P(STATIC_DIGITALS[_menuIndex].getLabel());
+  printTitle_P(Core2::digitals[_menuIndex].getLabel());
   _lcd.setCursor(LCDPOSITION_DIGITAL_X, 1);
-  if (STATIC_DIGITALS[_menuIndex].getValue()) {
+  if (Core2::digitals[_menuIndex].getValue()) {
     on = '*';
     off = ' ';
   } else {
@@ -299,15 +299,15 @@ void LSlave2::switchMenu()
     goto _switchEnd;
   }
   if (_menuType==index_message) {
-    _menuMax = STATIC_MESSAGES_LEN;
+    _menuMax = Core2::messages_len;
     goto _switchEnd;
   }
   if (_menuType==index_pulse) {
-    _menuMax = STATIC_PULSES_LEN;
+    _menuMax = Core2::pulses_len;
     goto _switchEnd;
   }
   if (_menuType==index_digital) {
-    _menuMax = STATIC_DIGITALS_LEN;
+    _menuMax = Core2::digitals_len;
     goto _switchEnd;
   }
   _switchEnd:

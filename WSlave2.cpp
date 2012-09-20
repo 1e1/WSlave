@@ -196,22 +196,22 @@ void WSlave2::sendHeaders_P(const prog_char *codeStatus, const prog_char *conten
 
 void WSlave2::sendDictionary()
 {
-  uint8_t comma = STATIC_TOTAL_LEN;
+  uint8_t comma = Core2::total_len;
   Core2::unbuffer();
   Core2::copyToBuffer_P(json_qbrace1);
   /*
   // messages
-  for (uint8_t i=0; i < STATIC_MESSAGES_LEN; i++) {
-    sendToJson('M', STATIC_MESSAGES[i], --comma);
+  for (uint8_t i=0; i < Core2::messages_len; i++) {
+    sendToJson('M', Core2::messages[i], --comma);
   }
   */
   // pulses
-  for (uint8_t i=0; i < STATIC_PULSES_LEN; i++) {
-    sendToJson('P', STATIC_PULSES[i], --comma);
+  for (uint8_t i=0; i < Core2::pulses_len; i++) {
+    sendToJson('P', Core2::pulses[i], --comma);
   }
   // digitals
-  for (uint8_t i=0; i < STATIC_DIGITALS_LEN; i++) {
-    sendToJson('D', STATIC_DIGITALS[i], --comma);
+  for (uint8_t i=0; i < Core2::digitals_len; i++) {
+    sendToJson('D', Core2::digitals[i], --comma);
   }
   Core2::copyToBuffer_P(json_qbrace2);
   Core2::sendBuffer();
@@ -220,28 +220,28 @@ void WSlave2::sendDictionary()
 
 void WSlave2::sendService()
 {
-  uint8_t comma = STATIC_TOTAL_LEN;
+  uint8_t comma = Core2::total_len;
   Core2::unbuffer();
   Core2::copyToBuffer('[');
   /*
   // messages
-  for (uint8_t i=0; i < STATIC_MESSAGES_LEN; i++) {
-    Core2::copyToBuffer(STATIC_MESSAGES[i].value);
+  for (uint8_t i=0; i < Core2::messages_len; i++) {
+    Core2::copyToBuffer(Core2::messages[i].value);
     if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
   */
   // pulses
-  for (uint8_t i=0; i < STATIC_PULSES_LEN; i++) {
-    Core2::copyToBuffer(STATIC_PULSES[i].getValue());
+  for (uint8_t i=0; i < Core2::pulses_len; i++) {
+    Core2::copyToBuffer(Core2::pulses[i].getValue());
     if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
   // digitals
-  for (uint8_t i=0; i < STATIC_DIGITALS_LEN; i++) {
-    Core2::copyToBuffer(STATIC_DIGITALS[i].getValue());
+  for (uint8_t i=0; i < Core2::digitals_len; i++) {
+    Core2::copyToBuffer(Core2::digitals[i].getValue());
     if (--comma) {
       Core2::copyToBuffer(',');
     }
