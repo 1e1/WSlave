@@ -20,10 +20,10 @@ class ConnectorDigital : public Connector {
   void setValue(const boolean v);
   
   protected:
-  __attribute__((always_inline)) inline const boolean isNormalyClose()  { return this->_pin & B1; };
+  __attribute__((always_inline)) inline const boolean isNormalyClose()                  { return this->_pin & B1;           };
   
   // hardwareValue to humanValue OR humanValue to hardwareValue
-  __attribute__((always_inline)) inline const boolean convertValue(const boolean v)  { return v^this->isNormalyClose(); };
+  __attribute__((always_inline)) inline const boolean convertValue(const boolean v)     { return v^this->isNormalyClose();  };
   
 };
 
@@ -45,7 +45,7 @@ __attribute__((always_inline)) inline void ConnectorDigital::setValue(const bool
 {
   const boolean value = this->convertValue(v);
   bitWrite_boolean(this->_pin, 1, value);
-  digitalWrite(this->_pin, value);
+  digitalWrite    (this->_pin, value);
 }
 
 

@@ -26,8 +26,8 @@ Connector::Connector(byte pin, const prog_char *label)
 
 void Connector::init(byte pin, const prog_char *label)
 {
-  this->_pin = pin << 2;
-  this->_label = label;
+  this->_pin    = pin << 2;
+  this->_label  = label;
   pinMode(this->_pin, OUTPUT);
 }
 

@@ -13,8 +13,8 @@ class Connector {
   Connector();
   Connector(byte pin, const prog_char *label);
   
-  __attribute__((always_inline)) inline const byte getPin() { return this->_pin >> 2; };
-  __attribute__((always_inline)) inline const prog_char* getLabel() { return this->_label;  };
+  __attribute__((always_inline)) inline const byte getPin()           { return this->_pin >> 2; };
+  __attribute__((always_inline)) inline const prog_char* getLabel()   { return this->_label;    };
   
   protected:
   void init(byte pin, const prog_char *label);
