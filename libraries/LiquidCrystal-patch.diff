@@ -1,0 +1,35 @@
+diff --git a/libraries/LiquidCrystal/LCD.cpp b/libraries/LiquidCrystal/LCD.cpp
+index b7d7efc..ac0cced 100644
+--- a/libraries/LiquidCrystal/LCD.cpp
++++ b/libraries/LiquidCrystal/LCD.cpp
+@@ -302,6 +302,16 @@ void LCD::createChar(uint8_t location, const uint8_t charmap[])
+    }
+ }
+ 
++// HACK NOT IN OFFICIAL LIBRARY
++void LCD::createChar_P(uint8_t location, const prog_uchar charmap[])
++{
++  location &= 0x7;
++  command(LCD_SETCGRAMADDR | (location << 3));
++  for (uint8_t i = 0; i<8; i++) {
++    write(pgm_read_byte_near(charmap++));
++  }
++}
++
+ //
+ // Switch on the backlight
+ void LCD::backlight ( void )
+diff --git a/libraries/LiquidCrystal/LCD.h b/libraries/LiquidCrystal/LCD.h
+index 43dd900..6107862 100644
+--- a/libraries/LiquidCrystal/LCD.h
++++ b/libraries/LiquidCrystal/LCD.h
+@@ -381,6 +381,9 @@ public:
+     */
+    void createChar(uint8_t location, const uint8_t charmap[]);
+    
++   // HACK
++   void createChar_P(uint8_t location, const prog_uchar charmap[]);
++   
+    /*!
+     @function
+     @abstract   Position the LCD cursor.

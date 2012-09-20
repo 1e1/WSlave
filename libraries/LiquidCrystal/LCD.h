@@ -381,6 +381,9 @@ public:
     */
    void createChar(uint8_t location, const uint8_t charmap[]);
    
+   // HACK
+   void createChar_P(uint8_t location, const prog_uchar charmap[]);
+   
    /*!
     @function
     @abstract   Position the LCD cursor.

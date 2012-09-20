@@ -302,6 +302,16 @@ void LCD::createChar(uint8_t location, const uint8_t charmap[])
    }
 }
 
+// HACK NOT IN OFFICIAL LIBRARY
+void LCD::createChar_P(uint8_t location, const prog_uchar charmap[])
+{
+  location &= 0x7;
+  command(LCD_SETCGRAMADDR | (location << 3));
+  for (uint8_t i = 0; i<8; i++) {
+    write(pgm_read_byte_near(charmap++));
+  }
+}
+
 //
 // Switch on the backlight
 void LCD::backlight ( void )
