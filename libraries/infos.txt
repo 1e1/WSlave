@@ -1,5 +1,6 @@
 LIBRARIES
     - LiquidCrystal_V1.2.1.zip      https://bitbucket.org/fmalpartida/new-liquidcrystal/
+    - ArduinoEthernet.zip           http://gkaindl.com/software/arduino-ethernet/bonjour
 
 
 INSTALL
