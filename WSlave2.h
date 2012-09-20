@@ -59,22 +59,14 @@ class WSlave2 {
   static EthernetServer _server;
   static EthernetClient _client;
   
-  static void sendHeaders_P(const prog_char *codeStatus, const prog_char *contentType);
+  static void sendHeaders_P(const prog_char* codeStatus, const prog_char* contentType);
   static void sendDictionary();
   static void sendService();
-  static void sendDefault_P(const prog_uchar data[], size_t length);
+  static void sendBody_P(const prog_uchar data[], size_t length);
   static const boolean nextHttpLine();
   static const uint8_t lineLength();
   static void sendToJson(const char type, Connector connector, const boolean coma);
-  /*
-  LONGSTRING(header_200)    = "200 OK";
-  LONGSTRING(header_417)    = "417 Expectation failed";
-  LONGSTRING(header_text)   = "text/plain" CRLF;
-  LONGSTRING(header_json)   = "application/json" CRLF;
-  LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
-  LONGBYTES(webpage)        = WEBPAGE;
-  static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
-  */
+  
 };
 
 
