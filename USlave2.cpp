@@ -29,9 +29,10 @@ void USlave2::check()
     for (uint8_t i=0; i < Core2::pulses_len; i++) {
       USlave2::statusLine(Core2::pulses[i], Core2::pulses[i].getValue());
     }
-    /*
     // messages
     Core2::copyToBuffer_P(PSTR("\n=== MESSAGES ===\n"));
+    // add IP info
+    /*
     for (uint8_t i=0; i < Core2::messages_len; i++) {
       USlave2::statusLine(Core2::messages[i], Core2::messages[i].getValue());
     }
