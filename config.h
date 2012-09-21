@@ -2,7 +2,11 @@
 #define CONFIG_H_
 
 
-#define DEVICE_NAME "@lan#12"
+// a number between 1 and 254
+#define DEVICE_SERIAL 12
+
+
+#define DEVICE_NAME "WSlave#DEVICE_SERIAL"
 #define DEBUG 0
 
 // LED
@@ -14,12 +18,12 @@
 // ETH conf
 #define USE_BONJOUR 1
 #define USE_DHCP    1
-#define IP          10,240,170, 12
+#define IP          10,240,170, DEVICE_SERIAL
 #define SUBNET      255,255,255,0
 #define GATEWAY     0,0,0,0
 #define DNS         0,0,0,0
 // ascii code for "@lan#" + HEX 12
-#define MAC         0x40,0x6C,0x61,0x6E,0x23, 0x0C
+#define MAC         0x40,0x6C,0x61,0x6E,0x23, DEVICE_SERIAL
 #define PORT        80
 #define ETH_BLPIN   53 /* power of W5100 chip */
 #define HTTP_AUTH64 "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
