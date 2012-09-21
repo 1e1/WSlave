@@ -100,9 +100,9 @@ void setup()
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave2::begin();
-  delay(1000);
 #if USE_BONJOUR
-  EthernetBonjour.begin(/*DEVICE_NAME*/);
+  EthernetBonjour.begin(DEVICE_NAME);
+  EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
   /*
     buffer[17] = strlen(HOST_NAME) + 6; // length of hostname + last 3 bytes of mac address
     strcpy((char*)&(buffer[18]), HOST_NAME);
