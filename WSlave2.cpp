@@ -44,15 +44,16 @@ void WSlave2::begin()
   byte mac[] = { MAC };
   const IPAddress ip(IP);
   /*
-  const IPAddress _gateway(GATEWAY);
-  const IPAddress _subnet(SUBNET);
+  const IPAddress dns(DNS);
+  const IPAddress gateway(GATEWAY);
+  const IPAddress subnet(SUBNET);
   */
 #if USE_DHCP
   LOGLN("Trying to get an IP address using DHCP");
   if (0==Ethernet.begin(mac)) {
     LOGLN("Failed to configure Ethernet using DHCP");
 #endif
-    Ethernet.begin(mac, ip/*, {DNS}, gateway, subnet*/);
+    Ethernet.begin(mac, ip/*, dns, gateway, subnet*/);
 #if USE_DHCP
   }
 #endif
