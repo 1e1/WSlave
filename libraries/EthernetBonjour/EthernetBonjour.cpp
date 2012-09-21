@@ -18,8 +18,8 @@
 //  <http://www.gnu.org/licenses/>.
 //
 
-#define  HAS_SERVICE_REGISTRATION      1  // disabling saves about 1.25 kilobytes
-#define  HAS_NAME_BROWSING             1 // disable together with above, additionally saves about 4.3 kilobytes
+#define  HAS_SERVICE_REGISTRATION      0  // disabling saves about 1.25 kilobytes
+#define  HAS_NAME_BROWSING             0 // disable together with above, additionally saves about 4.3 kilobytes
 
 #include <string.h>
 #include <stdlib.h>
