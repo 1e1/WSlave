@@ -149,7 +149,7 @@ void LSlave2::shutdown()
 void LSlave2::printInfo()
 {
   LOG("item I"); LOGLN(_menuType);
-  LSlave2::printTitle_P(PSTR(DEVICE_NAME));
+  LSlave2::printTitle_P(PSTR(DEVICE_NAME "DEVICE_SERIAL"));
   LSlave2::_lcd.setCursor(0, 1);
   //#if USE_ETH
   LSlave2::_lcd.print(Ethernet.localIP());
