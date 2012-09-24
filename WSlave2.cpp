@@ -14,7 +14,7 @@ EthernetServer WSlave2::_server(PORT);
 EthernetClient WSlave2::_client;
 
 LONGSTRING(header_200)    = "200 OK";
-LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME DEVICE_SERIAL "\"";
+LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME "DEVICE_SERIAL" "\"";
 LONGSTRING(header_417)    = "417 Expectation failed";
 LONGSTRING(header_text)   = "text/plain";
 LONGSTRING(header_json)   = "application/json";
