@@ -64,6 +64,7 @@ void WSlave2::begin()
   LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
   LOG("listen "); LOGLN(PORT);
   WSlave2::_server.begin();
+  //delay(1000);
 }
 
 
