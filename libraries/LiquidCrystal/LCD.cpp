@@ -41,6 +41,7 @@
 #else
 #include <Arduino.h>
 #endif
+
 #include "LCD.h"
 
 // CLASS CONSTRUCTORS
@@ -288,32 +289,35 @@ void LCD::noAutoscroll(void)
 }
 
 // Write to CGRAM of new characters
-void LCD::createChar(uint8_t location, const uint8_t charmap[]) 
+void LCD::createChar(uint8_t location, uint8_t charmap[]) 
 {
    location &= 0x7;            // we only have 8 locations 0-7
    
    command(LCD_SETCGRAMADDR | (location << 3));
    delayMicroseconds(30);
    
-   for (int i=0; i<8; i++) 
+   for (uint8_t i = 0; i < 8; i++)
    {
       write(charmap[i]);      // call the virtual write method
       delayMicroseconds(40);
    }
 }
 
-// HACK NOT IN OFFICIAL LIBRARY
-void LCD::createChar_P(uint8_t location, const prog_uchar charmap[])
+#ifdef __AVR__
+void LCD::createChar(uint8_t location, const prog_uchar charmap[])
 {
-  location &= 0x7;
-  command(LCD_SETCGRAMADDR | (location << 3));
-  delayMicroseconds(30);
-  
-  for (uint8_t i = 0; i<8; i++) {
-    write(pgm_read_byte_near(&charmap[i]));
-    delayMicroseconds(40);
-  }
+   location &= 0x7;   // we only have 8 memory locations 0-7
+   
+   command(LCD_SETCGRAMADDR | (location << 3));
+   delayMicroseconds(30);
+   
+   for (uint8_t i = 0; i < 8; i++)
+   {
+      write(pgm_read_byte_near(charmap++));
+      delayMicroseconds(40);
+   }
 }
+#endif // __AVR__
 
 //
 // Switch on the backlight

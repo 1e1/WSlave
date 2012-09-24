@@ -45,13 +45,13 @@ void LSlave2::begin()
 {
   //LSlave2::_lcd.on();
   LSlave2::_lcd.begin(LCD_WIDTH, LCD_HEIGHT);
-  LSlave2::_lcd.createChar_P(LCDCHAR_VOIDBAR    , lcdchar_voidBar     );
-  LSlave2::_lcd.createChar_P(LCDCHAR_HALFBAR    , lcdchar_halfBar     );
-  LSlave2::_lcd.createChar_P(LCDCHAR_FULLBAR    , lcdchar_fullBar     );
-  LSlave2::_lcd.createChar_P(LCDCHAR_LEFTBAR    , lcdchar_leftBar     );
-  LSlave2::_lcd.createChar_P(LCDCHAR_RIGHTBAR   , lcdchar_rightBar    );
-  LSlave2::_lcd.createChar_P(LCDCHAR_NOLEFTBAR  , lcdchar_noLeftBar   );
-  LSlave2::_lcd.createChar_P(LCDCHAR_NORIGHTBAR , lcdchar_noRightBar  );
+  LSlave2::_lcd.createChar(LCDCHAR_VOIDBAR    , lcdchar_voidBar     );
+  LSlave2::_lcd.createChar(LCDCHAR_HALFBAR    , lcdchar_halfBar     );
+  LSlave2::_lcd.createChar(LCDCHAR_FULLBAR    , lcdchar_fullBar     );
+  LSlave2::_lcd.createChar(LCDCHAR_LEFTBAR    , lcdchar_leftBar     );
+  LSlave2::_lcd.createChar(LCDCHAR_RIGHTBAR   , lcdchar_rightBar    );
+  LSlave2::_lcd.createChar(LCDCHAR_NOLEFTBAR  , lcdchar_noLeftBar   );
+  LSlave2::_lcd.createChar(LCDCHAR_NORIGHTBAR , lcdchar_noRightBar  );
   LSlave2::_lcd.home();
   LOGLN("display LCD");
 }
