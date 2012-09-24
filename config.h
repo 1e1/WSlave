@@ -6,7 +6,7 @@
 #define DEVICE_SERIAL 12
 
 
-#define DEVICE_NAME "WSlave#DEVICE_SERIAL"
+#define DEVICE_NAME "WSlave#"
 #define DEBUG 0
 
 // LED
@@ -16,7 +16,7 @@
 #define USB_SPEED   115200
 
 // ETH conf
-#define USE_BONJOUR 1
+#define USE_BONJOUR 0
 #define USE_DHCP    1
 #define IP          10,240,170, DEVICE_SERIAL
 #define SUBNET      255,255,255,0
