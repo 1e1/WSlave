@@ -82,6 +82,10 @@ void software_reset()
 
 void setup()
 {
+#if BUSYLED_PIN
+  pinMode(BUSYLED_PIN, OUTPUT);
+  digitalWrite(BUSYLED_PIN, HIGH);
+#endif
 #if USE_USB
   USlave2::begin();
 #elif DEBUG
@@ -89,9 +93,6 @@ void setup()
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
-#if BUSYLED_PIN
-  pinMode(BUSYLED_PIN, OUTPUT);
-#endif
 #if USE_ETH
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -101,8 +102,8 @@ void setup()
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave2::begin();
 #if USE_BONJOUR
-  EthernetBonjour.begin(DEVICE_NAME);
-  EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
+  EthernetBonjour.begin(DEVICE_NAME DEVICE_SERIAL);
+  EthernetBonjour.addServiceRecord(DEVICE_NAME DEVICE_SERIAL "._http", PORT, MDNSServiceTCP);
 #endif USE_BONJOUR
 #endif
 #if USE_LCD
@@ -111,6 +112,9 @@ void setup()
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
+#if BUSYLED_PIN
+  digitalWrite(BUSYLED_PIN, LOW);
+#endif
 }
 
 
@@ -180,5 +184,19 @@ void loop()
   LSlave2::uncheck();
 #endif
   
+}
+
+
+void fail()
+{
+#if BUSYLED_PIN
+  uint8_t light = 0;
+#endif
+  for(;;) {
+#if BUSYLED_PIN
+  analogWrite(BUSYLED_PIN, light--);
+  delay(5);
+#endif
+  }
 }
 
