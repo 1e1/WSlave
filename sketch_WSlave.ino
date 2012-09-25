@@ -104,10 +104,6 @@ void setup()
 #if USE_BONJOUR
   EthernetBonjour.begin(DEVICE_NAME DEVICE_SERIAL);
   EthernetBonjour.addServiceRecord(DEVICE_NAME DEVICE_SERIAL "._http", PORT, MDNSServiceTCP);
-  /*
-    buffer[17] = strlen(HOST_NAME) + 6; // length of hostname + last 3 bytes of mac address
-    strcpy((char*)&(buffer[18]), HOST_NAME);
-  */
 #endif USE_BONJOUR
 #endif
 #if USE_LCD
@@ -188,5 +184,19 @@ void loop()
   LSlave2::uncheck();
 #endif
   
+}
+
+
+void fail()
+{
+#if BUSYLED_PIN
+  uint8_t light = 0;
+#endif
+  for(;;) {
+#if BUSYLED_PIN
+  analogWrite(BUSYLED_PIN, light--);
+  delay(5);
+#endif
+  }
 }
 
