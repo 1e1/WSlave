@@ -82,6 +82,10 @@ void software_reset()
 
 void setup()
 {
+#if BUSYLED_PIN
+  pinMode(BUSYLED_PIN, OUTPUT);
+  digitalWrite(BUSYLED_PIN, HIGH);
+#endif
 #if USE_USB
   USlave2::begin();
 #elif DEBUG
@@ -89,9 +93,6 @@ void setup()
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
-#if BUSYLED_PIN
-  pinMode(BUSYLED_PIN, OUTPUT);
-#endif
 #if USE_ETH
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -115,6 +116,9 @@ void setup()
 #endif
   LOGLN("=== END SETUP ===");
   LOGLN();
+#if BUSYLED_PIN
+  digitalWrite(BUSYLED_PIN, LOW);
+#endif
 }
 
 
