@@ -255,8 +255,9 @@ void WSlave2::sendService()
 
 void WSlave2::sendBody_P(const prog_uchar *data, size_t length)
 {
-  Core2::copyToBuffer_P(data, length);
-  Core2::sendBuffer();
+  //Core2::copyToBuffer_P(data, length);
+  //Core2::sendBuffer();
+  WSlave2::_client.write(data, length);
 }
 
 
