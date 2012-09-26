@@ -68,6 +68,7 @@ class WSlave2 {
   static const boolean nextHttpLine();
   static const uint8_t lineLength();
   static void sendToJson(const char type, Connector connector, const boolean coma);
+  static void waitClient(uint8_t& watchdog);
   
 };
 

@@ -347,3 +347,11 @@ void WSlave2::sendToJson(const char type, Connector connector, const boolean com
     Core2::copyToBuffer_P(json_qcomma);
   }
 }
+
+
+void WSlave2::waitClient(uint8_t& watchdog)
+{
+  while(!WSlave2::_client.available() && watchdog--) {
+    delay(READCHAR_TIMEOUT);
+  }
+}
