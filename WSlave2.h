@@ -32,7 +32,8 @@
 #include "webApp.h"
 
 
-#define MAXHEADERS 255
+#define MAXHEADERS  255
+#define MAXRETRIES  255
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
@@ -49,6 +50,7 @@ class WSlave2 {
   static void check();
   static void uncheck();
   static void maintain();
+  static void sendEmail(const prog_char* sms, const uint8_t value);
   
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
   typedef enum { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ } MethodType;
