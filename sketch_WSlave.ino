@@ -93,6 +93,10 @@ void setup()
 #endif
   LOGLN();
   LOGLN("=== BEGIN SETUP ===");
+#if USE_LCD
+  LSlave2::begin();
+  LSlave2::printInfo();
+#endif
 #if USE_ETH
   // reduce DHCP timeout, default is 60000ms
   // change: Ethernet.cpp/EthernetClass::begin{...int ret = _dhcp->beginWithDHCP(mac_address);...}
@@ -105,11 +109,8 @@ void setup()
   EthernetBonjour.begin(DEVICE_NAME DEVICE_SERIAL);
   EthernetBonjour.addServiceRecord(DEVICE_NAME DEVICE_SERIAL "._http", PORT, MDNSServiceTCP);
 #endif USE_BONJOUR
-#endif
-#if USE_LCD
-  LSlave2::begin();
-  LSlave2::printInfo();
-#endif
+  WSlave2::sendEmail(PSTR("START"), 1);
+#endif USE_ETH
   LOGLN("=== END SETUP ===");
   LOGLN();
 #if BUSYLED_PIN
