@@ -4,6 +4,8 @@
 
 
 #include <Arduino.h>
+#include <avr/pgmspace.h>
+#include "macros.h"
 
 
 /** 
@@ -96,8 +98,11 @@ class Schedule {
   Schedule();
   Schedule(unsigned int data, const prog_char* label);
   
-  __attribute__((always_inline)) inline const boolean     isActive()  { return this->_schedule & MASK_ISACTIVE; };
-  __attribute__((always_inline)) inline const prog_char*  getLabel()  { return this->_label; };
+  // inline
+  const boolean     isActive();
+  const boolean     is(const unsigned int mask);
+  const prog_char*  getLabel();
+  void setActive(const boolean value);
   
   protected:
   void init(unsigned int data, const prog_char* label);
@@ -106,6 +111,38 @@ class Schedule {
   const prog_char* _label PROGMEM;
   
 };
+
+
+
+
+/***********************************************************
+ *                         INLINE                          *
+ **********************************************************/
+
+
+__attribute__((always_inline)) inline const boolean Schedule::isActive()
+{
+  return this->is(MASK_ISACTIVE);
+}
+
+
+__attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
+{
+  return this->_schedule & mask;
+}
+
+
+__attribute__((always_inline)) inline const prog_char* Schedule::getLabel()
+{
+  return this->_label;
+}
+
+
+__attribute__((always_inline)) inline void Schedule::setActive(const boolean value)
+{
+  bitWrite_boolean(this->_schedule, 0, value);
+}
+
 
 
 
