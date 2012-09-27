@@ -18,7 +18,10 @@ ConnectorDigital Core2::digitals[] = {
   NEWDIGITAL_NC(30, relay15),
   NEWDIGITAL_NO(32, relay16),
   NEWDIGITAL_NO(34, relay17),
-  NEWDIGITAL_NO(36, relay18)
+  NEWDIGITAL_NO(36, relay18),
+  
+  NEWDIGITAL_NC(63, sendmail),
+  NEWDIGITAL_NO(62, automatic)
 };
 
 ConnectorPulse Core2::pulses[] = {
