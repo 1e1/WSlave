@@ -186,7 +186,7 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
         case 1:
         WSlave2::_client.print(PSTR("To: "));
         WSlave2::_client.println(email);
-        WSlave2::_client.print(PSTR("Subject: "));
+        WSlave2::_client.print(PSTR("Subject: " ML_SUBJECT));
         WSlave2::_client.print(sms);
         WSlave2::_client.println(value);
         WSlave2::_client.println('.');
