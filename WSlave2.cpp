@@ -75,9 +75,10 @@ void WSlave2::check()
   if (WSlave2::_client = _server.available()) {
     LOGLN(">>> ETH0");
     
-    MethodType method = INVALID;
-    ActionType action = ROOT;
-    uint8_t watchdog  = MAXHEADERS;
+    MethodType method       = INVALID;
+    ActionType action       = ROOT;
+    uint8_t watchdog        = MAXHEADERS;
+    boolean isUnauthorized  = true;
     
     Core2::setStream(&(WSlave2::_client));
     
@@ -101,7 +102,7 @@ void WSlave2::check()
       LOGLN("dictionary");
     }
     WSlave2::lineLength(); // ends first Header line
-    /*
+    
     // check credentials = Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
     //header_401
     do {
@@ -111,13 +112,14 @@ void WSlave2::check()
         if (Core2::bufferIsEqualTo_P(PSTR("Basic"))) {
           Core2::readUntil(CR);
           if (Core2::bufferIsEqualTo_P(PSTR(HTTP_AUTH64))) {
-            // JUMP
+            isUnauthorized = false;
+            WSlave2::lineLength(); // ends first Header line
+            goto _crlfcrlf;
           }
         }
       }
-      goto _crlfcrlf;
-    } while(WSlave2::lineLength()>1 && --watchdog);
-    */
+    } while(isUnauthorized && WSlave2::lineLength()>1 && --watchdog);
+    
     // sweep headers until CRLF CRLF
     _crlfcrlf:
 //    while (WSlave2::nextHttpLine() && --watchdog);
@@ -132,29 +134,37 @@ void WSlave2::check()
       LOGLN("reading body");
       // [0-9]+=[0-9]+(&[0-9]+=[0-9]+)*
       Core2::processLine();
+      //Core2::readUntil(CR);
+      //Core2::printBuffer();
     }
+    LOG("isUnauthorized="); LOGLN(isUnauthorized);
+    LOG("watchdog="); LOGLN(watchdog);
     
     _send:
-    if (method == INVALID) {
-      WSlave2::sendHeaders_P(header_417, header_text);
+    if (isUnauthorized) {
+      WSlave2::sendHeaders_P(header_401, header_text);
     } else {
-      switch (action) {
-        case SERVICE:
-        WSlave2::sendHeaders_P(header_200, header_json);
-        LOGLN("< send service");
-        WSlave2::sendService();
-        break;
-        case DICTIONARY:
-        WSlave2::sendHeaders_P(header_200, header_json);
-        LOGLN("< send dictionnary");
-        WSlave2::sendDictionary();
-        break;
-        default:
-        LOG("< webpage_len="); LOGLN(webpage_len);
-        WSlave2::sendHeaders_P(header_200, header_htZ);
-        WSlave2::sendBody_P(webpage, webpage_len);
-      } // switch (action)
-    } // else (method == INVALID)
+      if (method == INVALID) {
+        WSlave2::sendHeaders_P(header_417, header_text);
+      } else {
+        switch (action) {
+          case SERVICE:
+          WSlave2::sendHeaders_P(header_200, header_json);
+          LOGLN("< send service");
+          WSlave2::sendService();
+          break;
+          case DICTIONARY:
+          WSlave2::sendHeaders_P(header_200, header_json);
+          LOGLN("< send dictionnary");
+          WSlave2::sendDictionary();
+          break;
+          default:
+          LOG("< webpage_len="); LOGLN(webpage_len);
+          WSlave2::sendHeaders_P(header_200, header_htZ);
+          WSlave2::sendBody_P(webpage, webpage_len);
+        } // switch (action)
+      } // else (method == INVALID)
+    } // else isUnauthorized
     LOGLN("<<< ETH0");
   } // if (WSlave2::_client = _server.available())
 }

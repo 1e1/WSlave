@@ -10,7 +10,7 @@
 #include "dictionary.h"
 #include "Connector.h"
 
-#define READBUFFERSIZE          16
+#define READBUFFERSIZE          max(16, 1+ ARRAYLEN(HTTP_AUTH64))
 #define WRITEBUFFERSIZE         64
 #define MAXLINESIZE             255
 
@@ -52,6 +52,8 @@ class Core2 {
   static const uint8_t pulses_len;
   static const uint8_t messages_len;
   static const uint8_t total_len;
+  
+  static inline void printBuffer() {for(uint8_t i=0; i<_bufferSize; i++) Serial.print(_buffer[i]); };
   
   // inline
   static void setStream(Stream* inputStream);
