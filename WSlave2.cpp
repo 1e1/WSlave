@@ -14,7 +14,7 @@ EthernetServer WSlave2::_server(PORT);
 EthernetClient WSlave2::_client;
 
 LONGSTRING(header_200)    = "200 OK";
-LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME "DEVICE_SERIAL" "\"";
+LONGSTRING(header_401)    = "401 Authorization Required" CRLF "WWW-Authenticate: Basic realm=\"" DEVICE_NAME "\"";
 LONGSTRING(header_417)    = "417 Expectation failed";
 LONGSTRING(header_text)   = "text/plain";
 LONGSTRING(header_json)   = "application/json";
@@ -170,22 +170,22 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
       WSlave2::waitClient(watchdog);
       switch (--state) {
         case 5:
-        WSlave2::_client.println(PSTR("HELO"));
+        WSlave2::_client.println(PSTR("EHLO")); // HELO | EHLO
         break;
         case 4:
-        WSlave2::_client.print(PSTR("MAIL From: "));
+        WSlave2::_client.print(PSTR("MAIL FROM: "));
         WSlave2::_client.println(email);
         break;
         case 3:
-        WSlave2::_client.print(PSTR("RCPT To: "));
+        WSlave2::_client.print(PSTR("RCPT TO: "));
         WSlave2::_client.println(email);
         break;
         case 2:
         WSlave2::_client.println(PSTR("DATA"));
         break;
         case 1:
-        WSlave2::_client.print(PSTR("To: "));
-        WSlave2::_client.println(email);
+        //WSlave2::_client.print(PSTR("To: "));
+        //WSlave2::_client.println(email);
         WSlave2::_client.print(PSTR("Subject: " ML_SUBJECT));
         WSlave2::_client.print(sms);
         WSlave2::_client.println(value);
@@ -300,9 +300,9 @@ void WSlave2::sendService()
 
 void WSlave2::sendBody_P(const prog_uchar *data, size_t length)
 {
-  //Core2::copyToBuffer_P(data, length);
-  //Core2::sendBuffer();
-  WSlave2::_client.write(data, length);
+  Core2::copyToBuffer_P(data, length);
+  Core2::sendBuffer();
+  //WSlave2::_client.write(data, length);
 }
 
 

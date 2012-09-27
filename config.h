@@ -3,12 +3,13 @@
 
 
 // a number between 1 and 254
-#define DEVICE_SERIAL 12
-#define EMAIL         "email@omain.com"
-#define ML_SUBJECT    "[Wslave#DEVICE_SERIAL]"
+#define DEVICE_NUMBER  12
+#define DEVICE_ID     "12"
+#define EMAIL         "email@domain.com"
+#define ML_SUBJECT    "[Wslave#" DEVICE_ID "]"
 
 
-#define DEVICE_NAME "WSlave_" // DEVICE_SERIAL
+#define DEVICE_NAME "WSlave_" DEVICE_ID
 #define DEBUG 0
 
 // LED
@@ -20,12 +21,12 @@
 // ETH conf
 #define USE_BONJOUR 0
 #define USE_DHCP    1
-#define IP          10,240,170, DEVICE_SERIAL
+#define IP          10,240,170, DEVICE_NUMBER
 #define SUBNET      255,255,255,0
 #define GATEWAY     0,0,0,0
 #define DNS         0,0,0,0
 // ascii code for "@lan#" + HEX 12
-#define MAC         0x40,0x6C,0x61,0x6E,0x23, DEVICE_SERIAL
+#define MAC         0x40,0x6C,0x61,0x6E,0x23, DEVICE_NUMBER
 #define PORT        80
 #define ETH_BLPIN   53 /* power of W5100 chip */
 #define HTTP_AUTH64 "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
@@ -34,7 +35,7 @@
 
 // LCD conf
 #define LCD_PINS            8, 13, 9, 4, 5, 6, 7
-#define LCD_BLPIN           10
+//#define LCD_BLPIN           10
 #define LCD_BLPOLARITY      POSITIVE // or POSITIVE, see ./library/LCD.h tpol, t_backlighPol
 #define LCD_ABTN            0 // analog pin of buttons
 #define LCD_WIDTH           16

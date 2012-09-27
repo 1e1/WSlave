@@ -106,10 +106,10 @@ void setup()
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave2::begin();
 #if USE_BONJOUR
-  EthernetBonjour.begin(DEVICE_NAME DEVICE_SERIAL);
-  EthernetBonjour.addServiceRecord(DEVICE_NAME DEVICE_SERIAL "._http", PORT, MDNSServiceTCP);
+  EthernetBonjour.begin(DEVICE_NAME);
+  EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
 #endif USE_BONJOUR
-  WSlave2::sendEmail(PSTR("START"), 1);
+  //WSlave2::sendEmail(PSTR("START"), 1);
 #endif USE_ETH
   LOGLN("=== END SETUP ===");
   LOGLN();
