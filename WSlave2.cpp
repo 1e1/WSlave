@@ -164,41 +164,39 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
 {
   byte smtp[]       = { SMTP_IP };
   uint8_t watchdog  = MAXRETRIES;
+  uint8_t state     = 5;
   if (WSlave2::_client.connect(smtp, SMTP_PORT)) {
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
+    while(watchdog && state) {
+      WSlave2::waitClient(watchdog);
+      switch (--state) {
+        case 5:
+        WSlave2::_client.println(PSTR("HELO"));
+        break;
+        case 4:
+        WSlave2::_client.print(PSTR("MAIL From: "));
+        WSlave2::_client.println(email);
+        break;
+        case 3:
+        WSlave2::_client.print(PSTR("RCPT To: "));
+        WSlave2::_client.println(email);
+        break;
+        case 2:
+        WSlave2::_client.println(PSTR("DATA"));
+        break;
+        case 1:
+        WSlave2::_client.print(PSTR("To: "));
+        WSlave2::_client.println(email);
+        WSlave2::_client.print(PSTR("Subject: "));
+        WSlave2::_client.print(sms);
+        WSlave2::_client.println(value);
+        WSlave2::_client.println('.');
+        break;
+        case 0:
+        WSlave2::_client.println(PSTR("QUIT"));
+        break;
+      }
     }
-    WSlave2::_client.println(PSTR("HELO"));
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
-    WSlave2::_client.print(PSTR("MAIL From: "));
-    WSlave2::_client.println(email);
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
-    WSlave2::_client.print(PSTR("RCPT To: "));
-    WSlave2::_client.println(email);
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
-    WSlave2::_client.println(PSTR("DATA"));
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
-    WSlave2::_client.print(PSTR("To: "));
-    WSlave2::_client.println(email);
-    WSlave2::_client.print(PSTR("Subject: "));
-    WSlave2::_client.print(sms);
-    WSlave2::_client.println(value);
-    WSlave2::_client.println('.');
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
-    WSlave2::_client.println(PSTR("QUIT"));
-    while(!WSlave2::_client.available() && watchdog--) {
-      delay(READCHAR_TIMEOUT);
-    }
+    WSlave2::waitClient(watchdog);
     WSlave2::_client.stop();
   }
 }
@@ -352,7 +350,7 @@ void WSlave2::sendToJson(const char type, Connector connector, const boolean com
 
 void WSlave2::waitClient(uint8_t& watchdog)
 {
-  while(!WSlave2::_client.available() && watchdog--) {
+  while(!WSlave2::_client.available() && --watchdog) {
     delay(READCHAR_TIMEOUT);
   }
 }
