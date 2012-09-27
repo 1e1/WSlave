@@ -24,6 +24,9 @@ namespace Dictionary {
   
   LONGSTRING(led) = "pulse";
   
+  LONGSTRING(automatic) = "automatic";
+  LONGSTRING(sendmail)  = "e-info";
+  
 }
 
 
