@@ -5,9 +5,10 @@
 // a number between 1 and 254
 #define DEVICE_SERIAL 12
 #define EMAIL         "email@omain.com"
+#define ML_SUBJECT    "[Wslave#DEVICE_SERIAL]"
 
 
-#define DEVICE_NAME "WSlave_"
+#define DEVICE_NAME "WSlave_" // DEVICE_SERIAL
 #define DEBUG 0
 
 // LED
