@@ -4,6 +4,7 @@
 
 // a number between 1 and 254
 #define DEVICE_SERIAL 12
+#define EMAIL         "email@omain.com"
 
 
 #define DEVICE_NAME "WSlave_"
@@ -27,6 +28,8 @@
 #define PORT        80
 #define ETH_BLPIN   53 /* power of W5100 chip */
 #define HTTP_AUTH64 "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
+#define SMTP_IP     173,194,67,108 // smtp.gmail.com
+#define SMTP_PORT   25
 
 // LCD conf
 #define LCD_PINS            8, 13, 9, 4, 5, 6, 7

@@ -21,6 +21,8 @@ LONGSTRING(header_json)   = "application/json";
 LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
 LONGSTRING(header_end)    = CRLF CRLF;
 
+LONGSTRING(email)         = EMAIL;
+
 LONGBYTES(webpage)        = WEBPAGE;
 static size_t webpage_len = ARRAYLEN(webpage); // ~ 1557o / 1600o / 1709o / 2100o
 
@@ -158,6 +160,50 @@ void WSlave2::check()
 }
 
 
+void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
+{
+  byte smtp[]       = { SMTP_IP };
+  uint8_t watchdog  = MAXRETRIES;
+  if (WSlave2::_client.connect(smtp, SMTP_PORT)) {
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.println(PSTR("HELO"));
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.print(PSTR("MAIL From: "));
+    WSlave2::_client.println(email);
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.print(PSTR("RCPT To: "));
+    WSlave2::_client.println(email);
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.println(PSTR("DATA"));
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.print(PSTR("To: "));
+    WSlave2::_client.println(email);
+    WSlave2::_client.print(PSTR("Subject: "));
+    WSlave2::_client.print(sms);
+    WSlave2::_client.println(value);
+    WSlave2::_client.println('.');
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.println(PSTR("QUIT"));
+    while(!WSlave2::_client.available() && watchdog--) {
+      delay(READCHAR_TIMEOUT);
+    }
+    WSlave2::_client.stop();
+  }
+}
+
+
 
 
 /***********************************************************
@@ -256,8 +302,9 @@ void WSlave2::sendService()
 
 void WSlave2::sendBody_P(const prog_uchar *data, size_t length)
 {
-  Core2::copyToBuffer_P(data, length);
-  Core2::sendBuffer();
+  //Core2::copyToBuffer_P(data, length);
+  //Core2::sendBuffer();
+  WSlave2::_client.write(data, length);
 }
 
 
@@ -299,5 +346,13 @@ void WSlave2::sendToJson(const char type, Connector connector, const boolean com
   Core2::copyToBuffer_P(connector.getLabel());
   if (comma) {
     Core2::copyToBuffer_P(json_qcomma);
+  }
+}
+
+
+void WSlave2::waitClient(uint8_t& watchdog)
+{
+  while(!WSlave2::_client.available() && watchdog--) {
+    delay(READCHAR_TIMEOUT);
   }
 }
