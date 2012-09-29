@@ -9,6 +9,7 @@
 #include "macros.h"
 #include "dictionary.h"
 #include "Connector.h"
+#include "Schedule.h"
 
 #define READBUFFERSIZE          max(16, 1+ ARRAYLEN(HTTP_AUTH64))
 #define WRITEBUFFERSIZE         64
@@ -47,10 +48,12 @@ class Core2 {
   
   static ConnectorDigital digitals[];
   static ConnectorPulse   pulses[];
+  static Schedule         schedules[];
 
   static const uint8_t digitals_len;
   static const uint8_t pulses_len;
   static const uint8_t messages_len;
+  static const uint8_t schedules_len;
   static const uint8_t total_len;
   
   static inline void printBuffer() {for(uint8_t i=0; i<_bufferSize; i++) Serial.print(_buffer[i]); };
