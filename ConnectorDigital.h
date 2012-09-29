@@ -12,6 +12,7 @@
 class ConnectorDigital : public Connector {
   
   public:
+  ConnectorDigital();
   ConnectorDigital(byte pin, const prog_char* label, const boolean isNC);
   ConnectorDigital(byte pin, const prog_char* label, const boolean isNC, boolean value);
   

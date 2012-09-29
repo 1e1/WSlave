@@ -5,6 +5,11 @@
 
 
 
+ConnectorDigital::ConnectorDigital()
+{
+}
+
+
 ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boolean isNC)
 {
   this->init(pin, label);
