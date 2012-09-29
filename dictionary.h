@@ -22,7 +22,9 @@ namespace Dictionary {
   LONGSTRING(relay27) = "relay2.7";
   LONGSTRING(relay28) = "relay2.8";
   
-  LONGSTRING(led) = "pulse";
+  LONGSTRING(led)     = "pulse";
+  
+  LONGSTRING(heating)   = "nightly heating";
   
   LONGSTRING(automatic) = "automatic";
   LONGSTRING(sendmail)  = "e-info";
