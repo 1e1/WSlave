@@ -28,10 +28,15 @@ ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
+Schedule Core2::schedules[] = {
+  NEWSCHEDULE_NO(13, heating1, MASK_SATURDAY | MASK_SUNDAY | MASK_HOUR_20 | MASK_HOUR_22 | MASK_HOUR_24 | MASK_HOUR_03 | MASK_HOUR_05 | MASK_HOUR_06)
+};
+
 const uint8_t Core2::digitals_len = ARRAYLEN(digitals);
 const uint8_t Core2::pulses_len   = ARRAYLEN(pulses);
 const uint8_t Core2::messages_len = 0;//ARRAYLEN(messages);
-const uint8_t Core2::total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses);// + ARRAYLEN(messages);
+const uint8_t Core2::schedules_len= ARRAYLEN(schedules);
+const uint8_t Core2::total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses)/* + ARRAYLEN(messages) */+ ARRAYLEN(schedules);
 
 Stream* Core2::_currentStream;
 char    Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];
@@ -50,12 +55,36 @@ uint8_t Core2::_bufferSize;
 
 void Core2::processLine()
 {
+  char type;
   uint8_t pin, value, index, watchdog = Core2::digitals_len + Core2::pulses_len;
   // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
   while (Core2::_currentStream->available() && watchdog--) {
+    type  = Core2::_currentStream->read();
     pin   = Core2::readUint8();
     value = Core2::readUint8();
-    LOG("SET #"); LOG(pin); LOG(" <- "); LOGLN(value);
+    LOG("SET #"); LOG(type); LOG(pin); LOG(" <- "); LOGLN(value);
+    switch (type) {
+    
+      case 'S':
+      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
+        Core2::schedules[index].setValue(value);
+      }
+      break;
+      
+      case 'P':
+      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::pulses, Core2::pulses_len))!=uint8_t(-1)) {
+        Core2::pulses[index].setValue(value);
+      }
+      break;
+      
+      case 'D':
+      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+        Core2::digitals[index].setValue(value);
+      }
+      break;
+      
+    }
+    /*
     if ((index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
       LOG(">DGET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
       Core2::digitals[index].setValue(value);
@@ -64,7 +93,12 @@ void Core2::processLine()
       LOG(">PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
       Core2::pulses[index].setValue(value);
       LOG("<PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
+    } else if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
+      LOG(">SGET #"); LOG(schedules[index].getPin()); LOG(" = "); LOGLN(schedules[index].getValue());
+      //Core2::schedules[index].setValue(value); // TODO
+      LOG("<SGET #"); LOG(schedules[index].getPin()); LOG(" = "); LOGLN(schedules[index].getValue());
     }
+    */
   }
 }
 
