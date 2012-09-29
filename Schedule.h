@@ -56,6 +56,7 @@
 #define BIT_HOUR_23     30
 #define BIT_HOUR_24     31
 
+// cache for time test
 #define MASK_ISACTIVE   B1
 
 #define MASK_MONDAY     int(B1<<BIT_MONDAY   )
@@ -93,7 +94,7 @@
 #define MASK_HOUR_24    int(B1<<BIT_HOUR_24)
 
 
-class Schedule : public Connector {
+class Schedule : public ConnectorDigital {
   
   public:
   Schedule(byte id, const prog_char* label, unsigned int data);
