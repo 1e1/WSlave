@@ -58,13 +58,13 @@
 
 #define MASK_ISACTIVE   B1
 
-#define MASK_MONDAY     nt(B1<<BIT_MONDAY   )
-#define MASK_TUESDAY    nt(B1<<BIT_TUESDAY  )
-#define MASK_WEDNESDAY  nt(B1<<BIT_WEDNESDAY)
-#define MASK_THURSDAY   nt(B1<<BIT_THURSDAY )
-#define MASK_FRIDAY     nt(B1<<BIT_FRIDAY   )
-#define MASK_SATURDAY   nt(B1<<BIT_SATURDAY )
-#define MASK_SUNDAY     nt(B1<<BIT_SUNDAY   )
+#define MASK_MONDAY     int(B1<<BIT_MONDAY   )
+#define MASK_TUESDAY    int(B1<<BIT_TUESDAY  )
+#define MASK_WEDNESDAY  int(B1<<BIT_WEDNESDAY)
+#define MASK_THURSDAY   int(B1<<BIT_THURSDAY )
+#define MASK_FRIDAY     int(B1<<BIT_FRIDAY   )
+#define MASK_SATURDAY   int(B1<<BIT_SATURDAY )
+#define MASK_SUNDAY     int(B1<<BIT_SUNDAY   )
 
 #define MASK_HOUR_00    MASK_HOUR_24
 #define MASK_HOUR_01    int(B1<<BIT_HOUR_01)
