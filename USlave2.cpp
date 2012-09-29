@@ -19,20 +19,26 @@ void USlave2::check()
     Core2::processLine();
     
     Core2::unbuffer();
-    // digitals
-    Core2::copyToBuffer_P(PSTR("\n=== DIGITALS ===\n"));
-    for (uint8_t i=0; i < Core2::digitals_len; i++) {
-      USlave2::statusLine(Core2::digitals[i], (uint8_t) Core2::digitals[i].getValue());
+    // schedules
+    Core2::copyToBuffer_P(PSTR("\n=== SCHEDULES ===\n"));
+    // add IP info
+    for (uint8_t i=0; i < Core2::schedules_len; i++) {
+      USlave2::statusLine(Core2::schedules[i], Core2::schedules[i].getValue());
     }
     // pulses
     Core2::copyToBuffer_P(PSTR("\n=== PULSES ===\n"));
     for (uint8_t i=0; i < Core2::pulses_len; i++) {
       USlave2::statusLine(Core2::pulses[i], Core2::pulses[i].getValue());
     }
+    // digitals
+    Core2::copyToBuffer_P(PSTR("\n=== DIGITALS ===\n"));
+    for (uint8_t i=0; i < Core2::digitals_len; i++) {
+      USlave2::statusLine(Core2::digitals[i], (uint8_t) Core2::digitals[i].getValue());
+    }
     // messages
+    /*
     Core2::copyToBuffer_P(PSTR("\n=== MESSAGES ===\n"));
     // add IP info
-    /*
     for (uint8_t i=0; i < Core2::messages_len; i++) {
       USlave2::statusLine(Core2::messages[i], Core2::messages[i].getValue());
     }

@@ -256,12 +256,10 @@ void WSlave2::sendDictionary()
   uint8_t comma = Core2::total_len;
   Core2::unbuffer();
   Core2::copyToBuffer_P(json_qbrace1);
-  /*
-  // messages
-  for (uint8_t i=0; i < Core2::messages_len; i++) {
-    WSlave2::sendToJson('M', Core2::messages[i], --comma);
+  // schedules
+  for (uint8_t i=0; i < Core2::schedules_len; i++) {
+    WSlave2::sendToJson('S', Core2::schedules[i], --comma);
   }
-  */
   // pulses
   for (uint8_t i=0; i < Core2::pulses_len; i++) {
     WSlave2::sendToJson('P', Core2::pulses[i], --comma);
@@ -270,6 +268,12 @@ void WSlave2::sendDictionary()
   for (uint8_t i=0; i < Core2::digitals_len; i++) {
     WSlave2::sendToJson('D', Core2::digitals[i], --comma);
   }
+  /*
+  // messages
+  for (uint8_t i=0; i < Core2::messages_len; i++) {
+    WSlave2::sendToJson('M', Core2::messages[i], --comma);
+  }
+  */
   Core2::copyToBuffer_P(json_qbrace2);
   Core2::sendBuffer();
 }
@@ -280,15 +284,13 @@ void WSlave2::sendService()
   uint8_t comma = Core2::total_len;
   Core2::unbuffer();
   Core2::copyToBuffer('[');
-  /*
-  // messages
-  for (uint8_t i=0; i < Core2::messages_len; i++) {
-    Core2::copyToBuffer(Core2::messages[i].value);
+  // schedules
+  for (uint8_t i=0; i < Core2::schedules_len; i++) {
+    Core2::copyToBuffer(Core2::schedules[i].getValue());
     if (--comma) {
       Core2::copyToBuffer(',');
     }
   }
-  */
   // pulses
   for (uint8_t i=0; i < Core2::pulses_len; i++) {
     Core2::copyToBuffer(Core2::pulses[i].getValue());
@@ -303,6 +305,15 @@ void WSlave2::sendService()
       Core2::copyToBuffer(',');
     }
   }
+  /*
+  // messages
+  for (uint8_t i=0; i < Core2::messages_len; i++) {
+    Core2::copyToBuffer(Core2::messages[i].value);
+    if (--comma) {
+      Core2::copyToBuffer(',');
+    }
+  }
+  */
   Core2::copyToBuffer(']');
   Core2::sendBuffer();
 }
