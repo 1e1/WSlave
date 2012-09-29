@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 #include "macros.h"
+#include "Connector.h"
 
 
 /** 
@@ -92,21 +93,19 @@
 #define MASK_HOUR_24    int(B1<<BIT_HOUR_24)
 
 
-class Schedule {
+class Schedule : public Connector {
   
   public:
-  Schedule();
-  Schedule(unsigned int data, const prog_char* label);
+  Schedule(byte id, const prog_char* label, unsigned int data);
   
   // inline
   const boolean     isActive();
   const boolean     is(const unsigned int mask);
-  const prog_char*  getLabel();
   void setActive(const boolean value);
   
-  protected:
-  void init(unsigned int data, const prog_char* label);
+  __attribute__((always_inline)) inline const byte getId() { return this->getPin(); };
   
+  protected:
   unsigned int _schedule;
   const prog_char* _label PROGMEM;
   
@@ -129,12 +128,6 @@ __attribute__((always_inline)) inline const boolean Schedule::isActive()
 __attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
 {
   return this->_schedule & mask;
-}
-
-
-__attribute__((always_inline)) inline const prog_char* Schedule::getLabel()
-{
-  return this->_label;
 }
 
 

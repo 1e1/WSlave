@@ -4,19 +4,8 @@
 
 
 
-Schedule::Schedule()
+Schedule::Schedule(byte id, const prog_char* label, unsigned int data)
 {
-}
-
-
-Schedule::Schedule(unsigned int data, const prog_char* label)
-{
-  this->init(data, label);
-}
-
-
-void Schedule::init(unsigned int data, const prog_char* label)
-{
+  this->init(id, label);
   this->_schedule = data;
-  this->_label    = label;
 }
