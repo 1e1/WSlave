@@ -3,13 +3,13 @@
 
 
 /** SETUP ALIAS **/
-#define WSDIGITAL(NAME, PIN, NC) { (NC?((1<<DIGITAL_BITNC)|PIN):PIN), NAME }
-#define WSPULSE(NAME, PIN) { PIN, 0, NAME }
-#define WSMESSAGE(NAME, FUNCTION, PINS...) { FUNCTION, '#', {PINS}, NAME }
-#define NEWDIGITAL_NO(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, false)
-#define NEWDIGITAL_NC(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, true)
-#define NEWDIGITAL(PIN, NAME) ConnectorDigital(PIN, Dictionary::NAME, true)
-#define NEWPULSE(PIN, NAME) ConnectorPulse(PIN, Dictionary::NAME)
+#define NEWDIGITAL_NO(PIN, NAME)  ConnectorDigital(PIN, Dictionary::NAME, false)
+#define NEWDIGITAL_NC(PIN, NAME)  ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWDIGITAL(PIN, NAME)     ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWPULSE(PIN, NAME)       ConnectorPulse(PIN, Dictionary::NAME)
+#define NEWSCHEDULE_NO(ID, N, D)  Schedule(ID, Dictionary::N, D)
+#define NEWSCHEDULE_NC(ID, N, D)  Schedule(ID, Dictionary::N, D | MASK_ISACTIVE)
+#define NEWSCHEDULE(ID, N, D)     Schedule(ID, Dictionary::N, D)
 #define LCDCHAR(ch) static const uint8_t ch[] PROGMEM
 #define LONGBYTES(b) static const prog_uchar b[] PROGMEM
 #define LONGSTRING(str) static const prog_char str[] PROGMEM
