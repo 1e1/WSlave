@@ -11,6 +11,15 @@
 #include "Connector.h"
 #include "Schedule.h"
 
+
+#define MONDAY    0 // MONTAG
+#define TUESDAY   1 // DIENSTAG
+#define WEDNESDAY 2 // MITTWOCH
+#define THURSDAY  3 // DONNERSTAG
+#define FRIDAY    4 // FREITAG
+#define SATURDAY  5 // SAMSTAG
+#define SUNDAY    6 // SONNTAG
+
 #define READBUFFERSIZE          max(16, 1+ ARRAYLEN(HTTP_AUTH64))
 #define WRITEBUFFERSIZE         64
 #define MAXLINESIZE             255
