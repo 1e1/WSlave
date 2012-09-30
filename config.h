@@ -33,7 +33,7 @@
 #define SMTP_IP         173,194,67,108 // smtp.gmail.com
 #define SMTP_PORT       25
 // 0.fr.pool.ntp.org
-#define NTP_SERVER      88, 191, 80, 53
+#define NTP_SERVER      /* 192, 168, 170, 254 */ 88, 191, 80, 53 // or use GATEWAY if not specified
 #define NTP_PORT        123
 #define NTP_LOCALPORT   3669 /* OR "ODE 8400" */
 #define NTP_PACKET_SIZE 48
