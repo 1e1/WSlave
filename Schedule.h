@@ -36,6 +36,7 @@ class Schedule : public ConnectorDigital {
   
   public:
   Schedule(byte id, const prog_char* label, unsigned int data);
+  const boolean     is(const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
   const boolean     isActive();
