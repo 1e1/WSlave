@@ -29,7 +29,7 @@ ConnectorPulse Core2::pulses[] = {
 };
 
 Schedule Core2::schedules[] = {
-  NEWSCHEDULE_NO(13, heating1, MASK_SATURDAY | MASK_SUNDAY | MASK_HOUR_20 | MASK_HOUR_22 | MASK_HOUR_24 | MASK_HOUR_03 | MASK_HOUR_05 | MASK_HOUR_06)
+  NEWSCHEDULE_NO(13, heating1, MASK_DAY(SATURDAY) | MASK_DAY(SUNDAY) | MASK_HOUR(20) | MASK_HOUR(22) | MASK_HOUR(24) | MASK_HOUR(3) | MASK_HOUR(5) | MASK_HOUR(6))
 };
 
 const uint8_t Core2::digitals_len = ARRAYLEN(digitals);

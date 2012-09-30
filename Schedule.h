@@ -22,76 +22,14 @@
   * 
   */
 
-#define BIT_MONDAY      1 // MONTAG
-#define BIT_TUESDAY     2 // DIENSTAG
-#define BIT_WEDNESDAY   3 // MITTWOCH
-#define BIT_THURSDAY    4 // DONNERSTAG
-#define BIT_FRIDAY      5 // FREITAG
-#define BIT_SATURDAY    6 // SAMSTAG
-#define BIT_SUNDAY      7 // SONNTAG
-
-#define BIT_HOUR_00     BIT_HOUR_24
-#define BIT_HOUR_01     8
-#define BIT_HOUR_02     9
-#define BIT_HOUR_03     10
-#define BIT_HOUR_04     11
-#define BIT_HOUR_05     12
-#define BIT_HOUR_06     13
-#define BIT_HOUR_07     14
-#define BIT_HOUR_08     15
-#define BIT_HOUR_09     16
-#define BIT_HOUR_10     17
-#define BIT_HOUR_11     18
-#define BIT_HOUR_12     19
-#define BIT_HOUR_13     20
-#define BIT_HOUR_14     21
-#define BIT_HOUR_15     22
-#define BIT_HOUR_16     23
-#define BIT_HOUR_17     24
-#define BIT_HOUR_18     25
-#define BIT_HOUR_19     26
-#define BIT_HOUR_20     27
-#define BIT_HOUR_21     28
-#define BIT_HOUR_22     29
-#define BIT_HOUR_23     30
-#define BIT_HOUR_24     31
+#define BIT_DAY_OF(dayOfWeek) (1+ (dayOfWeek%7))
+#define BIT_HOUR_OF(hour)     (8+ (hour%24))
 
 // cache for time test
 #define MASK_ISACTIVE   B1
 
-#define MASK_MONDAY     int(B1<<BIT_MONDAY   )
-#define MASK_TUESDAY    int(B1<<BIT_TUESDAY  )
-#define MASK_WEDNESDAY  int(B1<<BIT_WEDNESDAY)
-#define MASK_THURSDAY   int(B1<<BIT_THURSDAY )
-#define MASK_FRIDAY     int(B1<<BIT_FRIDAY   )
-#define MASK_SATURDAY   int(B1<<BIT_SATURDAY )
-#define MASK_SUNDAY     int(B1<<BIT_SUNDAY   )
-
-#define MASK_HOUR_00    MASK_HOUR_24
-#define MASK_HOUR_01    int(B1<<BIT_HOUR_01)
-#define MASK_HOUR_02    int(B1<<BIT_HOUR_02)
-#define MASK_HOUR_03    int(B1<<BIT_HOUR_03)
-#define MASK_HOUR_04    int(B1<<BIT_HOUR_04)
-#define MASK_HOUR_05    int(B1<<BIT_HOUR_05)
-#define MASK_HOUR_06    int(B1<<BIT_HOUR_06)
-#define MASK_HOUR_07    int(B1<<BIT_HOUR_07)
-#define MASK_HOUR_08    int(B1<<BIT_HOUR_08)
-#define MASK_HOUR_09    int(B1<<BIT_HOUR_09)
-#define MASK_HOUR_10    int(B1<<BIT_HOUR_10)
-#define MASK_HOUR_11    int(B1<<BIT_HOUR_11)
-#define MASK_HOUR_12    int(B1<<BIT_HOUR_12)
-#define MASK_HOUR_13    int(B1<<BIT_HOUR_13)
-#define MASK_HOUR_14    int(B1<<BIT_HOUR_14)
-#define MASK_HOUR_15    int(B1<<BIT_HOUR_15)
-#define MASK_HOUR_16    int(B1<<BIT_HOUR_16)
-#define MASK_HOUR_17    int(B1<<BIT_HOUR_17)
-#define MASK_HOUR_18    int(B1<<BIT_HOUR_18)
-#define MASK_HOUR_19    int(B1<<BIT_HOUR_19)
-#define MASK_HOUR_20    int(B1<<BIT_HOUR_20)
-#define MASK_HOUR_21    int(B1<<BIT_HOUR_21)
-#define MASK_HOUR_22    int(B1<<BIT_HOUR_22)
-#define MASK_HOUR_23    int(B1<<BIT_HOUR_23)
-#define MASK_HOUR_24    int(B1<<BIT_HOUR_24)
+#define MASK_DAY(dayOfWeek)   int(B1 << BIT_DAY_OF(dayOfWeek))
+#define MASK_HOUR(hour)       int(B1 << BIT_HOUR_OF(hour))
 
 
 class Schedule : public ConnectorDigital {
