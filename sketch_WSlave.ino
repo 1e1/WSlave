@@ -19,7 +19,7 @@
 #include "Core2.h"
 #include "config.h"
 #include "macros.h"
-#include "FastTimer.h"
+#include "FastTimer2.h"
 #include "Connector.h"
 #include <SPI.h>
 
@@ -111,6 +111,7 @@ void setup()
 #endif USE_BONJOUR
   //WSlave2::sendEmail(PSTR("START"), 1);
 #endif USE_ETH
+  FastTimer2::begin();
   LOGLN("=== END SETUP ===");
   LOGLN();
 #if BUSYLED_PIN
@@ -121,10 +122,10 @@ void setup()
 
 void loop()
 {
-  const uint8_t timer = FastTimer::update();
+  const uint8_t timer = FastTimer2::update();
   if (timer) {
 #if BUSYLED_PIN
-  digitalWrite(BUSYLED_PIN, HIGH);
+    digitalWrite(BUSYLED_PIN, HIGH);
 #endif
     // no true statement since half-maxlife
     if (timer > (((uint8_t)-1)>>1)) {
@@ -151,6 +152,11 @@ void loop()
     }
 #if USE_LCD
     LSlave2::shutdown();
+#endif
+#if USE_ETH
+    FastTimer2::requestNtp();
+    delay(1000);
+    FastTimer2::readNtp();
 #endif
 #if USE_BONJOUR
     EthernetBonjour.run();
