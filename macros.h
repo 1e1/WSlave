@@ -10,8 +10,9 @@
 #define NEWSCHEDULE_NO(ID, N, D)  Schedule(ID, Dictionary::N, D)
 #define NEWSCHEDULE_NC(ID, N, D)  Schedule(ID, Dictionary::N, D | MASK_ISACTIVE)
 #define NEWSCHEDULE(ID, N, D)     Schedule(ID, Dictionary::N, D)
-#define LCDCHAR(ch) static const uint8_t ch[] PROGMEM
-#define LONGBYTES(b) static const prog_uchar b[] PROGMEM
+#define LCDCHAR(ch)     static const uint8_t    ch[] PROGMEM
+#define LONGBYTES(b)    static const prog_uchar  b[] PROGMEM
+#define LONGBYTEN(b, n) static const prog_uchar b[n] PROGMEM
 #define LONGSTRING(str) static const prog_char str[] PROGMEM
 /** === **/
 
