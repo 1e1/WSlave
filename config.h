@@ -19,19 +19,26 @@
 #define USB_SPEED   115200
 
 // ETH conf
-#define USE_BONJOUR 0
-#define USE_DHCP    1
-#define IP          10,240,170, DEVICE_NUMBER
-#define SUBNET      255,255,255,0
-#define GATEWAY     0,0,0,0
-#define DNS         0,0,0,0
+#define USE_BONJOUR     0
+#define USE_DHCP        1
+#define IP              10,240,170, DEVICE_NUMBER
+#define SUBNET          255,255,255,0
+#define GATEWAY         0,0,0,0
+#define DNS             0,0,0,0
 // ascii code for "@lan#" + HEX 12
-#define MAC         0x40,0x6C,0x61,0x6E,0x23, DEVICE_NUMBER
-#define PORT        80
-#define ETH_BLPIN   53 /* power of W5100 chip */
-#define HTTP_AUTH64 "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
-#define SMTP_IP     173,194,67,108 // smtp.gmail.com
-#define SMTP_PORT   25
+#define MAC             0x40,0x6C,0x61,0x6E,0x23, DEVICE_NUMBER
+#define PORT            80
+#define ETH_BLPIN       53 /* power of W5100 chip */
+#define HTTP_AUTH64     "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
+#define SMTP_IP         173,194,67,108 // smtp.gmail.com
+#define SMTP_PORT       25
+// 0.fr.pool.ntp.org
+#define NTP_SERVER      88, 191, 80, 53
+#define NTP_PORT        123
+#define NTP_LOCALPORT   3669 /* OR "ODE 8400" */
+#define NTP_PACKET_SIZE 48
+#define TZ_OFFSET       (+2)
+#define TZ_DAYLIGHT     1
 
 // LCD conf
 #define LCD_PINS            8, 13, 9, 4, 5, 6, 7
