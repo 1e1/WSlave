@@ -6,6 +6,7 @@
 #include <EthernetUDP.h>
 #include "config.h"
 #include "macros.h"
+#include "Core2.h"
 
 
 //==>  >> 0: 1 unit of embedTime is 0.001s
