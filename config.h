@@ -37,7 +37,7 @@
 #define NTP_PORT        123
 #define NTP_LOCALPORT   3669 /* OR "ODE 8400" */
 #define NTP_PACKET_SIZE 48
-#define TZ_OFFSET       (+2)
+#define TZ_OFFSET       (+1) /* no DST by default (case of 12/31/y and 01/01/y+1)  */
 #define TZ_DST          1
 
 // LCD conf
