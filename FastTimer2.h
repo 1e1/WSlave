@@ -36,14 +36,14 @@ class FastTimer2 {
   public:
   static void begin(); // call it in setup()
   static const uint8_t update(); // call it once in the main loop()
-  static const void requestNtp();
-  static const unsigned long readNtp();
+  static void requestNtp();
+  static void readNtp();
   
   protected:
   static EthernetUDP _server;
   static IPAddress _timeServer;
   static uint8_t _embedTime;
-  static uint8_t _referenceTime; // XDDD HHHH (day[0..6], hour[0..23])
+  static uint8_t _referenceTime; // SDDD HHHH (DST[0..1], day[0..6], hour[0..23])
   
 };
 

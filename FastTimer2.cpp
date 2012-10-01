@@ -12,7 +12,7 @@
 
 EthernetUDP FastTimer2::_server;
 IPAddress FastTimer2::_timeServer(NTP_SERVER);
-uint8_t FastTimer2::_embedTime = 0;
+uint8_t FastTimer2::_embedTime = B01111111;
 
 // http://tools.ietf.org/html/rfc1305
 LONGBYTEN(ntp_packet, NTP_PACKET_SIZE) = {
@@ -63,7 +63,7 @@ const uint8_t FastTimer2::update()
 }
 
 
-const void FastTimer2::requestNtp()
+void FastTimer2::requestNtp()
 {
   // http://tools.ietf.org/html/rfc1305
   byte ntp_packet[NTP_PACKET_SIZE] = {
@@ -72,11 +72,11 @@ const void FastTimer2::requestNtp()
     // VM = 011, client
     // Stratum = 0, unspecified
     // Poll Interval: 6 = 64 seconds
-    // Precision: 16MHz Arduino is 2**-24
+    // Precision: 16MHz Arduino is about 2**-24
     B11100011, 0, 6, -24,
-    // Root Delay
+    // Root Delay: 29s -> target less than 1 minute
     0, 29, 0, 0,
-    // Root Dispersion
+    // Root Dispersion: 29s -> target less than 1 minute
     0, 29, 0, 0,
     // Reference Clock Identifier
     IP //0, 0, 0, DEVICE_NUMBER,
@@ -93,32 +93,37 @@ const void FastTimer2::requestNtp()
 }
 
 
-const unsigned long FastTimer2::readNtp()
+void FastTimer2::readNtp()
 {
-  unsigned long time = 0;
-  uint8_t dayOfWeek = 7;
+  unsigned long secondsSince1900, iDaySince1900;
+  unsigned int dst = B0, dayOfWeek = B111, hour = B1111, iBissextile;
   byte ntp_packet[NTP_PACKET_SIZE];
   if (FastTimer2::_server.parsePacket()) {
     FastTimer2::_server.read(ntp_packet, NTP_PACKET_SIZE);
-    time  = long(ntp_packet[40]) << 24
-          | long(ntp_packet[41]) << 16
-          | long(ntp_packet[42]) << 8
-          | long(ntp_packet[43]) << 0
-          ;
-    time+= TZ_OFFSET *3600;
-    Serial.println((unsigned long)time);
-    dayOfWeek = (time / 86400L) %7;
-    Serial.println(dayOfWeek);
-    unsigned long secondOfDay = (time % 86400L);
-    Serial.print(secondOfDay/3600); Serial.print(':');
+    secondsSince1900  = long(ntp_packet[40]) << 24
+                      | long(ntp_packet[41]) << 16
+                      | long(ntp_packet[42]) << 8
+                      | long(ntp_packet[43]) << 0
+                      ;
+    secondsSince1900+= TZ_OFFSET *3600;
+#if TZ_DST
+    // dernier week-end mars <-> dernier week-end d'octobre = +3600
+#endif TZ_DST
+    Serial.println(secondsSince1900);
+    iDaySince1900 = secondsSince1900 / 86400L;
+    iBissextile   = 1 + ( (iDaySince1900 - /* first days of 1900 */ -31 -29) / 1461 );
+    dayOfWeek     = iDaySince1900 %7;
+    hour          = secondsSince1900/3600;
+    Serial.print(dayOfWeek); Serial.println(" (day of week; 0=monday..6-sunday)");
+    unsigned long secondOfDay = (secondsSince1900 % 86400L);
+    Serial.print(hour%24); Serial.print(':');
     Serial.print((secondOfDay%3600)/60); Serial.print(':');
     Serial.print(secondOfDay%60); Serial.println('.');
-    Serial.println(secondOfDay);
-#if TZ_DAYLIGHT
-    // dernier week-end mars <-> dernier week-end d'octobre = +3600
-#endif TZ_DAYLIGHT
+    Serial.print(1900+((iDaySince1900-iBissextile)/365)); Serial.print("y");
+    Serial.print((iDaySince1900-iBissextile)%365); Serial.print("d");
+    Serial.print(""); Serial.println('.');
+    Serial.print(secondOfDay); Serial.println(" (second of day)");
   }
   FastTimer2::_server.flush();
-  return time;
 }
 
