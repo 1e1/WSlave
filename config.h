@@ -38,7 +38,7 @@
 #define NTP_LOCALPORT   3669 /* OR "ODE 8400" */
 #define NTP_PACKET_SIZE 48
 #define TZ_OFFSET       (+2)
-#define TZ_DAYLIGHT     1
+#define TZ_DST          1
 
 // LCD conf
 #define LCD_PINS            8, 13, 9, 4, 5, 6, 7
