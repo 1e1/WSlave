@@ -78,28 +78,29 @@ void FastTimer2::requestNtp()
 
 void FastTimer2::readNtp()
 {
-  unsigned long secondsSince1900, iDaySince1900;
-  unsigned int dst = B0, dayOfWeek = B111, hour = B1111;
+  unsigned long /* seconds|iDay */xSince1900;
+  uint8_t dst = B0, dayOfWeek = B111, hour = B1111;
+  byte ntp_packet[NTP_PACKET_SIZE];
+#if TZ_DST
   int dayOfYear;
   uint8_t yearSince1900, iLeapYear, deltaDays;
-  byte ntp_packet[NTP_PACKET_SIZE];
+#endif TZ_DST
   if (FastTimer2::_server.parsePacket()) {
-    FastTimer2::_referenceTime = 0;
     FastTimer2::_server.read(ntp_packet, NTP_PACKET_SIZE);
-    secondsSince1900  = long(ntp_packet[40]) << 24
-                      | long(ntp_packet[41]) << 16
-                      | long(ntp_packet[42]) << 8
-                      | long(ntp_packet[43]) << 0
-                      ;
-    secondsSince1900+= TZ_OFFSET *3600;
-    LOGLN(secondsSince1900);
-    iDaySince1900 = secondsSince1900 / 86400L;
-    iLeapYear     = ( (iDaySince1900 /* first days of 1900 */ -31 -28) / (365*4 +1) );
-    yearSince1900 = ( iDaySince1900 - iLeapYear ) / 365;
-    dayOfYear     = 1 + ((iDaySince1900 - iLeapYear) % 365);
-    dayOfWeek     = (MONDAY + iDaySince1900) % 7;
-    hour          = (secondsSince1900 / 3600) % 24;
+    /*seconds*/xSince1900 = long(ntp_packet[40]) << 24
+                          | long(ntp_packet[41]) << 16
+                          | int(ntp_packet[42]) << 8
+                          | int(ntp_packet[43]) << 0
+                          ;
+    /*seconds*/xSince1900+= TZ_OFFSET *3600;
+    hour                = (/*seconds*/xSince1900 / 3600) % 24;
+    /*iDay*/xSince1900  = /*seconds*/xSince1900 / 86400L;
+    dayOfWeek           = (MONDAY + /*iDay*/xSince1900) % 7;
 #if TZ_DST
+    iLeapYear           = ( (/*iDay*/xSince1900 /* first days of 1900 */ -31 -28) / (365*4 +1) );
+    yearSince1900       = (/*iDay*/xSince1900 - iLeapYear) / 365;
+    dayOfYear           = 1 + ((/*iDay*/xSince1900 - iLeapYear) % 365);
+    
     // http://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000000221946&dateTexte=&categorieLien=id
     //( ? + year + int(year/4) /* Arduino will die before ( */ - int(year/100) + int(year/400) /* ) */ ) % 7;
     // work until 2104 = 1900 + 204
@@ -109,6 +110,7 @@ void FastTimer2::readNtp()
     if ((yearSince1900 % 4) == 0) {
       dayOfYear--;
     }
+    
     // last sunday of march = 31 - ( (SATURDAY + deltaDays) % 7 );
     if (dayOfYear > ((SATURDAY + deltaDays) % 7)) {
       
@@ -120,7 +122,7 @@ void FastTimer2::readNtp()
         dst = B1;
         hour++;
         
-      } else if (dayOfYear == ((SATURDAY + deltaDays) % 7)) {
+      } else if (dayOfYear == ((WEDNESDAY + deltaDays) % 7)) {
         
         // last DST day
         if (hour<2) {
@@ -130,7 +132,7 @@ void FastTimer2::readNtp()
         
       }
       
-    } else if (dayOfYear == ((WEDNESDAY + deltaDays) % 7)) {
+    } else if (dayOfYear == ((SATURDAY + deltaDays) % 7)) {
       
       // first DST day
       if (hour >= 2) {
@@ -141,20 +143,13 @@ void FastTimer2::readNtp()
     }
     
     if (hour==24) {
-      dayOfYear++;
-      secondsSince1900+= 3600;
+      //dayOfYear++;
+      ///*seconds*/xSince1900+= 3600;
       dayOfWeek = (dayOfWeek + 1) %7;
     }
 #endif TZ_DST
-    FastTimer2::_referenceTime = (dst << 7) | (dayOfWeek << 4) | (hour);
-    
-    unsigned long secondOfDay = (secondsSince1900 % 86400L);
-    unsigned int year = 1900 + ( (iDaySince1900-iLeapYear) / 365 );
-    
-    LOG(dayOfWeek);   LOGLN(" (day of week; 0=monday..6=sunday)");
-    LOG(hour%24);     LOG(':');     LOG((secondOfDay%3600)/60);   LOG(':'); LOG(secondOfDay%60);  LOGLN('.');
-    LOG(year);        LOG("y ");    LOG(dayOfYear);               LOGLN("d");
-    LOG(secondOfDay); LOGLN(" (second of day)");
+    FastTimer2::_referenceTime = int(dst << 7) | int(dayOfWeek << 4) | (hour);
+    LOG("DST="); LOG(dst); LOG("; DAY="); LOG(dayOfWeek); LOG("; HOUR="); LOGLN(hour);
   }
   FastTimer2::_server.flush();
 }
