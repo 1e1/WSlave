@@ -100,12 +100,13 @@ void FastTimer2::readNtp()
     iLeapYear           = ( (/*iDay*/xSince1900 /* first days of 1900 */ -31 -28) / (365*4 +1) );
     yearSince1900       = (/*iDay*/xSince1900 - iLeapYear) / 365;
     dayOfYear           = 1 + ((/*iDay*/xSince1900 - iLeapYear) % 365);
+    //dayOfYear           = 1 + ((/*iDay*/xSince1900 - iLeapYear) - (365 * yearSince1900));
     
     // http://www.legifrance.gouv.fr/affichTexte.do?cidTexte=JORFTEXT000000221946&dateTexte=&categorieLien=id
     //( ? + year + int(year/4) /* Arduino will die before ( */ - int(year/100) + int(year/400) /* ) */ ) % 7;
     // work until 2104 = 1900 + 204
     // 255 = (204 + 204/4)
-    deltaDays = yearSince1900 + iLeapYear;
+    deltaDays = (yearSince1900 + iLeapYear) /* % 7 */;
     dayOfYear-= (31 + 28 + 31);
     if ((yearSince1900 % 4) == 0) {
       dayOfYear--;
