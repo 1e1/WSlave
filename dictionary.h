@@ -24,7 +24,10 @@ namespace Dictionary {
   
   LONGSTRING(led)     = "pulse";
   
-  LONGSTRING(heating1)  = "bedroom heating";
+  LONGSTRING(heating1)  = "week-end heating";
+  LONGSTRING(heating2)  = "bedroom heating";
+  LONGSTRING(bathroom1) = "bathroom heating";
+  LONGSTRING(bathroom2) = "water heating";
   
   LONGSTRING(automatic) = "automatic";
   LONGSTRING(sendmail)  = "e-info";
