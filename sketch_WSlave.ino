@@ -131,39 +131,29 @@ void loop()
     if (timer > (((uint8_t)-1)>>1)) {
       LOGLN("*** new time cycle ***");
 #if USE_ETH
-      WSlave2::maintain();
+      FastTimer2::requestNtp();
 #endif
-      // OR: software_reset();
-      
-      /*
-      // get time by NTP
-      EthernetUDP Udp;
-      IPAddress timeServer(85, 234, 224, 216); // 0.pool.ntp.org
-      Udp.begin(8463); // TIME
-      // sendNTPpacket
-      delay(1000);
-      if (Udp.parsePacket()) {
-        //
+#if USE_BONJOUR
+      EthernetBonjour.run();
+#endif USE_BONJOUR
+#if USE_LCD
+      LSlave2::shutdown();
+#endif
+#if USE_ETH && !USE_BONJOUR && !USE_LCD
+      delay(500);
+#endif !USE_BONJOUR && !USE_LCD
+#if USE_ETH
+      if (FastTimer2::readNtp()) {
+        WSlave2::maintain();
+        // OR: software_reset();
       }
-      */
+#endif
       
     } else {
       LOGLN("*** new time section ***");
     }
-#if USE_LCD
-    LSlave2::shutdown();
-#endif
-#if USE_ETH
-    FastTimer2::requestNtp();
-    delay(1000);
-    FastTimer2::readNtp();
-#endif
-#if USE_BONJOUR
-    EthernetBonjour.run();
-#endif USE_BONJOUR
     // DO SOMETHING NEW
 #if BUSYLED_PIN
-  WAIT(2000);
   digitalWrite(BUSYLED_PIN, LOW);
 #endif
   } // if (timer)
