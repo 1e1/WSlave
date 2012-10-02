@@ -29,6 +29,9 @@
 #define SMASK_DAY(dayOfWeek)  int(boolean(1) << BIT_DAY_OF(dayOfWeek))
 #define SMASK_HOUR(hour)      int(boolean(1) << BIT_HOUR_OF(hour))
 
+#define SMASK_WEEKEND         SMASK_DAY(SATURDAY) | SMASK_DAY(SUNDAY)
+#define SMASK_EVERYDAY        SMASK_DAY(MONDAY) | SMASK_DAY(TUESDAY) | SMASK_DAY(WEDNESDAY) | SMASK_DAY(THURSDAY) | SMASK_DAY(FRIDAY) | SMASK_WEEKEND
+
 
 class Schedule : public ConnectorDigital {
   
