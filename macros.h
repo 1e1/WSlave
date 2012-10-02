@@ -3,15 +3,17 @@
 
 
 /** SETUP ALIAS **/
-#define NEWDIGITAL_NO(PIN, NAME)  ConnectorDigital(PIN, Dictionary::NAME, false)
-#define NEWDIGITAL_NC(PIN, NAME)  ConnectorDigital(PIN, Dictionary::NAME, true)
-#define NEWDIGITAL(PIN, NAME)     ConnectorDigital(PIN, Dictionary::NAME, true)
-#define NEWPULSE(PIN, NAME)       ConnectorPulse(PIN, Dictionary::NAME)
-#define NEWSCHEDULE(ID, N, S, D)  Schedule(ID, Dictionary::N, S, D)
-#define LCDCHAR(ch)     static const uint8_t    ch[] PROGMEM
-#define LONGBYTES(b)    static const prog_uchar  b[] PROGMEM
-#define LONGBYTEN(b, n) static const prog_uchar b[n] PROGMEM
-#define LONGSTRING(str) static const prog_char str[] PROGMEM
+#define NEWDIGITAL_NO(PIN, NAME)    ConnectorDigital(PIN, Dictionary::NAME, false)
+#define NEWDIGITAL_NC(PIN, NAME)    ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWDIGITAL(PIN, NAME)       ConnectorDigital(PIN, Dictionary::NAME, true)
+#define NEWPULSE(PIN, NAME)         ConnectorPulse(PIN, Dictionary::NAME)
+#define NEWSCHEDULE(ID, N, S, D...) uint8_t schedulePins_ ## ID[] = { D }; \
+                                    Schedule schedule_ ## ID = Schedule(ID, Dictionary::N, S, schedulePins_ ## ID )
+#define SCHEDULE(ID)                schedule_ ## ID
+#define LCDCHAR(ch)                 static const uint8_t    ch[] PROGMEM
+#define LONGBYTES(b)                static const prog_uchar  b[] PROGMEM
+#define LONGBYTEN(b, n)             static const prog_uchar b[n] PROGMEM
+#define LONGSTRING(str)             static const prog_char str[] PROGMEM
 /** === **/
 
 
