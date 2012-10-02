@@ -47,17 +47,18 @@
 //==>  >> 16: 1 unit of embedTime is 65.535s
 //-->  const uint8_t maxEmbedTime = 255; // = 4h 38mn 31s 425ms
 //     const uint8_t moduloEmbedTime = 219; // = 4h 00mn 00s 000ms = 219.72991531
-#define EMBEDTIME_4s_15m   ((uint8_t) (millis() >> 12))
-//#define EMBEDTIME_4s_3d    ((unsigned int) (millis() >> 12))
-#define EMBEDTIME_16s_1h   ((uint8_t) (millis() >> 14))
-#define EMBEDTIME_65s_4h   ((uint8_t) (millis() >> 16))
+#define EMBEDTIME_1s_4m    byte(millis() >> 10)
+#define EMBEDTIME_4s_15m   byte(millis() >> 12)
+//#define EMBEDTIME_4s_3d    int(millis() >> 12)
+#define EMBEDTIME_16s_1h   byte(millis() >> 14)
+#define EMBEDTIME_65s_4h   byte(millis() >> 16)
 /** === **/
 
 
 
 /** FAST TRIGO **/
-#define FACTOR_PI_UINT12(x) (50*x) >> 4
-#define FACTOR_PI_UINT8(x) (804*x) >> 8
+#define FACTOR_PI_UINT12(x) byte((50*x) >> 4)
+#define FACTOR_PI_UINT8(x)  byte((804*x) >> 8)
 /** === **/
 
 
@@ -85,14 +86,14 @@ FOREACH (int, p2, c2, ARRAYLEN(c2) ){
 
 
 /** BIT **/
-#define bitRead_uint8_t(value, bit)             (((value) >> (bit)) & 0x01)
-#define bitSet_uint8_t(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
-#define bitClear_uint8_t(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitRead_uint8_t(value, bit)             byte(((value) >> (bit)) & byte(1))
+#define bitSet_uint8_t(value, bit)              ((value) |=  (byte(1) << (bit)))
+#define bitClear_uint8_t(value, bit)            ((value) &= ~(byte(1) << (bit)))
 #define bitWrite_uint8_t(value, bit, bitvalue)  (bitvalue ? bitSet_uint8_t(value, bit) : bitClear_uint8_t(value, bit))
 
-#define bitRead_boolean(value, bit)             (((value) >> (bit)) & 0x01)
-#define bitSet_boolean(value, bit)              ((value) |=  (((uint8_t)1) << (bit)))
-#define bitClear_boolean(value, bit)            ((value) &= ~(((uint8_t)1) << (bit)))
+#define bitRead_boolean(value, bit)             byte(((value) >> (bit)) & byte(1))
+#define bitSet_boolean(value, bit)              ((value) |=  (byte(1) << (bit)))
+#define bitClear_boolean(value, bit)            ((value) &= ~(byte(1) << (bit)))
 #define bitWrite_boolean(value, bit, bitvalue)  (bitvalue ? bitSet_boolean(value, bit) : bitClear_boolean(value, bit))
 /** === **/
 
