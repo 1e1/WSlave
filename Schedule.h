@@ -36,8 +36,7 @@
 class Schedule : public ConnectorDigital {
   
   public:
-  Schedule(byte id, const prog_char* label, unsigned int data);
-  //const boolean     is(const uint8_t dayOfWeek, const unsigned int hour);
+  Schedule(byte id, const prog_char* label, unsigned int data, ConnectorDigital digitals[]);
   const boolean     is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
@@ -48,7 +47,7 @@ class Schedule : public ConnectorDigital {
   
   protected:
   unsigned int _schedule;
-  const prog_char* _label PROGMEM;
+  ConnectorDigital _digitals[];
   
 };
 

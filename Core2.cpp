@@ -28,8 +28,41 @@ ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
+static ConnectorDigital noDigitals[] = {};
+
 Schedule Core2::schedules[] = {
-  NEWSCHEDULE_NO(13, heating1, SMASK_FULLYEAR(false) | SMASK_DAY(SATURDAY) | SMASK_DAY(SUNDAY) | SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6))
+  NEWSCHEDULE
+  ( 10
+  , heating1
+  , SMASK_FULLYEAR(false)
+  | SMASK_DAY(WEDNESDAY) | SMASK_WEEKEND
+  | SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
+  , noDigitals
+  ),
+  NEWSCHEDULE
+  ( 11
+  , heating2
+  , SMASK_FULLYEAR(false)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6)
+  , noDigitals
+  ),
+  NEWSCHEDULE
+  ( 20
+  , bathroom1
+  , SMASK_FULLYEAR(false)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(20) | SMASK_HOUR(6) | SMASK_HOUR(7)
+  , noDigitals
+  ),
+  NEWSCHEDULE
+  ( 21
+  , bathroom2
+  , SMASK_FULLYEAR(true)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(6) | SMASK_HOUR(7)
+  , noDigitals
+  )
 };
 
 const uint8_t Core2::digitals_len = ARRAYLEN(digitals);

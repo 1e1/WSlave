@@ -7,9 +7,7 @@
 #define NEWDIGITAL_NC(PIN, NAME)  ConnectorDigital(PIN, Dictionary::NAME, true)
 #define NEWDIGITAL(PIN, NAME)     ConnectorDigital(PIN, Dictionary::NAME, true)
 #define NEWPULSE(PIN, NAME)       ConnectorPulse(PIN, Dictionary::NAME)
-#define NEWSCHEDULE_NO(ID, N, D)  Schedule(ID, Dictionary::N, D)
-#define NEWSCHEDULE_NC(ID, N, D)  Schedule(ID, Dictionary::N, D | MASK_ISACTIVE)
-#define NEWSCHEDULE(ID, N, D)     Schedule(ID, Dictionary::N, D)
+#define NEWSCHEDULE(ID, N, S, D)  Schedule(ID, Dictionary::N, S, D)
 #define LCDCHAR(ch)     static const uint8_t    ch[] PROGMEM
 #define LONGBYTES(b)    static const prog_uchar  b[] PROGMEM
 #define LONGBYTEN(b, n) static const prog_uchar b[n] PROGMEM
