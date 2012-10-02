@@ -32,8 +32,8 @@
 #include "webApp.h"
 
 
-#define MAXHEADERS  255
-#define MAXRETRIES  255
+#define MAXHEADERS  byte(255)
+#define MAXRETRIES  byte(255)
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
 #define SP ' '
