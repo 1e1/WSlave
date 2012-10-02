@@ -35,9 +35,9 @@
 **/
 
 // SDDD HHHH (DST[0..1], day[0..6], hour[0..23])
-#define FMASK_DST(dst)        (dst << 7)
-#define FMASK_DAY(dayOfWeek)  (dayOfWeek << 3)
-#define FMASK_HOUR(hour)      (hour)
+#define FMASK_DST(dst)        byte(dst << 7)
+#define FMASK_DAY(dayOfWeek)  byte(dayOfWeek << 3)
+#define FMASK_HOUR(hour)      byte(hour)
 
 
 class FastTimer2 {
