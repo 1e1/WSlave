@@ -125,7 +125,7 @@ void FastTimer2::readNtp()
       } else if (dayOfYear == ((WEDNESDAY + deltaDays) % 7)) {
         
         // last DST day
-        if (hour < 2) {
+        if (hour < byte(2) ) {
           dst = B1;
           hour++;
         }
@@ -135,7 +135,7 @@ void FastTimer2::readNtp()
     } else if (dayOfYear == ((SATURDAY + deltaDays) % 7)) {
       
       // first DST day
-      if (hour >= 2) {
+      if (hour >= byte(2)) {
         dst = B1;
         hour++;
       }
