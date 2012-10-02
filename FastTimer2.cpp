@@ -40,8 +40,8 @@ void FastTimer2::begin()
   */
 const uint8_t FastTimer2::update()
 {
-  const uint8_t previousTime = FastTimer2::_embedTime;
-  FastTimer2::_embedTime = EMBEDTIME;
+  const uint8_t previousTime  = FastTimer2::_embedTime;
+  FastTimer2::_embedTime      = EMBEDTIME;
   return FastTimer2::_embedTime ^ previousTime;
 }
 
@@ -125,7 +125,7 @@ void FastTimer2::readNtp()
       } else if (dayOfYear == ((WEDNESDAY + deltaDays) % 7)) {
         
         // last DST day
-        if (hour<2) {
+        if (hour < 2) {
           dst = B1;
           hour++;
         }
@@ -148,7 +148,7 @@ void FastTimer2::readNtp()
       dayOfWeek = (dayOfWeek + 1) %7;
     }
 #endif TZ_DST
-    FastTimer2::_referenceTime = int(dst << 7) | int(dayOfWeek << 4) | (hour);
+    FastTimer2::_referenceTime = FMASK_DST(dst) | FMASK_DAY(dayOfWeek) | FMASK_HOUR(hour);
     LOG("DST="); LOG(dst); LOG("; DAY="); LOG(dayOfWeek); LOG("; HOUR="); LOGLN(hour);
   }
   FastTimer2::_server.flush();
