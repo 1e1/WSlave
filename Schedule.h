@@ -65,7 +65,7 @@ __attribute__((always_inline)) inline const boolean Schedule::is(const unsigned 
 
 __attribute__((always_inline)) inline void Schedule::setActive(const boolean value)
 {
-  bitWrite_boolean(this->_schedule, 0, value);
+  bitWrite_boolean(this->_schedule, boolean(0), value);
 }
 
 
