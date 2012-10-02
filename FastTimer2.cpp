@@ -76,8 +76,9 @@ void FastTimer2::requestNtp()
 }
 
 
-void FastTimer2::readNtp()
+const boolean FastTimer2::readNtp()
 {
+  const uint8_t previousTime = FastTimer2::_referenceTime;
   unsigned long /* seconds|iDay */xSince1900;
   uint8_t dst = B0, dayOfWeek = B111, hour = B1111;
   byte ntp_packet[NTP_PACKET_SIZE];
@@ -153,5 +154,6 @@ void FastTimer2::readNtp()
     LOG("DST="); LOG(dst); LOG("; DAY="); LOG(dayOfWeek); LOG("; HOUR="); LOGLN(hour);
   }
   FastTimer2::_server.flush();
+  return previousTime ^ FastTimer2::_referenceTime;
 }
 

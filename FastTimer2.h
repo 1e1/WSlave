@@ -46,7 +46,7 @@ class FastTimer2 {
   static void begin(); // call it in setup()
   static const uint8_t update(); // call it once in the main loop()
   static void requestNtp();
-  static void readNtp();
+  static const boolean readNtp(); // true if the hour changes
   
   protected:
   static EthernetUDP _server;
