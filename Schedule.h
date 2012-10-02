@@ -18,28 +18,26 @@
   * A : AM hour 123456789AB
   * P : PM hour 123456789AB
   * D : day MTWTFSS
-  * B : boolean isActive
+  * B : boolean is DST
   * 
   */
 
 #define BIT_DAY_OF(dayOfWeek) (1+ (dayOfWeek%7))
 #define BIT_HOUR_OF(hour)     (8+ (hour%24))
 
-// cache for time test
-#define MASK_ISACTIVE   B1
-
-#define MASK_DAY(dayOfWeek)   int(B1 << BIT_DAY_OF(dayOfWeek))
-#define MASK_HOUR(hour)       int(B1 << BIT_HOUR_OF(hour))
+#define SMASK_FULLYEAR(bool)  (B1 & bool)// DST & noDST
+#define SMASK_DAY(dayOfWeek)  int(B1 << BIT_DAY_OF(dayOfWeek))
+#define SMASK_HOUR(hour)      int(B1 << BIT_HOUR_OF(hour))
 
 
 class Schedule : public ConnectorDigital {
   
   public:
   Schedule(byte id, const prog_char* label, unsigned int data);
-  const boolean     is(const uint8_t dayOfWeek, const unsigned int hour);
+  //const boolean     is(const uint8_t dayOfWeek, const unsigned int hour);
+  const boolean     is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
-  const boolean     isActive();
   const boolean     is(const unsigned int mask);
   void setActive(const boolean value);
   
@@ -57,12 +55,6 @@ class Schedule : public ConnectorDigital {
 /***********************************************************
  *                         INLINE                          *
  **********************************************************/
-
-
-__attribute__((always_inline)) inline const boolean Schedule::isActive()
-{
-  return this->is(MASK_ISACTIVE);
-}
 
 
 __attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
