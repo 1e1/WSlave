@@ -31,6 +31,11 @@
 #define EMBEDTIME_65s_4h   ((uint8_t) (millis() >> 16))
 **/
 
+// SDDD HHHH (DST[0..1], day[0..6], hour[0..23])
+#define FMASK_DST(dst)        (dst << 7)
+#define FMASK_DAY(dayOfWeek)  (dayOfWeek << 3)
+#define FMASK_HOUR(hour)      (hour)
+
 
 class FastTimer2 {
   
