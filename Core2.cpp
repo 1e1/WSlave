@@ -11,7 +11,7 @@
 
 
 ConnectorDigital Core2::digitals[] = {
-  NEWDIGITAL_NC(22, relay11) ,
+  NEWDIGITAL_NC(22, relay11),
   NEWDIGITAL_NO(24, relay12),
   NEWDIGITAL_NO(26, relay13),
   NEWDIGITAL_NO(28, relay14),
@@ -28,7 +28,7 @@ ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
-static ConnectorDigital noDigitals[] = {};
+static const uint8_t noDigitals[] = { 22, 24 };
 
 Schedule Core2::schedules[] = {
   NEWSCHEDULE
