@@ -42,9 +42,10 @@ class Schedule : public ConnectorDigital {
   
   // inline
   const boolean     is(const unsigned int mask);
-  void setActive(const boolean value);
   
-  __attribute__((always_inline)) inline const byte getId() { return this->getPin(); };
+  __attribute__((always_inline)) inline const byte getId()              { return this->getPin();    };
+  __attribute__((always_inline)) inline const boolean isActive()        { return this->getValue();  };
+  __attribute__((always_inline)) inline void setActive(const boolean v) { this->setValue(v);        };
   
   protected:
   unsigned int _schedule;
@@ -63,12 +64,6 @@ class Schedule : public ConnectorDigital {
 __attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
 {
   return this->_schedule & mask;
-}
-
-
-__attribute__((always_inline)) inline void Schedule::setActive(const boolean value)
-{
-  bitWrite_boolean(this->_schedule, boolean(0), value);
 }
 
 
