@@ -36,7 +36,7 @@
 
 // SDDD HHHH (DST[0..1], day[0..6], hour[0..23])
 #define FMASK_DST(dst)        byte(dst << 7)
-#define FMASK_DAY(dayOfWeek)  byte(dayOfWeek << 3)
+#define FMASK_DAY(dayOfWeek)  byte(dayOfWeek << 4)
 #define FMASK_HOUR(hour)      byte(hour)
 
 
@@ -47,6 +47,11 @@ class FastTimer2 {
   static const uint8_t update(); // call it once in the main loop()
   static void requestNtp();
   static const boolean readNtp(); // true if the hour changes
+  
+  // inline
+  __attribute__((always_inline)) inline static const boolean getDst()       { return FastTimer2::_referenceTime >> 7; };
+  __attribute__((always_inline)) inline static const uint8_t getDayOfWeek() { return (FastTimer2::_referenceTime >> 4) & uint8_t(B111); };
+  __attribute__((always_inline)) inline static const uint8_t getHour()      { return FastTimer2::_referenceTime & uint8_t(B1111); };
   
   protected:
   static EthernetUDP _server;
