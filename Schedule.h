@@ -22,12 +22,12 @@
   * 
   */
 
-#define BIT_DAY_OF(dayOfWeek) (1+ (dayOfWeek%7))
-#define BIT_HOUR_OF(hour)     (8+ (hour%24))
+#define BIT_DAY_OF(dayOfWeek) (byte(1)+ (byte(dayOfWeek) % byte(7)))
+#define BIT_HOUR_OF(hour)     (byte(8)+ (byte(hour) % byte(24)))
 
-#define SMASK_FULLYEAR(bool)  (B1 & bool)// DST & noDST
-#define SMASK_DAY(dayOfWeek)  int(B1 << BIT_DAY_OF(dayOfWeek))
-#define SMASK_HOUR(hour)      int(B1 << BIT_HOUR_OF(hour))
+#define SMASK_FULLYEAR(bool)  (boolean(1) & boolean(bool))// DST & noDST
+#define SMASK_DAY(dayOfWeek)  int(boolean(1) << BIT_DAY_OF(dayOfWeek))
+#define SMASK_HOUR(hour)      int(boolean(1) << BIT_HOUR_OF(hour))
 
 
 class Schedule : public ConnectorDigital {
