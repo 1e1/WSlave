@@ -84,21 +84,6 @@ void Core2::processLine()
       break;
       
     }
-    /*
-    if ((index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
-      LOG(">DGET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
-      Core2::digitals[index].setValue(value);
-      LOG("<DGET #"); LOG(digitals[index].getPin()); LOG(" = "); LOGLN(digitals[index].getValue());
-    } else if ((index=Core2::getConnectorIndexOfPin(pin, Core2::pulses, Core2::pulses_len))!=uint8_t(-1)) {
-      LOG(">PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
-      Core2::pulses[index].setValue(value);
-      LOG("<PGET #"); LOG(pulses[index].getPin()); LOG(" = "); LOGLN(pulses[index].getValue());
-    } else if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
-      LOG(">SGET #"); LOG(schedules[index].getPin()); LOG(" = "); LOGLN(schedules[index].getValue());
-      //Core2::schedules[index].setValue(value); // TODO
-      LOG("<SGET #"); LOG(schedules[index].getPin()); LOG(" = "); LOGLN(schedules[index].getValue());
-    }
-    */
   }
 }
 
@@ -207,7 +192,7 @@ uint8_t Core2::readUint8()
   _read:
   if (Core2::_currentStream->available()) {
     while ((c=Core2::_currentStream->read()) && '0'<=c && c<='9' && --watchdog) {
-      out = (out *10) + ((uint8_t) (c -'0'));
+      out = (out *10) + byte(c -'0');
     }
     if (c==-1) {
       delay(READCHAR_TIMEOUT);
