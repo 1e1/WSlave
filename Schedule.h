@@ -46,6 +46,7 @@ class Schedule : public ConnectorDigital {
   __attribute__((always_inline)) inline const byte getId()              { return this->getPin();    };
   __attribute__((always_inline)) inline const boolean isActive()        { return this->getValue();  };
   __attribute__((always_inline)) inline void setActive(const boolean v) { this->setValue(v);        };
+  __attribute__((always_inline)) inline const uint8_t* getDigitals()    { this->_digitals;          };
   
   protected:
   unsigned int _schedule;

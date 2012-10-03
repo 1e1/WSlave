@@ -20,9 +20,5 @@ const boolean Schedule::is(const boolean fullYear, const uint8_t dayOfWeek, cons
 
 void Schedule::check(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour)
 {
-  if (this->is(fullYear, dayOfWeek, hour)) {
-    // switch ON
-  } else {
-    //switch OFF
-  }
+  this->setActive(this->is(fullYear, dayOfWeek, hour));
 }
