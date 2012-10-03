@@ -38,7 +38,6 @@ class Schedule : public ConnectorDigital {
   public:
   Schedule(byte id, const prog_char* label, unsigned int data, const uint8_t digitals[]);
   const boolean is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
-  void check(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
   const boolean     is(const unsigned int mask);

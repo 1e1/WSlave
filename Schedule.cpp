@@ -16,9 +16,3 @@ const boolean Schedule::is(const boolean fullYear, const uint8_t dayOfWeek, cons
 {
   return this->is(SMASK_FULLYEAR(fullYear) | SMASK_DAY(dayOfWeek) | SMASK_HOUR(hour));
 }
-
-
-void Schedule::check(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour)
-{
-  this->setActive(this->is(fullYear, dayOfWeek, hour));
-}
