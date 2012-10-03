@@ -144,6 +144,14 @@ void loop()
 #endif !USE_BONJOUR && !USE_LCD
 #if USE_ETH
       if (FastTimer2::readNtp()) {
+        for (uint8_t index=0; index<Core2::schedules_len; index++) {
+          Core2::schedules[index].check(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
+          const uint8_t* digitals = Core2::schedules[index].getDigitals();
+          while (*digitals) {
+            Core2::digitals[*digitals].setValue(Core2::schedules[index].isActive());
+            digitals++;
+          }
+        }
         WSlave2::maintain();
         // OR: software_reset();
       }
