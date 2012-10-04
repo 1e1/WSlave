@@ -47,6 +47,7 @@ const intfMessage STATIC_MESSAGES[] = {
 class Core2 {
   
   public:
+  static void processTimer();
   static void processLine();
   static void readUntil(char terminator);
   static void copyToBuffer  (uint8_t x);

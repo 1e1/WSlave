@@ -94,6 +94,28 @@ uint8_t Core2::_bufferSize;
 
 
 
+void Core2::processTimer()
+{
+  /*
+  boolean state;
+  uint8_t iPin;
+  uint8_t* digitals;
+  for (uint8_t index=0; index<Core2::schedules_len; index++) {
+    if (Core2::schedules[index].getValue()) {
+      state     = Core2::schedules[index].is(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
+      digitals  = Core2::schedules[index].getDigitals();
+      for (uint8_t jndex=0; jndex<Core2::schedules[index].getSize(); jndex++) {
+        Core2::digitals[digitals[jndex]].setValue(state);
+        if ((iPin=Core2::getConnectorIndexOfPin(digitals[jndex], Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+          Core2::digitals[iPin].setValue(state);
+        }
+      }
+    }
+  }
+  */
+}
+
+
 void Core2::processLine()
 {
   char type;
@@ -108,8 +130,9 @@ void Core2::processLine()
     
       case 'S':
       if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
+        Serial.print("Schedule#"); Serial.println(index);
         Core2::schedules[index].setValue(value);
-      }
+      }else{Serial.print("Schedule?"); Serial.println(pin);}
       break;
       
       case 'P':
