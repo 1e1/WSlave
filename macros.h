@@ -3,14 +3,18 @@
 
 
 /** SETUP ALIAS **/
+#define NEWARRAY(TYPE, NAME, V...)      static const TYPE NAME ## _values[] = { V }; \
+                                        Array<TYPE>* NAME = new Array<TYPE>(NAME ## _values)
 #define NEWDIGITAL_NO(PIN, NAME)        NEWDIGITAL(PIN, NAME, false)
 #define NEWDIGITAL_NC(PIN, NAME)        NEWDIGITAL(PIN, NAME, true)
 #define NEWDIGITAL(PIN, NAME, B)        ConnectorDigital(PIN, Dictionary::NAME, B)
 #define NEWPULSE(PIN, NAME)             ConnectorPulse(PIN, Dictionary::NAME)
 #define NEWSCHEDULE_NO(ID, N, S, D...)  NEWSCHEDULE(ID, N, false, S, D)
 #define NEWSCHEDULE_NC(ID, N, S, D...)  NEWSCHEDULE(ID, N, true, S, D)
-#define NEWSCHEDULE(ID, N, B, S, D...)  static uint8_t schedulePins_ ## ID[] = { D }; \
-                                        static Schedule schedule_ ## ID = Schedule(ID, Dictionary::N, B, S, ARRAYLEN(schedulePins_ ## ID) , schedulePins_ ## ID )
+//#define NEWSCHEDULE(ID, N, B, S, D...)  static uint8_t schedulePins_ ## ID[] = { D }; \
+//                                        static Schedule schedule_ ## ID = Schedule(ID, Dictionary::N, B, S, ARRAYLEN(schedulePins_ ## ID), schedulePins_ ## ID )
+#define NEWSCHEDULE(ID, N, B, S, D...)  NEWARRAY(uint8_t, schedulePins_ ## ID, D); \
+                                        static Schedule schedule_ ## ID = Schedule(ID, Dictionary::N, B, S, schedulePins_ ## ID )
 #define SCHEDULE(ID)                    schedule_ ## ID
 #define LCDCHAR(ch)                     static const uint8_t    ch[] PROGMEM
 #define LONGBYTES(b)                    static const prog_uchar  b[] PROGMEM

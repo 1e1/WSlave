@@ -4,12 +4,11 @@
 
 
 
-Schedule::Schedule(byte id, const prog_char* label, const boolean isNC, unsigned int data, uint8_t size, uint8_t* digitals)
+Schedule::Schedule(byte id, const prog_char* label, const boolean isNC, unsigned int data, Array<const uint8_t>* digitals)
 {
   this->_pin      = (id << 2) | isNC;
   this->_label    = label;
   this->_schedule = data;
-  this->_size     = size;
   this->_digitals = digitals;
 }
 

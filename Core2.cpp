@@ -24,12 +24,14 @@ ConnectorDigital Core2::digitals[] = {
   NEWDIGITAL_NO(62, automatic)
 };
 
+NEWARRAY(uint8_t, tests, 1, 2 );
+
 ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
 
-NEWSCHEDULE
+NEWSCHEDULE_NC
 ( 10
 , heating1
 , SMASK_FULLYEAR(false)
@@ -37,7 +39,8 @@ NEWSCHEDULE
 | SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
 , 22, 23, 30, 31
 );
-NEWSCHEDULE
+/*
+NEWSCHEDULE_NC
 ( 11
 , heating2
 , SMASK_FULLYEAR(false)
@@ -45,7 +48,7 @@ NEWSCHEDULE
 | SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6)
 , 24, 25, 32, 33, 34
 );
-NEWSCHEDULE
+NEWSCHEDULE_NC
 ( 20
 , bathroom1
 , SMASK_FULLYEAR(false)
@@ -53,7 +56,7 @@ NEWSCHEDULE
 | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(20) | SMASK_HOUR(6) | SMASK_HOUR(7)
 , 26, 27
 );
-NEWSCHEDULE
+NEWSCHEDULE_NC
 ( 21
 , bathroom2
 , SMASK_FULLYEAR(true)
@@ -61,20 +64,20 @@ NEWSCHEDULE
 | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(6) | SMASK_HOUR(7)
 , 28, 29
 );
-
+*/
 Schedule Core2::schedules[] = {
-    SCHEDULE(10),
+    SCHEDULE(10)/*,
     SCHEDULE(11),
     SCHEDULE(20),
-    SCHEDULE(21)
+    SCHEDULE(21)*/
 };
 
 
-const uint8_t Core2::digitals_len = ARRAYLEN(digitals);
-const uint8_t Core2::pulses_len   = ARRAYLEN(pulses);
-const uint8_t Core2::messages_len = 0;//ARRAYLEN(messages);
-const uint8_t Core2::schedules_len= ARRAYLEN(schedules);
-const uint8_t Core2::total_len    = ARRAYLEN(digitals) + ARRAYLEN(pulses)/* + ARRAYLEN(messages) */+ ARRAYLEN(schedules);
+const uint8_t Core2::digitals_len   = ARRAYLEN(digitals);
+const uint8_t Core2::pulses_len     = ARRAYLEN(pulses);
+const uint8_t Core2::messages_len   = 0;//ARRAYLEN(messages);
+const uint8_t Core2::schedules_len  = ARRAYLEN(schedules);
+const uint8_t Core2::total_len      = ARRAYLEN(digitals) + ARRAYLEN(pulses)/* + ARRAYLEN(messages) */+ ARRAYLEN(schedules);
 
 Stream* Core2::_currentStream;
 char    Core2::_buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];

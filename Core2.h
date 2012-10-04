@@ -8,6 +8,8 @@
 #include "config.h"
 #include "macros.h"
 #include "dictionary.h"
+#include "FastTimer2.h"
+#include "Array.h"
 #include "Connector.h"
 #include "Schedule.h"
 

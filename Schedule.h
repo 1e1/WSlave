@@ -6,6 +6,7 @@
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 #include "macros.h"
+#include "Array.h"
 #include "Connector.h"
 
 
@@ -36,22 +37,20 @@
 class Schedule : public ConnectorDigital {
   
   public:
-  Schedule(byte id, const prog_char* label, const boolean isNC, unsigned int data, uint8_t size, uint8_t* digitals);
+  Schedule(byte id, const prog_char* label, const boolean isNC, unsigned int data, Array<const uint8_t>* digitals);
   const boolean is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
   const boolean     is(const unsigned int mask);
   
-  __attribute__((always_inline)) inline const byte getId()              { return this->getPin();    };
-  __attribute__((always_inline)) inline const boolean isActive()        { return this->getValue();  };
-  __attribute__((always_inline)) inline uint8_t getSize()               { this->_size;              };
-  __attribute__((always_inline)) inline uint8_t* getDigitals()          { this->_digitals;          };
+  __attribute__((always_inline)) inline const byte getId()                  { return this->getPin();    };
+  __attribute__((always_inline)) inline const boolean isActive()            { return this->getValue();  };
+  __attribute__((always_inline)) inline Array<const uint8_t>* getDigitals() { return this->_digitals;   };
   __attribute__((always_inline)) inline void setActive(const boolean v) ;
   
   protected:
   unsigned int _schedule;
-  uint8_t _size;
-  uint8_t* _digitals;
+  Array<const uint8_t>* _digitals;
   
 };
 
