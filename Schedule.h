@@ -36,7 +36,7 @@
 class Schedule : public ConnectorDigital {
   
   public:
-  Schedule(byte id, const prog_char* label, unsigned int data, const uint8_t digitals[]);
+  Schedule(byte id, const prog_char* label, const boolean isNC, unsigned int data, uint8_t size, uint8_t* digitals);
   const boolean is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
@@ -44,12 +44,14 @@ class Schedule : public ConnectorDigital {
   
   __attribute__((always_inline)) inline const byte getId()              { return this->getPin();    };
   __attribute__((always_inline)) inline const boolean isActive()        { return this->getValue();  };
-  __attribute__((always_inline)) inline void setActive(const boolean v) { this->setValue(v);        };
-  __attribute__((always_inline)) inline const uint8_t* getDigitals()    { this->_digitals;          };
+  __attribute__((always_inline)) inline uint8_t getSize()               { this->_size;              };
+  __attribute__((always_inline)) inline uint8_t* getDigitals()          { this->_digitals;          };
+  __attribute__((always_inline)) inline void setActive(const boolean v) ;
   
   protected:
   unsigned int _schedule;
-  const uint8_t* _digitals;
+  uint8_t _size;
+  uint8_t* _digitals;
   
 };
 
@@ -64,6 +66,13 @@ class Schedule : public ConnectorDigital {
 __attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
 {
   return this->_schedule & mask;
+}
+
+
+__attribute__((always_inline)) inline void Schedule::setActive(const boolean v)
+{
+  const boolean value = this->convertValue(v);
+  bitWrite_boolean(this->_pin, 1, value);
 }
 
 
