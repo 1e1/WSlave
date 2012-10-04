@@ -17,7 +17,7 @@ ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boole
 }
 
 
-ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boolean isNC, boolean value)
+ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boolean isNC, const boolean value)
 {
   this->init(pin, label);
   this->_pin|= isNC | (value << 1);
