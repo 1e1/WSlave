@@ -4,39 +4,30 @@
 
 
 #include <Arduino.h>
+#define ARRAY(ITEMS...) { ARRAYLEN({ITEMS}), {ITEMS} }
 
-
-template<class T>
+/* * /
+template<typename _Type, uint8_t _Size>
 class Array {
   
   public:
-  Array(const T* elements);
+  enum {
+    size = _Size
+  };
+  _Type& operator[](uint8_t index)  { return this->_elements[index]; }
+  operator _Type*()                 { return this->_elements; }
   
-  __attribute__((always_inline)) inline const T* getElments() { return this->_elements; };
-  __attribute__((always_inline)) inline const uint8_t size()  { return this->_size; };
-  
-  protected:
-  const T* _elements;
-  uint8_t _size;
+  const _Type _elements[_Size];
   
 };
-
-
-
-
-/***********************************************************
- *                         INLINE                          *
- **********************************************************/
-
-
-template <class T> 
-Array<T>::Array(const T* elements)
-{
-  this->_size = ARRAYLEN(elements);
-  this->_elements = elements;
-}
-
-
+/* */
+/* */
+//template<typename _Type>
+typedef struct {
+  uint8_t size;
+  /*typedef _Type*/ uint8_t* data;
+} array;
+/* */
 
 
 #endif ARRAY_H_
