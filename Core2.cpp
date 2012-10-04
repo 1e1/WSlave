@@ -24,22 +24,44 @@ ConnectorDigital Core2::digitals[] = {
   NEWDIGITAL_NO(62, automatic)
 };
 
-NEWARRAY(uint8_t, tests, 1, 2 );
 
 ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
+/*
+Array<ConnectorDigital, 10> Xdigitals[] = {
+  NEWDIGITAL_NC(22, relay11),
+  NEWDIGITAL_NO(24, relay12),
+  NEWDIGITAL_NO(26, relay13),
+  NEWDIGITAL_NO(28, relay14),
+  NEWDIGITAL_NC(30, relay15),
+  NEWDIGITAL_NO(32, relay16),
+  NEWDIGITAL_NO(34, relay17),
+  NEWDIGITAL_NO(36, relay18),
+  
+  NEWDIGITAL_NC(63, sendmail),
+  NEWDIGITAL_NO(62, automatic)
+};
 
+Array<ConnectorPulse, 1> Xpulses[] = {
+  NEWPULSE(13, led)
+};
+*/
+
+//array/*<uint8_t>*/ tests = { 2, 1, 2 };
+const Schedule::schedule today_test = { 1, WEDNESDAY | SUNDAY , 8 | 9 | 12 };
+Schedule stest(10, Dictionary::heating1, true, today_test, 0 );
+
+/*
 NEWSCHEDULE_NC
 ( 10
 , heating1
 , SMASK_FULLYEAR(false)
 | SMASK_DAY(WEDNESDAY) | SMASK_WEEKEND
 | SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
-, 22, 23, 30, 31
+, SMASK_PIN(22)  | SMASK_PIN(23)  | SMASK_PIN(30)  | SMASK_PIN(31)
 );
-/*
 NEWSCHEDULE_NC
 ( 11
 , heating2
@@ -65,13 +87,48 @@ NEWSCHEDULE_NC
 , 28, 29
 );
 */
-Schedule Core2::schedules[] = {
+Schedule Core2::schedules[] = {/*
     SCHEDULE(10)/*,
     SCHEDULE(11),
     SCHEDULE(20),
     SCHEDULE(21)*/
 };
-
+/*
+Array<Schedule, 4> Xschedules[] = {
+  NEWSCHEDULE_NC
+  ( 10
+  , heating1
+  , SMASK_FULLYEAR(false)
+  | SMASK_DAY(WEDNESDAY) | SMASK_WEEKEND
+  | SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
+  , SMASK_PIN(22)  | SMASK_PIN(23)  | SMASK_PIN(30)  | SMASK_PIN(31)
+  ),
+  NEWSCHEDULE_NC
+  ( 11
+  , heating2
+  , SMASK_FULLYEAR(false)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6)
+  , SMASK_PIN(24)  | SMASK_PIN(25)  | SMASK_PIN(32)  | SMASK_PIN(33) | SMASK_PIN(34)
+  ),
+  NEWSCHEDULE_NC
+  ( 20
+  , bathroom1
+  , SMASK_FULLYEAR(false)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(20) | SMASK_HOUR(6) | SMASK_HOUR(7)
+  , SMASK_PIN(26)  | SMASK_PIN(27)
+  ),
+  NEWSCHEDULE_NC
+  ( 21
+  , bathroom2
+  , SMASK_FULLYEAR(true)
+  | SMASK_EVERYDAY
+  | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(6) | SMASK_HOUR(7)
+  , SMASK_PIN(28)  | SMASK_PIN(29)
+  )
+};
+*/
 
 const uint8_t Core2::digitals_len   = ARRAYLEN(digitals);
 const uint8_t Core2::pulses_len     = ARRAYLEN(pulses);

@@ -13,13 +13,17 @@ class Connector {
   Connector();
   Connector(byte pin, const prog_char* label);
   
-  __attribute__((always_inline)) inline const byte getPin()           { return this->_pin >> 2; };
-  __attribute__((always_inline)) inline const prog_char* getLabel()   { return this->_label;    };
+  __attribute__((always_inline)) inline const byte getPin()           { return this->_id.pin; };
+  __attribute__((always_inline)) inline const prog_char* getLabel()   { return this->_label;  };
   
   protected:
   void init(byte pin, const prog_char* label);
   
-  byte _pin;
+  struct {
+    byte pin          : 6;
+    boolean isNC      : 1;
+    boolean isActive  : 1;
+  } _id;
   const prog_char* _label PROGMEM;
   
 };

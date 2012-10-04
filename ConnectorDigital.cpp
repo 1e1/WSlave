@@ -13,12 +13,13 @@ ConnectorDigital::ConnectorDigital()
 ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boolean isNC)
 {
   this->init(pin, label);
-  this->_pin|= isNC;
+  this->_id.isNC = isNC;
 }
 
 
 ConnectorDigital::ConnectorDigital(byte pin, const prog_char* label, const boolean isNC, const boolean value)
 {
   this->init(pin, label);
-  this->_pin|= isNC | (value << 1);
+  this->_id.isNC      = isNC;
+  this->_id.isActive  = value;
 }
