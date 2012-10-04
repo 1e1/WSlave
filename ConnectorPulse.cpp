@@ -29,6 +29,6 @@ ConnectorPulse::ConnectorPulse(const byte pin, const prog_char* label, uint8_t v
 
 void ConnectorPulse::addValue(const uint8_t d)
 {
-  this->_value = constrain(this->_value + d, 0, (uint8_t) -1);
-  analogWrite(this->_pin, this->_value);
+  this->_value = constrain(this->getValue() + d, 0, (uint8_t) -1);
+  analogWrite(this->getPin(), this->getValue());
 }

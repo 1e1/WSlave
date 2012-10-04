@@ -18,7 +18,7 @@ class ConnectorPulse : public Connector {
   void addValue(const uint8_t d);
   
   __attribute__((always_inline)) inline uint8_t getValue()        { return this->_value;                                        };
-  __attribute__((always_inline)) inline void setValue(uint8_t v)  { this->_value = v; analogWrite(this->_pin, this->_value);    };
+  __attribute__((always_inline)) inline void setValue(uint8_t v)  { this->_value = v; analogWrite(this->getPin(), this->getValue());    };
   
   protected:
   uint8_t _value;
