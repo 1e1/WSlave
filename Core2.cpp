@@ -94,23 +94,23 @@ void Core2::processTimer()
   Schedule current;
   for (uint8_t index=0; index<Core2::schedules_len; index++) {
     current = Core2::schedules[index];
-    Serial.print("schedule#"); Serial.println((uint8_t)current.getPin());
-    Serial.print("  |  value: "); Serial.println((uint8_t)current.getValue());
+    LOG("schedule#"); LOGLN((uint8_t)current.getPin());
+    LOG("  |  value: "); LOGLN((uint8_t)current.getValue());
     if (current.getValue()) {
       state = current.is(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
-      Serial.print("  |  state: "); Serial.println((boolean)state);
-      Serial.print("  |  pins:");
+      LOG("  |  state: "); LOGLN((boolean)state);
+      LOG("  |  pins:");
       for (uint8_t iPin=SMASK_PIN_MIN; iPin<=SMASK_PIN_MAX; iPin++) {
         if (current.hasPin(iPin)) {
-          Serial.print(" "); Serial.print((uint8_t)iPin);
+          LOG(" "); LOG((uint8_t)iPin);
           if ((iDigital=Core2::getConnectorIndexOfPin(iPin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
             Core2::digitals[iDigital].setValue(state);
           }
         }
       }
-      Serial.println();
+      LOGLN();
     }
-    Serial.print("  |--"); Serial.println();
+    LOG("  |--"); LOGLN();
   }
 }
 
@@ -129,9 +129,8 @@ void Core2::processLine()
     
       case 'S':
       if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
-        Serial.print("Schedule#"); Serial.println(index);
         Core2::schedules[index].setValue(value);
-      }else{Serial.print("Schedule?"); Serial.println(pin);}
+      }
       break;
       
       case 'P':
