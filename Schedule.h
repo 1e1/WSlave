@@ -6,7 +6,6 @@
 #include <Arduino.h>
 #include <avr/pgmspace.h>
 #include "macros.h"
-#include "Array.h"
 #include "Connector.h"
 
 
