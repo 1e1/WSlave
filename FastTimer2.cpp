@@ -12,7 +12,7 @@
 
 EthernetUDP FastTimer2::_server;
 IPAddress FastTimer2::_timeServer(NTP_SERVER);
-uint8_t FastTimer2::_embedTime      = 0;
+uint8_t FastTimer2::_embedTime      = -1; // force "new time section" at startup
 uint8_t FastTimer2::_referenceTime  = B01111111;
 
 
