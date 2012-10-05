@@ -98,7 +98,7 @@ void Core2::processTimer()
     LOG("schedule#"); LOGLN((uint8_t)current.getPin());
     LOG("  |  value: "); LOGLN((uint8_t)current.getValue());
     
-    if (current.getValue()) {
+    if (current.isActive()) {
       state = current.is(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
       
       LOG("  |  state: "); LOGLN((boolean)state);
@@ -128,7 +128,7 @@ void Core2::processLine()
   char type;
   uint8_t pin, value, index, watchdog = Core2::digitals_len + Core2::pulses_len;
   // [0-9]+ OTHER [0-9]+ (OTHER [0-9]+ OTHER [0-9]+)
-  while (Core2::_currentStream->available() && watchdog--) {
+  while (Core2::_currentStream->available() && --watchdog) {
     type  = Core2::_currentStream->read();
     pin   = Core2::readUint8();
     value = Core2::readUint8();
@@ -207,10 +207,10 @@ void Core2::copyToBuffer_P(const prog_char* const data)
 
 void Core2::copyToBuffer(const char chars[], uint8_t size)
 {
-  while(size--) {
+  do {
     Core2::_buffer[Core2::_bufferSize++] = *chars++;
     Core2::autoSendBuffer();
-  }
+  } while(--size);
 }
 
 
