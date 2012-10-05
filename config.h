@@ -30,7 +30,7 @@
 #define PORT            80
 #define ETH_BLPIN       53 /* power of W5100 chip */
 #define HTTP_AUTH64     "YXJkbWluOkBsYW4jMTI=" // base64("ardmin:@lan#12"); /!\ chars must be parsed by reading buffer
-#define SMTP_IP         173,194,67,108 // smtp.gmail.com
+#define SMTP_IP         173,194,67,26 // ping gmail-smtp-in.l.google.com
 #define SMTP_PORT       25
 // 0.fr.pool.ntp.org
 #define NTP_SERVER      /* 192, 168, 170, 254 */ 88, 191, 80, 53 // or use GATEWAY if not specified
