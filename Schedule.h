@@ -33,38 +33,29 @@
 #define SMASK_WEEKEND           SMASK_DAY(SATURDAY) | SMASK_DAY(SUNDAY)
 #define SMASK_EVERYDAY          SMASK_DAY(MONDAY) | SMASK_DAY(TUESDAY) | SMASK_DAY(WEDNESDAY) | SMASK_DAY(THURSDAY) | SMASK_DAY(FRIDAY) | SMASK_WEEKEND
 
-#define SMASK_PIN(number_22_49) long(B1 << (number_22_49  - 21))
+#define SMASK_PIN_MIN           22
+#define SMASK_PIN_MAX           49
+#define SMASK_PIN(number_22_49) long(B1 << (number_22_49  - SMASK_PIN_MIN))
 
 
 class Schedule : public ConnectorDigital {
   
   public:
-  
-  struct schedule {
-    boolean fullYear  : 1;
-    uint8_t day       : 7;
-    unsigned int hour : 24;
-  };
-  
-  //Schedule(byte id, const prog_char* label, const boolean isNC, const unsigned int data, const uint8_t* digitals);
-  Schedule(byte id, const prog_char* label, const boolean isNC, const unsigned int data, const unsigned long digitals_32_49);
-  Schedule(byte id, const prog_char* label, const boolean isNC, const schedule data, const unsigned long digitals_32_49);
+  Schedule();
+  Schedule(byte id, const prog_char* label, const boolean isNC, const unsigned int schedule, const unsigned long digitals_22_49);
   const boolean is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
-  const boolean     is(const unsigned int mask);
+  __attribute__((always_inline)) inline const byte getId()                    { return this->getPin();    };
+  __attribute__((always_inline)) inline const boolean isActive()              { return this->getValue();  };
+  __attribute__((always_inline)) inline const unsigned long getPins()         { return this->_pins;       };
   
-  __attribute__((always_inline)) inline const byte getId()                { return this->getPin();    };
-  __attribute__((always_inline)) inline const boolean isActive()          { return this->getValue();  };
-  __attribute__((always_inline)) inline const unsigned long getPins()     { return this->_pins;       };
-  __attribute__((always_inline)) inline const uint8_t* getDigitals()      { return this->_digitals;   };
-  __attribute__((always_inline)) inline void setActive(const boolean v) ;
+  inline void setActive(const boolean v);
+  inline const boolean hasPin(const uint8_t iPin);
   
   protected:
-  schedule _schedule2;
   unsigned int _schedule;
   unsigned long _pins;
-  const uint8_t* _digitals;
   
 };
 
@@ -76,16 +67,16 @@ class Schedule : public ConnectorDigital {
  **********************************************************/
 
 
-__attribute__((always_inline)) inline const boolean Schedule::is(const unsigned int mask)
-{
-  return this->_schedule & mask;
-}
-
-
 __attribute__((always_inline)) inline void Schedule::setActive(const boolean v)
 {
   const boolean value = this->convertValue(v);
   this->_id.isActive = value;
+}
+
+
+__attribute__((always_inline)) inline const boolean Schedule::hasPin(const uint8_t iPin)
+{
+  return boolean(this->_pins >> (iPin  - SMASK_PIN_MIN)) & boolean(1);
 }
 
 
