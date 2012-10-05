@@ -14,6 +14,11 @@ Schedule::Schedule(byte id, const prog_char* label, const boolean isNC, const un
   this->_id.isNC  = isNC;
   this->_schedule = schedule;
   this->_pins     = digitals_22_49;
+  for (uint8_t iPin=SMASK_PIN_MIN; iPin<=SMASK_PIN_MAX; iPin++) {
+    if (this->hasPin(iPin)) {
+      pinMode(iPin, OUTPUT);
+    }
+  }
 }
 
 
