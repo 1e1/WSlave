@@ -104,7 +104,13 @@ void Core2::processTimer()
         if (current.hasPin(iPin)) {
           LOG(" "); LOG((uint8_t)iPin);
           if ((iDigital=Core2::getConnectorIndexOfPin(iPin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+            
             Core2::digitals[iDigital].setValue(state);
+            
+          } else {
+            
+            digitalWrite(iPin, state);
+            
           }
         }
       }
