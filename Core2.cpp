@@ -134,6 +134,7 @@ void Core2::processLine()
       break;
       
       case 'P':
+      // first, check if this digital is not controlled by a timer
       if ((index=Core2::getConnectorIndexOfPin(pin, Core2::pulses, Core2::pulses_len))!=uint8_t(-1)) {
         Core2::pulses[index].setValue(value);
       }
