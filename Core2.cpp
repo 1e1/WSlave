@@ -148,7 +148,9 @@ void Core2::processLine()
       break;
       
       case 'D':
-      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+      // first, check if this digital is not controlled by a timer
+      for (index=0; index<Core2::schedules_len && !Core2::schedules[index].hasPin(pin); index++);
+      if (index!=Core2::schedules_len && (index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
         Core2::digitals[index].setValue(value);
       }
       break;
