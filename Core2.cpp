@@ -29,72 +29,8 @@ ConnectorPulse Core2::pulses[] = {
   NEWPULSE(13, led)
 };
 
-/*
-Array<ConnectorDigital, 10> Xdigitals[] = {
-  NEWDIGITAL_NC(22, relay11),
-  NEWDIGITAL_NO(24, relay12),
-  NEWDIGITAL_NO(26, relay13),
-  NEWDIGITAL_NO(28, relay14),
-  NEWDIGITAL_NC(30, relay15),
-  NEWDIGITAL_NO(32, relay16),
-  NEWDIGITAL_NO(34, relay17),
-  NEWDIGITAL_NO(36, relay18),
-  
-  NEWDIGITAL_NC(63, sendmail),
-  NEWDIGITAL_NO(62, automatic)
-};
 
-Array<ConnectorPulse, 1> Xpulses[] = {
-  NEWPULSE(13, led)
-};
-*/
-
-//array/*<uint8_t>*/ tests = { 2, 1, 2 };
-const Schedule::schedule today_test = { 1, WEDNESDAY | SUNDAY , 8 | 9 | 12 };
-Schedule stest(10, Dictionary::heating1, true, today_test, 0 );
-
-/*
-NEWSCHEDULE_NC
-( 10
-, heating1
-, SMASK_FULLYEAR(false)
-| SMASK_DAY(WEDNESDAY) | SMASK_WEEKEND
-| SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
-, SMASK_PIN(22)  | SMASK_PIN(23)  | SMASK_PIN(30)  | SMASK_PIN(31)
-);
-NEWSCHEDULE_NC
-( 11
-, heating2
-, SMASK_FULLYEAR(false)
-| SMASK_EVERYDAY
-| SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6)
-, 24, 25, 32, 33, 34
-);
-NEWSCHEDULE_NC
-( 20
-, bathroom1
-, SMASK_FULLYEAR(false)
-| SMASK_EVERYDAY
-| SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(20) | SMASK_HOUR(6) | SMASK_HOUR(7)
-, 26, 27
-);
-NEWSCHEDULE_NC
-( 21
-, bathroom2
-, SMASK_FULLYEAR(true)
-| SMASK_EVERYDAY
-| SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(6) | SMASK_HOUR(7)
-, 28, 29
-);
-*/
-Schedule Core2::schedules[] = {/*
-    SCHEDULE(10)/*,
-    SCHEDULE(11),
-    SCHEDULE(20),
-    SCHEDULE(21)*/
-};
-/*
-Array<Schedule, 4> Xschedules[] = {
+Schedule Core2::schedules[] = {
   NEWSCHEDULE_NC
   ( 10
   , heating1
@@ -128,7 +64,7 @@ Array<Schedule, 4> Xschedules[] = {
   , SMASK_PIN(28)  | SMASK_PIN(29)
   )
 };
-*/
+
 
 const uint8_t Core2::digitals_len   = ARRAYLEN(digitals);
 const uint8_t Core2::pulses_len     = ARRAYLEN(pulses);
@@ -153,23 +89,29 @@ uint8_t Core2::_bufferSize;
 
 void Core2::processTimer()
 {
-  /*
   boolean state;
-  uint8_t iPin;
-  uint8_t* digitals;
+  uint8_t iDigital;
+  Schedule current;
   for (uint8_t index=0; index<Core2::schedules_len; index++) {
-    if (Core2::schedules[index].getValue()) {
-      state     = Core2::schedules[index].is(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
-      digitals  = Core2::schedules[index].getDigitals();
-      for (uint8_t jndex=0; jndex<Core2::schedules[index].getSize(); jndex++) {
-        Core2::digitals[digitals[jndex]].setValue(state);
-        if ((iPin=Core2::getConnectorIndexOfPin(digitals[jndex], Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
-          Core2::digitals[iPin].setValue(state);
+    current = Core2::schedules[index];
+    Serial.print("schedule#"); Serial.println((uint8_t)current.getPin());
+    Serial.print("  |  value: "); Serial.println((uint8_t)current.getValue());
+    if (current.getValue()) {
+      state = current.is(FastTimer2::getDst(), FastTimer2::getDayOfWeek(), FastTimer2::getHour());
+      Serial.print("  |  state: "); Serial.println((boolean)state);
+      Serial.print("  |  pins:");
+      for (uint8_t iPin=SMASK_PIN_MIN; iPin<=SMASK_PIN_MAX; iPin++) {
+        if (current.hasPin(iPin)) {
+          Serial.print(" "); Serial.print((uint8_t)iPin);
+          if ((iDigital=Core2::getConnectorIndexOfPin(iPin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+            Core2::digitals[iDigital].setValue(state);
+          }
         }
       }
+      Serial.println();
     }
+    Serial.print("  |--"); Serial.println();
   }
-  */
 }
 
 
