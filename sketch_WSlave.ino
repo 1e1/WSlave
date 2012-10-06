@@ -109,7 +109,7 @@ void setup()
   EthernetBonjour.begin(DEVICE_NAME);
   EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
 #endif USE_BONJOUR
-  //WSlave2::sendEmail(PSTR("START"), 1);
+  WSlave2::sendEmail(PSTR("START"), 1);
 #endif USE_ETH
   FastTimer2::begin();
   LOGLN("=== END SETUP ===");

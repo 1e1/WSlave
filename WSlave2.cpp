@@ -20,6 +20,7 @@ LONGSTRING(header_text)   = "text/plain";
 LONGSTRING(header_json)   = "application/json";
 LONGSTRING(header_htZ)    = "text/html" CRLF "Content-Encoding: gzip";
 LONGSTRING(header_end)    = CRLF CRLF;
+LONGSTRING(crlf)          = CRLF;
 
 LONGSTRING(email)         = EMAIL;
 
@@ -174,41 +175,51 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
 {
   byte smtp[]       = { SMTP_IP };
   uint8_t watchdog  = MAXRETRIES;
-  uint8_t state     = 5;
+  uint8_t state     = 6;
+  Core2::setStream(&(WSlave2::_client));
+  LOGLN("BEGIN");
   if (WSlave2::_client.connect(smtp, SMTP_PORT)) {
-    while(watchdog && state) {
+    do {
       WSlave2::waitClient(watchdog);
+      LOG("< state #");
       switch (--state) {
         case 5:
-        WSlave2::_client.println(PSTR("EHLO")); // HELO | EHLO
+        Core2::copyToBuffer_P(PSTR("HELO")); // HELO | EHLO
         break;
         case 4:
-        WSlave2::_client.print(PSTR("MAIL FROM: "));
-        WSlave2::_client.println(email);
+        Core2::copyToBuffer_P(PSTR("MAIL FROM:<"));
+        Core2::copyToBuffer_P(email);
+        Core2::copyToBuffer('>');
         break;
         case 3:
-        WSlave2::_client.print(PSTR("RCPT TO: "));
-        WSlave2::_client.println(email);
+        Core2::copyToBuffer_P(PSTR("RCPT TO:<"));
+        Core2::copyToBuffer_P(email);
+        Core2::copyToBuffer('>');
         break;
         case 2:
-        WSlave2::_client.println(PSTR("DATA"));
+        Core2::copyToBuffer_P(PSTR("DATA"));
         break;
         case 1:
-        //WSlave2::_client.print(PSTR("To: "));
-        //WSlave2::_client.println(email);
-        WSlave2::_client.print(PSTR("Subject: " ML_SUBJECT));
-        WSlave2::_client.print(sms);
-        WSlave2::_client.println(value);
-        WSlave2::_client.println('.');
+        Core2::copyToBuffer_P(PSTR("Subject:" ML_SUBJECT CRLF CRLF));
+        Core2::copyToBuffer_P(sms);
+        Core2::copyToBuffer_P( crlf );
+        Core2::copyToBuffer(value);
+        Core2::copyToBuffer_P( crlf );
+        Core2::copyToBuffer('.');
         break;
         case 0:
-        WSlave2::_client.println(PSTR("QUIT"));
+        Core2::copyToBuffer_P(PSTR("QUIT"));
         break;
       }
-    }
+      //Core2::copyToBuffer( LF );
+      Core2::copyToBuffer_P( crlf );
+      Core2::sendBuffer();
+      LOGLN(state);
+    } while(watchdog && state);
     WSlave2::waitClient(watchdog);
     WSlave2::_client.stop();
   }
+  LOGLN("END");
 }
 
 
@@ -371,7 +382,16 @@ void WSlave2::sendToJson(const char type, Connector connector, const boolean com
 
 void WSlave2::waitClient(uint8_t& watchdog)
 {
-  while(!WSlave2::_client.available() && --watchdog) {
+  do {
     delay(READCHAR_TIMEOUT);
+  } while(!WSlave2::_client.available() && --watchdog);
+  /* == * /
+  char c;
+  LOG("> ");
+  while((c=WSlave2::_client.read()) && 32<=c && c<=127) {
+    LOG(c);
   }
+  LOGLN();
+  /* == */
+  WSlave2::_client.flush();
 }
