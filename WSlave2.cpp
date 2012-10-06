@@ -188,12 +188,12 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
         break;
         case 4:
         Core2::copyToBuffer_P(PSTR("MAIL FROM:<"));
-        Core2::copyToBuffer_P(email);
+        Core2::copyToBuffer_P( email );
         Core2::copyToBuffer('>');
         break;
         case 3:
         Core2::copyToBuffer_P(PSTR("RCPT TO:<"));
-        Core2::copyToBuffer_P(email);
+        Core2::copyToBuffer_P( email );
         Core2::copyToBuffer('>');
         break;
         case 2:
@@ -201,7 +201,7 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
         break;
         case 1:
         Core2::copyToBuffer_P(PSTR("Subject:" ML_SUBJECT CRLF CRLF));
-        Core2::copyToBuffer_P(sms);
+        Core2::copyToBuffer_P( sms );
         Core2::copyToBuffer_P( crlf );
         Core2::copyToBuffer(value);
         Core2::copyToBuffer_P( crlf );
