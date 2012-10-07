@@ -31,6 +31,10 @@
 #include "macros.h"
 #include "webApp.h"
 
+#if USE_BONJOUR
+#include <EthernetBonjour.h>
+#endif USE_BONJOUR
+
 
 #define MAXHEADERS  byte(255)
 #define MAXRETRIES  byte(255)
@@ -50,6 +54,7 @@ class WSlave2 {
   static void check();
   static void uncheck();
   static void maintain();
+  static void broadcast();
   static void sendEmail(const prog_char* sms, const uint8_t value);
   
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
@@ -93,6 +98,14 @@ __attribute__((always_inline)) inline void WSlave2::maintain()
   Ethernet.maintain(); /* added in 1.0.1 - default Ubuntu IDE is still in 1.0 */
   LOGLN("renew DHCP");
 #endif
+}
+
+
+__attribute__((always_inline)) inline void WSlave2::broadcast()
+{
+#if USE_BONJOUR
+  EthernetBonjour.run();
+#endif USE_BONJOUR
 }
 
 

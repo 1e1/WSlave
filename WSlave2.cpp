@@ -67,7 +67,12 @@ void WSlave2::begin()
   LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
   LOG("listen "); LOGLN(PORT);
   WSlave2::_server.begin();
-  //delay(1000);
+  delay(3000);
+#if USE_BONJOUR
+  EthernetBonjour.begin(DEVICE_NAME);
+  EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
+#endif USE_BONJOUR
+  WSlave2::sendEmail(PSTR("START"), 1);
 }
 
 
