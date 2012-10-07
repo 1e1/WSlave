@@ -55,10 +55,10 @@ void software_reset()
 
 #if ETH_BLPIN && defined(IP) && defined(MAC) && defined(PORT) && defined(GATEWAY) && defined(SUBNET)
 #include <Ethernet.h>
-#include "WSlave2.h"
 #if USE_BONJOUR
 #include <EthernetBonjour.h>
 #endif USE_BONJOUR
+#include "WSlave2.h"
 #define USE_ETH 1
 #else
 #define USE_ETH 0
@@ -105,11 +105,6 @@ void setup()
   // change: Ethernet.h/#define MAX_SOCK_NUM 4
   // by:     Ethernet.h/#define MAX_SOCK_NUM 1
   WSlave2::begin();
-#if USE_BONJOUR
-  EthernetBonjour.begin(DEVICE_NAME);
-  EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
-#endif USE_BONJOUR
-  WSlave2::sendEmail(PSTR("START"), 1);
 #endif USE_ETH
   FastTimer2::begin();
   LOGLN("=== END SETUP ===");
@@ -132,14 +127,12 @@ void loop()
       LOGLN("*** new time cycle ***");
 #if USE_ETH
       FastTimer2::requestNtp();
+      WSlave2::broadcast();
 #endif
-#if USE_BONJOUR
-      EthernetBonjour.run();
-#endif USE_BONJOUR
 #if USE_LCD
       LSlave2::shutdown();
 #endif
-#if USE_ETH && !USE_BONJOUR && !USE_LCD
+#if USE_ETH /*&& !USE_BONJOUR*/ && !USE_LCD
       delay(500);
 #endif !USE_BONJOUR && !USE_LCD
 #if USE_ETH
