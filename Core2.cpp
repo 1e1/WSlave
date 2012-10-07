@@ -10,52 +10,53 @@
 
 
 
-ConnectorDigital Core2::digitals[] = {
-  NEWDIGITAL_NC(22, relay11),
-  NEWDIGITAL_NO(24, relay12),
-  NEWDIGITAL_NO(26, relay13),
-  NEWDIGITAL_NO(28, relay14),
-  NEWDIGITAL_NC(30, relay15),
-  NEWDIGITAL_NO(32, relay16),
-  NEWDIGITAL_NO(34, relay17),
-  NEWDIGITAL_NO(36, relay18),
-  
-  NEWDIGITAL_NC(63, sendmail),
-  NEWDIGITAL_NO(62, automatic)
+ConnectorDigital Core2::digitals[] =
+{ NEWDIGITAL_NC(22, relay11)
+, NEWDIGITAL_NO(24, relay12)
+, NEWDIGITAL_NO(26, relay13)
+, NEWDIGITAL_NO(28, relay14)
+, NEWDIGITAL_NC(30, relay15)
+, NEWDIGITAL_NO(32, relay16)
+, NEWDIGITAL_NO(34, relay17)
+, NEWDIGITAL_NO(36, relay18)
+/*
+, NEWDIGITAL_NC(63, sendmail)
+, NEWDIGITAL_NO(62, automatic)
+*/
 };
 
 
-ConnectorPulse Core2::pulses[] = {
-  NEWPULSE(13, led)
+ConnectorPulse Core2::pulses[] =
+{ NEWPULSE(13, led)
 };
 
 
-Schedule Core2::schedules[] = {
-  NEWSCHEDULE_NC
+Schedule Core2::schedules[] =
+{ NEWSCHEDULE_NC
   ( 10
   , heating1
   , SMASK_FULLYEAR(false)
   | SMASK_DAY(WEDNESDAY) | SMASK_WEEKEND
   | SMASK_HOUR(18) | SMASK_HOUR(19) | SMASK_HOUR(7)
   , SMASK_PIN(22)  | SMASK_PIN(23)  | SMASK_PIN(30)  | SMASK_PIN(31)
-  ),
-  NEWSCHEDULE_NC
+  )
+, NEWSCHEDULE_NC
   ( 11
   , heating2
   , SMASK_FULLYEAR(false)
   | SMASK_EVERYDAY
   | SMASK_HOUR(20) | SMASK_HOUR(22) | SMASK_HOUR(24) | SMASK_HOUR(3) | SMASK_HOUR(5) | SMASK_HOUR(6)
   , SMASK_PIN(24)  | SMASK_PIN(25)  | SMASK_PIN(32)  | SMASK_PIN(33) | SMASK_PIN(34)
-  ),
-  NEWSCHEDULE_NC
+  )
+, NEWSCHEDULE_NC
   ( 20
   , bathroom1
   , SMASK_FULLYEAR(false)
   | SMASK_EVERYDAY
   | SMASK_HOUR(17) | SMASK_HOUR(18) | SMASK_HOUR(20) | SMASK_HOUR(7) | SMASK_HOUR(8)
   , SMASK_PIN(26)  | SMASK_PIN(27)
-  ),
-  NEWSCHEDULE_NC
+  )
+, NEWSCHEDULE_NC
   ( 21
   , bathroom2
   , SMASK_FULLYEAR(true)
