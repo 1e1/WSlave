@@ -40,10 +40,6 @@
 #define MAXRETRIES  byte(255)
 
 // Request-Line   = Method SP Request-URI SP HTTP-Version CRLF
-#define SP ' '
-#define CR '\r'
-#define LF '\n'
-#define CRLF "\r\n"
 
 
 
@@ -55,7 +51,10 @@ class WSlave2 {
   static void uncheck();
   static void maintain();
   static void broadcast();
-  static void sendEmail(const prog_char* sms, const uint8_t value);
+  static void openEmail(const prog_char* subject);
+  static void closeEmail();
+  //static void writeEmail_P(const prog_char* content);
+  //static void writeEmail(const char* content);
   
   // http://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html
   typedef enum { INVALID/*, OPTIONS*/, GET/*, HEAD, POST*/, PUT/*, DELETE, TRACE, CONNECT*/ } MethodType;

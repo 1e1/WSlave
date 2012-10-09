@@ -72,7 +72,8 @@ void WSlave2::begin()
   EthernetBonjour.begin(DEVICE_NAME);
   EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
 #endif USE_BONJOUR
-  WSlave2::sendEmail(PSTR("START"), 1);
+  WSlave2::openEmail(PSTR("START"));
+  WSlave2::closeEmail();
 }
 
 
@@ -176,11 +177,11 @@ void WSlave2::check()
 }
 
 
-void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
+void WSlave2::openEmail(const prog_char* subject)
 {
   byte smtp[]       = { SMTP_IP };
   uint8_t watchdog  = MAXRETRIES;
-  uint8_t state     = 6;
+  uint8_t state     = 5;
   Core2::setStream(&(WSlave2::_client));
   LOGLN("BEGIN");
   if (WSlave2::_client.connect(smtp, SMTP_PORT)) {
@@ -188,42 +189,60 @@ void WSlave2::sendEmail(const prog_char* sms, const uint8_t value)
       WSlave2::waitClient(watchdog);
       LOG("< state #");
       switch (--state) {
-        case 5:
+        case 4:
         Core2::copyToBuffer_P(PSTR("HELO")); // HELO | EHLO
         break;
-        case 4:
+        case 3:
         Core2::copyToBuffer_P(PSTR("MAIL FROM:<"));
         Core2::copyToBuffer_P( email );
         Core2::copyToBuffer('>');
         break;
-        case 3:
+        case 2:
         Core2::copyToBuffer_P(PSTR("RCPT TO:<"));
         Core2::copyToBuffer_P( email );
         Core2::copyToBuffer('>');
         break;
-        case 2:
+        case 1:
         Core2::copyToBuffer_P(PSTR("DATA"));
         break;
-        case 1:
-        Core2::copyToBuffer_P(PSTR("Subject:" ML_SUBJECT CRLF CRLF));
-        Core2::copyToBuffer_P( sms );
-        Core2::copyToBuffer_P( crlf );
-        Core2::copyToBuffer(value);
-        Core2::copyToBuffer_P( crlf );
-        Core2::copyToBuffer('.');
-        break;
         case 0:
-        Core2::copyToBuffer_P(PSTR("QUIT"));
+        Core2::copyToBuffer_P(PSTR("Subject:" ML_SUBJECT));
+        Core2::copyToBuffer_P(subject);
+        Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
         break;
       }
-      //Core2::copyToBuffer( LF );
-      Core2::copyToBuffer_P( crlf );
-      Core2::sendBuffer();
+      //Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
+      //Core2::sendBuffer();
+      Core2::sendBufferLn();
       LOGLN(state);
     } while(watchdog && state);
-    WSlave2::waitClient(watchdog);
-    WSlave2::_client.stop();
   }
+}
+
+
+void WSlave2::closeEmail()
+{
+  /*uint8_t watchdog  = MAXRETRIES;*/
+  /**uint8_t state     = 2;**/
+  //Core2::setStream(&(WSlave2::_client));
+  /**do {
+    LOG("< state #");
+    switch (--state) {
+      case 1:**/
+      Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
+      Core2::copyToBuffer('.');
+      /**break;
+      case 0:
+      Core2::copyToBuffer_P(PSTR("QUIT"));
+      break;
+    }**/
+    //Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
+    //Core2::sendBuffer();
+    Core2::sendBufferLn();
+    LOGLN(state);
+    /*WSlave2::waitClient(watchdog);*/
+  /**} while(/*watchdog && * /state);**/
+  WSlave2::_client.stop();
   LOGLN("END");
 }
 
