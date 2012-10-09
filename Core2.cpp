@@ -241,6 +241,13 @@ void Core2::sendBuffer()
 }
 
 
+void Core2::sendBufferLn()
+{
+  Core2::copyToBuffer( LF );
+  Core2::sendBuffer();
+}
+
+
 
 
 /***********************************************************

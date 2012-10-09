@@ -13,6 +13,11 @@
 #include "Schedule.h"
 
 
+#define SP ' '
+#define CR '\r'
+#define LF '\n'
+#define CRLF "\r\n"
+
 #define MONDAY    byte(0) // MONTAG
 #define TUESDAY   byte(1) // DIENSTAG
 #define WEDNESDAY byte(2) // MITTWOCH
@@ -66,6 +71,7 @@ class Core2 {
   static void copyToBuffer_P(const prog_uchar data[], size_t size);
   static const uint8_t bufferEqualsLength_P(const prog_char* str);
   static void sendBuffer();
+  static void sendBufferLn();
   
   static ConnectorDigital digitals[];
   static ConnectorPulse   pulses[];
