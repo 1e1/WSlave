@@ -243,7 +243,7 @@ void Core2::sendBuffer()
 
 void Core2::sendBufferLn()
 {
-  Core2::copyToBuffer( LF );
+  Core2::copyToBuffer_P( PSTR(CRLF) );
   Core2::sendBuffer();
 }
 
