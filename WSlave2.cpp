@@ -67,7 +67,6 @@ void WSlave2::begin()
   LOG("DNS:  ");  LOGLN(Ethernet.dnsServerIP());
   LOG("listen "); LOGLN(PORT);
   WSlave2::_server.begin();
-  delay(3000);
 #if USE_BONJOUR
   EthernetBonjour.begin(DEVICE_NAME);
   EthernetBonjour.addServiceRecord(DEVICE_NAME "._http", PORT, MDNSServiceTCP);
@@ -193,14 +192,12 @@ void WSlave2::openEmail(const prog_char* subject)
         Core2::copyToBuffer_P(PSTR("HELO")); // HELO | EHLO
         break;
         case 3:
-        Core2::copyToBuffer_P(PSTR("MAIL FROM:<"));
+        Core2::copyToBuffer_P(PSTR("MAIL FROM:"));
         Core2::copyToBuffer_P( email );
-        Core2::copyToBuffer('>');
         break;
         case 2:
-        Core2::copyToBuffer_P(PSTR("RCPT TO:<"));
+        Core2::copyToBuffer_P(PSTR("RCPT TO:"));
         Core2::copyToBuffer_P( email );
-        Core2::copyToBuffer('>');
         break;
         case 1:
         Core2::copyToBuffer_P(PSTR("DATA"));
@@ -208,11 +205,9 @@ void WSlave2::openEmail(const prog_char* subject)
         case 0:
         Core2::copyToBuffer_P(PSTR("Subject:" ML_SUBJECT));
         Core2::copyToBuffer_P(subject);
-        Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
+        Core2::sendBufferLn();
         break;
       }
-      //Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
-      //Core2::sendBuffer();
       Core2::sendBufferLn();
       LOGLN(state);
     } while(watchdog && state);
@@ -222,25 +217,23 @@ void WSlave2::openEmail(const prog_char* subject)
 
 void WSlave2::closeEmail()
 {
-  /*uint8_t watchdog  = MAXRETRIES;*/
+  uint8_t watchdog  = MAXRETRIES;
   /**uint8_t state     = 2;**/
   //Core2::setStream(&(WSlave2::_client));
   /**do {
     LOG("< state #");
     switch (--state) {
       case 1:**/
-      Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
+      Core2::sendBufferLn();
       Core2::copyToBuffer('.');
       /**break;
       case 0:
       Core2::copyToBuffer_P(PSTR("QUIT"));
       break;
     }**/
-    //Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
-    //Core2::sendBuffer();
     Core2::sendBufferLn();
     /**LOGLN(state);**/
-    /*WSlave2::waitClient(watchdog);*/
+    WSlave2::waitClient(watchdog);
   /**} while(/*watchdog && * /state);**/
   WSlave2::_client.stop();
   LOGLN("END");
