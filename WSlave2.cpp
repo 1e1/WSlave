@@ -239,7 +239,7 @@ void WSlave2::closeEmail()
     //Core2::copyToBuffer( LF ); // Core2::copyToBuffer_P( crlf );
     //Core2::sendBuffer();
     Core2::sendBufferLn();
-    LOGLN(state);
+    /**LOGLN(state);**/
     /*WSlave2::waitClient(watchdog);*/
   /**} while(/*watchdog && * /state);**/
   WSlave2::_client.stop();
