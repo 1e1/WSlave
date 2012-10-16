@@ -45,7 +45,7 @@ class Schedule : public ConnectorDigital {
   const boolean is(const boolean fullYear, const uint8_t dayOfWeek, const unsigned int hour);
   
   // inline
-  __attribute__((always_inline)) inline const byte getId()                    { return this->getPin();    };
+  //__attribute__((always_inline)) inline const byte getId()                    { return this->getPin();    };
   __attribute__((always_inline)) inline const boolean isActive()              { return this->getValue();  };
   __attribute__((always_inline)) inline const unsigned long getPins()         { return this->_pins;       };
   
