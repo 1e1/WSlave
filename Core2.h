@@ -95,6 +95,9 @@ class Core2 {
   static void autoSendBuffer();
   static uint8_t readUint8();
   static uint8_t getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const uint8_t size);
+  static uint8_t getPulseConnectorIndexOfPin(uint8_t pin);
+  static uint8_t getDigitalConnectorIndexOfPin(uint8_t pin);
+  static uint8_t getScheduleConnectorIndexOfPin(uint8_t pin);
   
   static Stream*  _currentStream;
   static char     _buffer[max(READBUFFERSIZE, WRITEBUFFERSIZE)];

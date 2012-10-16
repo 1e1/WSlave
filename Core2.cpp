@@ -110,7 +110,7 @@ void Core2::processTimer()
           
           LOG(" "); LOG((uint8_t)iPin);
           
-          if ((iDigital=Core2::getConnectorIndexOfPin(iPin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+          if ((iDigital=Core2::getDigitalConnectorIndexOfPin(iPin))!=uint8_t(-1)) {
             Core2::digitals[iDigital].setValue(state);
           } else {
             digitalWrite(iPin, state);
@@ -137,13 +137,13 @@ void Core2::processLine()
     switch (type) {
     
       case 'S':
-      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::schedules, Core2::schedules_len))!=uint8_t(-1)) {
+      if ((index=Core2::getScheduleConnectorIndexOfPin(pin))!=uint8_t(-1)) {
         Core2::schedules[index].setValue(value);
       }
       break;
       
       case 'P':
-      if ((index=Core2::getConnectorIndexOfPin(pin, Core2::pulses, Core2::pulses_len))!=uint8_t(-1)) {
+      if ((index=Core2::getPulseConnectorIndexOfPin(pin))!=uint8_t(-1)) {
         Core2::pulses[index].setValue(value);
       }
       break;
@@ -151,7 +151,7 @@ void Core2::processLine()
       case 'D':
       // first, check if this digital is not controlled by a timer
       for (index=0; index<Core2::schedules_len && !Core2::schedules[index].hasPin(pin); index++);
-      if (index!=Core2::schedules_len && (index=Core2::getConnectorIndexOfPin(pin, Core2::digitals, Core2::digitals_len))!=uint8_t(-1)) {
+      if (index==Core2::schedules_len && (index=Core2::getDigitalConnectorIndexOfPin(pin))!=uint8_t(-1)) {
         Core2::digitals[index].setValue(value);
       }
       break;
@@ -288,6 +288,39 @@ uint8_t Core2::getConnectorIndexOfPin(uint8_t pin, Connector connectors[], const
 {
   for (uint8_t index=0; index<size; index++) {
     if (connectors[index].getPin() == pin) {
+      return index;
+    }
+  }
+  return uint8_t(-1);
+}
+
+
+uint8_t Core2::getPulseConnectorIndexOfPin(uint8_t pin)
+{
+  for (uint8_t index=0; index<Core2::pulses_len; index++) {
+    if (Core2::pulses[index].getPin() == pin) {
+      return index;
+    }
+  }
+  return uint8_t(-1);
+}
+
+
+uint8_t Core2::getDigitalConnectorIndexOfPin(uint8_t pin)
+{
+  for (uint8_t index=0; index<Core2::digitals_len; index++) {
+    if (Core2::digitals[index].getPin() == pin) {
+      return index;
+    }
+  }
+  return uint8_t(-1);
+}
+
+
+uint8_t Core2::getScheduleConnectorIndexOfPin(uint8_t pin)
+{
+  for (uint8_t index=0; index<Core2::schedules_len; index++) {
+    if (Core2::schedules[index].getPin() == pin) {
       return index;
     }
   }
